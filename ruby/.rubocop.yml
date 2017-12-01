@@ -1,0 +1,18 @@
+AllCops:
+  Exclude:
+    - !ruby/regexp /_test\.rb\z/
+  TargetRubyVersion: 2.4
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+  ConsistentQuotesInMultiline: true
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
