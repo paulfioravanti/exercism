@@ -15,8 +15,8 @@ module Binary
     )
   end
 
-  def add_decimal_value(decimal, (binary_number, index))
-    decimal + binary_number.to_i * BASE**index
+  def add_decimal_value(decimal, (bit, exponent))
+    decimal + bit.to_i * BASE**exponent
   end
   private_class_method :add_decimal_value
 end
