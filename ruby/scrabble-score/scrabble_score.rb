@@ -21,6 +21,7 @@ class Scrabble
       0
     end
   end
+  private_constant :SCORE
 
   def self.score(word)
     new(word).score
