@@ -31,7 +31,7 @@ class Scrabble
   end
 
   def score
-    word.chars.sum(&SCORE.method(:call))
+    word.chars.sum(&SCORE)
   end
 
   private
