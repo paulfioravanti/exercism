@@ -4,8 +4,6 @@ class Robot
   POSSIBLE_NAMES = ("AA000".."ZZ999").to_a.freeze
   private_constant :POSSIBLE_NAMES
 
-  attr_reader :name
-
   class << self
     attr_reader :names
 
@@ -13,6 +11,8 @@ class Robot
       @names = POSSIBLE_NAMES.shuffle(random: Random.new)
     end
   end
+
+  attr_reader :name
 
   def initialize
     reset
