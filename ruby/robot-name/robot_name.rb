@@ -6,15 +6,15 @@ class Robot
   module Names
     POSSIBLE_NAMES = ("AA000".."ZZ999").to_a.freeze
     private_constant :POSSIBLE_NAMES
-    TOTAL_POSSIBLE_NAME_COUNT = POSSIBLE_NAMES.size
-    private_constant :TOTAL_POSSIBLE_NAME_COUNT
+    COUNT = POSSIBLE_NAMES.size
+    private_constant :COUNT
+
     OutOfNamesError = Class.new(StandardError)
-    private_constant :OutOfNamesError
 
     module_function
 
-    def assign
-      raise OutOfNamesError unless name_assignable?
+    def generate
+      raise OutOfNamesError if out_of_names?
       @assigned_names += 1
       @names.shift
     end
@@ -24,10 +24,10 @@ class Robot
       @names = POSSIBLE_NAMES.shuffle(random: rng)
     end
 
-    def name_assignable?
-      @assigned_names < TOTAL_POSSIBLE_NAME_COUNT
+    def out_of_names?
+      @assigned_names >= COUNT
     end
-    private_class_method :name_assignable?
+    private_class_method :out_of_names?
 
     forget
   end
@@ -43,7 +43,7 @@ class Robot
   end
 
   def reset
-    self.name = Names.assign
+    self.name = Names.generate
   end
 
   private
