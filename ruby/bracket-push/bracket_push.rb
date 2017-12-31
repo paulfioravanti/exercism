@@ -1,16 +1,10 @@
 # frozen_string_literal: true
 
 module Brackets
-  PAIRS = {
-    "(" => ")",
-    "[" => "]",
-    "{" => "}"
-  }.freeze
-  private_constant :PAIRS
-  LEFT = PAIRS.keys.freeze
-  private_constant :LEFT
-  RIGHT = PAIRS.values.freeze
-  private_constant :RIGHT
+  OPEN = "([{"
+  private_constant :OPEN
+  CLOSE = ")]}"
+  private_constant :CLOSE
   WHITESPACE = /\s/
   private_constant :WHITESPACE
 
@@ -19,8 +13,8 @@ module Brackets
   def paired?(string)
     return true if (string = string.gsub(WHITESPACE, "")).empty?
     string.each_char.with_object([]) do |char, acc|
-      return false if RIGHT.include?(char) && PAIRS[acc.pop] != char
-      acc.push(char) if LEFT.include?(char)
+      return false if CLOSE.include?(char) && acc.pop != char.tr(CLOSE, OPEN)
+      acc.push(char) if OPEN.include?(char)
     end.empty?
   end
 end
