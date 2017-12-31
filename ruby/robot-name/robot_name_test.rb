@@ -1,4 +1,5 @@
 require 'minitest/autorun'
+require 'minitest/focus'
 require_relative 'robot_name'
 
 class RobotTest < Minitest::Test
