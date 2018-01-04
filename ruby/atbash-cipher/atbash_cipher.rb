@@ -5,8 +5,10 @@ module Atbash
   private_constant :ALPHABET
   NON_LETTERS = /[[[:blank:]][[:punct:]]]/
   private_constant :NON_LETTERS
-  GROUP_LETTERS = [/(.{5})(?=.)/, "\\1 \\2"].freeze
-  private_constant :GROUP_LETTERS
+  TEXT_GROUPING = /(.{5})(?=.)/
+  private_constant :TEXT_GROUPING
+  GROUPING_OUTPUT = "\\1 \\2"
+  private_constant :GROUPING_OUTPUT
 
   module_function
 
@@ -15,6 +17,6 @@ module Atbash
       .downcase
       .gsub(NON_LETTERS, "")
       .tr(ALPHABET, ALPHABET.reverse)
-      .gsub(*GROUP_LETTERS)
+      .gsub(TEXT_GROUPING, GROUPING_OUTPUT)
   end
 end
