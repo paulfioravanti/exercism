@@ -22,6 +22,7 @@ perl5/
 php/
 plsql/
 python/
+ruby/**/Guardfile
 rust/
 scala/
 scheme/
