@@ -1,15 +1,17 @@
+# frozen_string_literal: true
+
 module Bob
-  QUESTION_MARK = "?".freeze
+  QUESTION_MARK = "?"
   private_constant :QUESTION_MARK
   SHOUTING_LETTERS = /[A-Z]+/
   private_constant :SHOUTING_LETTERS
-  SILENCE_RESPONSE = "Fine. Be that way!".freeze
+  SILENCE_RESPONSE = "Fine. Be that way!"
   private_constant :SILENCE_RESPONSE
-  SHOUTING_RESPONSE = "Whoa, chill out!".freeze
+  SHOUTING_RESPONSE = "Whoa, chill out!"
   private_constant :SHOUTING_RESPONSE
-  QUESTION_RESPONSE = "Sure.".freeze
+  QUESTION_RESPONSE = "Sure."
   private_constant :QUESTION_RESPONSE
-  DEFAULT_RESPONSE = "Whatever.".freeze
+  DEFAULT_RESPONSE = "Whatever."
   private_constant :DEFAULT_RESPONSE
 
   module_function
