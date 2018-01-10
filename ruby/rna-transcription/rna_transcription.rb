@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Complement
   RNA_TRANSCRIPTIONS = {
     "A" => "U",
@@ -14,7 +16,7 @@ module Complement
   def of_dna(string)
     return "" unless string.match?(DNA_STRAND)
     string.chars.reduce("") do |rna_strand, dna_nucleotide|
-      rna_strand << RNA_TRANSCRIPTIONS[dna_nucleotide]
+      rna_strand + RNA_TRANSCRIPTIONS[dna_nucleotide]
     end
   end
 end
