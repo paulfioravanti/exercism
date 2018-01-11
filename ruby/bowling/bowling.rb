@@ -35,15 +35,7 @@ class Game
   def roll(pins)
     raise BowlingError if invalid_roll?(pins)
     frames[frame_number] << pins
-    if standard_frame?
-      standard_frame_roll(pins)
-    elsif can_roll_next_final_frame_ball?(pins)
-      reset_pins
-    elsif frame_finished_without_fill_ball?
-      game_over
-    else
-      knock_down(pins)
-    end
+    roll_result(pins)
   end
 
   def score
@@ -62,6 +54,18 @@ class Game
 
   attr_reader :frames
   attr_accessor :frame_number, :remaining_pins
+
+  def roll_result(pins)
+    if standard_frame?
+      standard_frame_roll(pins)
+    elsif can_roll_next_final_frame_ball?(pins)
+      reset_pins
+    elsif frame_finished_without_fill_ball?
+      game_over
+    else
+      knock_down(pins)
+    end
+  end
 
   def invalid_roll?(pins)
     !pins.between?(MIN_PINS, MAX_PINS) ||
