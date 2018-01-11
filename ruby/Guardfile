@@ -9,7 +9,7 @@ group :red_green_refactor, halt_on_fail: true do
   end
 
   guard :rubocop, all_on_start: false, cli: ["--display-cop-names"] do
-    # Only run Rubocop over implementation files only
+    # Only run Rubocop over implementation files
     # as test files are not written by me.
     watch(%r{\A(.+)(?<!_test)\.rb\z})
     watch(%r{(?:.+/)?\.rubocop\.yml\z}) { |m| File.dirname(m[0]) }
