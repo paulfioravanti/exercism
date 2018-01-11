@@ -1,18 +1,14 @@
 # frozen_string_literal: true
 
 group :red_green_refactor, halt_on_fail: true do
-  guard :minitest,
-        all_on_start: false,
-        test_folders: ["."] do
+  guard :minitest, all_on_start: false, test_folders: ["."] do
     # Re-test test files when they're edited.
     watch(%r{\A.+_test\.rb\z}) { |m| "./#{m[1]}" }
     # Run the test file of the file that was edited.
     watch(%r{\A(.+)(?<!_test)\.rb\z}) { |m| "./#{m[1]}_test.rb" }
   end
 
-  guard :rubocop,
-        all_on_start: false,
-        cli: ["--display-cop-names"] do
+  guard :rubocop, all_on_start: false, cli: ["--display-cop-names"] do
     # Only run Rubocop over implementation files only
     # as test files are not written by me.
     watch(%r{\A(.+)(?<!_test)\.rb\z})
