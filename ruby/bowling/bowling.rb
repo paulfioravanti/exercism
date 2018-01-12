@@ -55,6 +55,7 @@ class Game
       def standard_frame_strike?(frame)
         frame == STANDARD_FRAME_STRIKE
       end
+      private_class_method :standard_frame_strike?
 
       def strike_bonus(frames, index)
         if before_final_standard_frame?(index)
@@ -67,35 +68,43 @@ class Game
           strike_bonus_from_final_frame(frames, index)
         end
       end
+      private_class_method :strike_bonus
 
       def before_final_standard_frame?(index)
         index < FINAL_STANDARD_FRAME
       end
+      private_class_method :before_final_standard_frame?
 
       def next_standard_frame_is_a_strike?(frames, index)
         frames[index + FRAME_INCREMENT] == STANDARD_FRAME_STRIKE
       end
+      private_class_method :next_standard_frame_is_a_strike?
 
       def double_strike_bonus(frames, index)
         next_frame = index + FRAME_INCREMENT
         frames[next_frame].first + frames[next_frame + FRAME_INCREMENT].first
       end
+      private_class_method :double_strike_bonus
 
       def single_strike_bonus(frames, index)
         frames[index + FRAME_INCREMENT].sum
       end
+      private_class_method :single_strike_bonus
 
       def strike_bonus_from_final_frame(frames, index)
         frames[index + FRAME_INCREMENT].first(STANDARD_FRAME_SIZE).sum
       end
+      private_class_method :strike_bonus_from_final_frame
 
       def spare?(frame)
         frame.sum == MAX_PINS
       end
+      private_class_method :spare?
 
       def spare_bonus(frames, index)
         frames[index + FRAME_INCREMENT].first
       end
+      private_class_method :spare_bonus
     end
     private_constant :Scorer
 
@@ -128,6 +137,7 @@ class Game
     def standard_frame?(frame_number)
       frame_number < FINAL_FRAME
     end
+    private_class_method :standard_frame?
 
     def standard_frame_roll(frames, frame_number, pins)
       if all_pins_knocked_down?(pins)
@@ -138,24 +148,29 @@ class Game
         [[:knock_down, pins]]
       end
     end
+    private_class_method :standard_frame_roll
 
     def all_pins_knocked_down?(pins)
       pins == MAX_PINS
     end
+    private_class_method :all_pins_knocked_down?
 
     def end_of_standard_frame?(frames, frame_number)
       frames[frame_number].size == STANDARD_FRAME_SIZE
     end
+    private_class_method :end_of_standard_frame?
 
     def can_roll_next_final_frame_ball?(frames, frame_number, pins)
       pins == MAX_PINS ||
         frames[frame_number].first(STANDARD_FRAME_SIZE).sum == MAX_PINS
     end
+    private_class_method :can_roll_next_final_frame_ball?
 
     def frame_finished_without_fill_ball?(frames, frame_number)
       frames[frame_number].length == STANDARD_FRAME_SIZE &&
         frames[frame_number].sum < MAX_PINS
     end
+    private_class_method :frame_finished_without_fill_ball?
   end
   private_constant :BowlingRules
 
