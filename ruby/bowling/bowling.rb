@@ -5,33 +5,112 @@ class Game
     NUM_FRAMES = 10
     START_FRAME = 0
     FRAME_INCREMENT = 1
-
-    FINAL_FRAME = 9
-    private_constant :FINAL_FRAME
-    MIN_PINS = 0
-    private_constant :MIN_PINS
     MAX_PINS = 10
+
+    FINAL_FRAME = NUM_FRAMES - 1
+    private_constant :FINAL_FRAME
     STANDARD_FRAME_SIZE = 2
     private_constant :STANDARD_FRAME_SIZE
     FINAL_FRAME_SIZE = 3
     private_constant :FINAL_FRAME_SIZE
     STANDARD_FRAME_STRIKE = [MAX_PINS].freeze
     private_constant :STANDARD_FRAME_STRIKE
-    FINAL_STANDARD_FRAME = FINAL_FRAME - 1
-    private_constant :FINAL_STANDARD_FRAME
+
+    module Referee
+      MIN_PINS = 0
+      private_constant :MIN_PINS
+
+      module_function
+
+      def invalid_roll?(frame_number, pins, remaining_pins)
+        !pins.between?(MIN_PINS, MAX_PINS) ||
+          pins > remaining_pins ||
+          frame_number > FINAL_FRAME
+      end
+
+      def unscoreable?(frames)
+        frames.any?(&:empty?) ||
+          frames[FINAL_FRAME].length < FINAL_FRAME_SIZE &&
+            frames[FINAL_FRAME].sum >= MAX_PINS
+      end
+    end
+    private_constant :Referee
+
+    module Scorer
+      FINAL_STANDARD_FRAME = FINAL_FRAME - 1
+      private_constant :FINAL_STANDARD_FRAME
+
+      module_function
+
+      def score(frames, frame, index)
+        score = 0
+        if standard_frame_strike?(frame)
+          score += strike_bonus(frames, index)
+        elsif spare?(frame)
+          score += spare_bonus(frames, index)
+        end
+        score + frame.sum
+      end
+
+      def standard_frame_strike?(frame)
+        frame == STANDARD_FRAME_STRIKE
+      end
+
+      def strike_bonus(frames, index)
+        if before_final_standard_frame?(index)
+          if next_standard_frame_is_a_strike?(frames, index)
+            double_strike_bonus(frames, index)
+          else
+            single_strike_bonus(frames, index)
+          end
+        else
+          strike_bonus_from_final_frame(frames, index)
+        end
+      end
+
+      def before_final_standard_frame?(index)
+        index < FINAL_STANDARD_FRAME
+      end
+
+      def next_standard_frame_is_a_strike?(frames, index)
+        frames[index + FRAME_INCREMENT] == STANDARD_FRAME_STRIKE
+      end
+
+      def double_strike_bonus(frames, index)
+        next_frame = index + FRAME_INCREMENT
+        frames[next_frame].first + frames[next_frame + FRAME_INCREMENT].first
+      end
+
+      def single_strike_bonus(frames, index)
+        frames[index + FRAME_INCREMENT].sum
+      end
+
+      def strike_bonus_from_final_frame(frames, index)
+        frames[index + FRAME_INCREMENT].first(STANDARD_FRAME_SIZE).sum
+      end
+
+      def spare?(frame)
+        frame.sum == MAX_PINS
+      end
+
+      def spare_bonus(frames, index)
+        frames[index + FRAME_INCREMENT].first
+      end
+    end
+    private_constant :Scorer
 
     module_function
 
     def invalid_roll?(frame_number, pins, remaining_pins)
-      !pins.between?(MIN_PINS, MAX_PINS) ||
-        pins > remaining_pins ||
-        frame_number > FINAL_FRAME
+      Referee.invalid_roll?(frame_number, pins, remaining_pins)
     end
 
     def unscoreable?(frames)
-      frames.any?(&:empty?) ||
-        frames[FINAL_FRAME].length < FINAL_FRAME_SIZE &&
-          frames[FINAL_FRAME].sum >= MAX_PINS
+      Referee.unscoreable?(frames)
+    end
+
+    def score(frames, frame, index)
+      Scorer.score(frames, frame, index)
     end
 
     def next_actions(frames, frame_number, pins)
@@ -46,63 +125,8 @@ class Game
       end
     end
 
-    def score(frames, frame, index)
-      score = 0
-      if standard_frame_strike?(frame)
-        score += strike_bonus(frames, index)
-      elsif spare?(frame)
-        score += spare_bonus(frames, index)
-      end
-      score + frame.sum
-    end
-
-    def standard_frame_strike?(frame)
-      frame == STANDARD_FRAME_STRIKE
-    end
-
-    def strike_bonus(frames, index)
-      if before_final_standard_frame?(index)
-        if next_standard_frame_is_a_strike?(frames, index)
-          double_strike_bonus(frames, index)
-        else
-          single_strike_bonus(frames, index)
-        end
-      else
-        strike_bonus_from_final_frame(frames, index)
-      end
-    end
-
-    def before_final_standard_frame?(index)
-      index < FINAL_STANDARD_FRAME
-    end
-
     def standard_frame?(frame_number)
       frame_number < FINAL_FRAME
-    end
-
-    def next_standard_frame_is_a_strike?(frames, index)
-      frames[index + FRAME_INCREMENT] == STANDARD_FRAME_STRIKE
-    end
-
-    def double_strike_bonus(frames, index)
-      next_frame = index + FRAME_INCREMENT
-      frames[next_frame].first + frames[next_frame + FRAME_INCREMENT].first
-    end
-
-    def single_strike_bonus(frames, index)
-      frames[index + FRAME_INCREMENT].sum
-    end
-
-    def strike_bonus_from_final_frame(frames, index)
-      frames[index + FRAME_INCREMENT].first(STANDARD_FRAME_SIZE).sum
-    end
-
-    def spare?(frame)
-      frame.sum == MAX_PINS
-    end
-
-    def spare_bonus(frames, index)
-      frames[index + FRAME_INCREMENT].first
     end
 
     def standard_frame_roll(frames, frame_number, pins)
@@ -149,7 +173,9 @@ class Game
       raise BowlingError
     end
     frames[frame_number] << pins
-    roll_result(pins)
+    BowlingRules.next_actions(frames, frame_number, pins).each do |action|
+      send(*action)
+    end
   end
 
   def score
@@ -163,12 +189,6 @@ class Game
 
   attr_reader :frames
   attr_accessor :frame_number, :remaining_pins
-
-  def roll_result(pins)
-    BowlingRules.next_actions(frames, frame_number, pins).each do |action|
-      send(*action)
-    end
-  end
 
   def start_next_frame
     self.frame_number = frame_number + BowlingRules::FRAME_INCREMENT
