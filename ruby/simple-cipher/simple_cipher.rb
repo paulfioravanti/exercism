@@ -27,22 +27,23 @@ class Cipher
 
   private
 
-  def shift(text, method)
+  def shift(text, message)
     text
-      .bytes
+      .chars
       .lazy
-      .zip(key.bytes.cycle)
-      .with_object(method)
+      .zip(key.chars.cycle)
+      .with_object(message)
       .map(&method(:substitute))
       .force
       .join
   end
 
-  def substitute((char_ordinal, key_ordinal), method)
-    char_ordinal
-      .yield_self { |num| num - A_ORDINAL }
-      .yield_self { |num| num.public_send(method, key_ordinal - A_ORDINAL) }
-      .yield_self { |num| num % ALPHABET.count + A_ORDINAL }
+  def substitute((char, key_char), message)
+    [char, key_char]
+      .map { |num| num.ord - A_ORDINAL }
+      .reduce(message)
+      .modulo(ALPHABET.count)
+      .+(A_ORDINAL)
       .chr
   end
 end
