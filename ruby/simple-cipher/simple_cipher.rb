@@ -17,12 +17,12 @@ class Cipher
     @key = key
   end
 
-  def encode(text)
-    shift(text, :+)
+  def encode(plaintext)
+    shift(plaintext, :+)
   end
 
-  def decode(text)
-    shift(text, :-)
+  def decode(ciphertext)
+    shift(ciphertext, :-)
   end
 
   private
@@ -38,9 +38,9 @@ class Cipher
       .join
   end
 
-  def substitute((char, key_char), message)
-    [char, key_char]
-      .map { |num| num.ord - A_ORDINAL }
+  def substitute((text_char, key_char), message)
+    [text_char, key_char]
+      .map { |char| char.ord - A_ORDINAL }
       .reduce(message)
       .modulo(ALPHABET.count)
       .+(A_ORDINAL)
