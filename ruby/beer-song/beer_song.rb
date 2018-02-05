@@ -1,28 +1,29 @@
 # frozen_string_literal: true
 
 class BeerSong
-  AMOUNT_OF_BEER = ->(amount, container) { "#{amount} #{container} of beer" }
+  AMOUNT_OF_BEER = "%<amount>s %<container>s of beer"
   private_constant :AMOUNT_OF_BEER
-  BEER_ON_WALL = lambda { |amount, container: "bottles"|
-    "#{AMOUNT_OF_BEER.call(amount, container)} on the wall"
-  }
+  BEER_ON_WALL = lambda do |amount, container: "bottles"|
+    "#{format(AMOUNT_OF_BEER, amount: amount, container: container)} "\
+    "on the wall"
+  end
   private_constant :BEER_ON_WALL
-  LINE_1 = lambda { |amount, container: "bottles"|
+  LINE_1 = lambda do |amount, container: "bottles"|
     "#{BEER_ON_WALL.call(amount.to_s.capitalize, container: container)}, "\
-    "#{AMOUNT_OF_BEER.call(amount, container)}."
-  }
+    "#{format(AMOUNT_OF_BEER, amount: amount, container: container)}."
+  end
   private_constant :LINE_1
-  LINE_2 = lambda { |amount, container: "bottles", subject: "one"|
+  LINE_2 = lambda do |amount, container: "bottles", subject: "one"|
     "Take #{subject} down and pass it around, "\
     "#{BEER_ON_WALL.call(amount, container: container)}."
-  }
+  end
   private_constant :LINE_2
-  GENERIC_VERSE = lambda { |amount|
+  GENERIC_VERSE = lambda do |amount|
     <<~VERSE
       #{LINE_1.call(amount)}
       #{LINE_2.call(amount - 1)}
     VERSE
-  }
+  end
   private_constant :GENERIC_VERSE
   VERSE_2 =
     <<~VERSE
