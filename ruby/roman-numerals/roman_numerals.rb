@@ -1,4 +1,4 @@
-class Integer
+module RomanNumerals
   ROMAN_NUMERALS = {
     "M" => 1000,
     "CM" => 900,
@@ -16,17 +16,24 @@ class Integer
   }.freeze
   private_constant :ROMAN_NUMERALS
 
-  def to_roman
+  module_function
+
+  def to_roman(integer)
     ROMAN_NUMERALS.each_with_object(
-      { string: "", number: self }, &method(:append_roman_letters)
+      { string: "", number: integer }, &method(:append_roman_letters)
     )[:string]
   end
-
-  private
 
   def append_roman_letters((roman_letters, value), roman_numeral)
     quotient, roman_numeral[:number] = roman_numeral[:number].divmod(value)
     roman_numeral[:string] << roman_letters * quotient
+  end
+  private_class_method :append_roman_letters
+end
+
+class Integer
+  def to_roman
+    RomanNumerals.to_roman(self)
   end
 end
 
