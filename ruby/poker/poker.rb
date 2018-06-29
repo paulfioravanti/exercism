@@ -18,6 +18,8 @@ class Card
     value + suit
   end
 
+  private
+
   def <=>(other)
     RANKS.index(value) <=> RANKS.index(other.value)
   end
