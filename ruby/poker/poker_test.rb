@@ -16,7 +16,6 @@ class PokerTest < Minitest::Test
   end
 
   def test_highest_card_10
-    skip
     high_of_8 = %w(4D 5S 6S 8D 3C)
     high_of_10 = %w(2S 4C 7S 9H 10H)
     game = Poker.new([high_of_8, high_of_10])

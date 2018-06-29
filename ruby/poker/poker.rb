@@ -3,13 +3,15 @@
 class Card
   include Comparable
 
-  RANKS = %w[2 3 4 5 6 7 8 9 J Q K A].freeze
+  RANKS = %w[2 3 4 5 6 7 8 9 10 J Q K A].freeze
   private_constant :RANKS
+  NON_DIGIT = /(?=\D)/
+  private_constant :NON_DIGIT
 
   attr_reader :suit, :value
 
   def initialize(card)
-    @value, @suit = card.chars
+    @value, @suit = card.split(NON_DIGIT)
   end
 
   def to_s
@@ -41,7 +43,7 @@ class Poker
   end
 
   def best_hand
-    return first_hand if only_one_hand?
+    return first_hand if hands.length == 1
     high_card_hand
   end
 
@@ -51,10 +53,6 @@ class Poker
 
   def first_hand
     [hands.first.cards]
-  end
-
-  def only_one_hand?
-    hands.length == 1
   end
 
   def high_card_hand
