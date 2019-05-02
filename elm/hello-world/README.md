@@ -16,28 +16,25 @@ If everything goes well, you will be ready to fetch your first real exercise.
 
 ## Elm Installation
 
-Refer to the [Exercism help page](http://exercism.io/languages/elm) for Elm
-installation and learning resources.
+Refer to the [Installing Elm](https://exercism.io/tracks/elm/installation) page
+for information about installing elm.
 
 ## Writing the Code
 
 The first time you start an exercise, you'll need to ensure you have the
-appropriate dependencies installed.
-
-```bash
-$ npm install
-```
+appropriate dependencies installed. Thankfully, Elm makes that easy for you and
+will install dependencies when you try to run tests or build the code.
 
 Execute the tests with:
 
 ```bash
-$ npm test
+$ elm-test
 ```
 
 Automatically run tests again when you save changes:
 
 ```bash
-$ npm run watch
+$ elm-test --watch
 ```
 
 As you work your way through the test suite, be sure to remove the `skip <|`
@@ -48,4 +45,6 @@ calls from each test until you get them all passing!
 This is an exercise to introduce users to using Exercism [http://en.wikipedia.org/wiki/%22Hello,_world!%22_program](http://en.wikipedia.org/wiki/%22Hello,_world!%22_program)
 
 ## Submitting Incomplete Solutions
-It's possible to submit an incomplete solution so you can see how others have completed the exercise.
+
+It is possible to submit an incomplete solution so you can see how others have
+completed the exercise.
