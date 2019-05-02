@@ -1,69 +1,70 @@
-if System.get_env("EXERCISM_TEST_EXAMPLES") do
-  Code.load_file("example.exs")
-else
-  Code.load_file("bob.exs")
+if !System.get_env("EXERCISM_TEST_EXAMPLES") do
+  Code.load_file("bob.exs", __DIR__)
 end
 
-ExUnit.start
-ExUnit.configure(exclude: :pending)
+ExUnit.start()
+ExUnit.configure(exclude: :pending, trace: true)
 
-defmodule TeenagerTest do
-  use ExUnit.Case, async: true
+defmodule BobTest do
+  use ExUnit.Case
 
   test "stating something" do
-    assert Teenager.hey("Tom-ay-to, tom-aaaah-to.") == "Whatever."
+    assert Bob.hey("Tom-ay-to, tom-aaaah-to.") == "Whatever."
   end
 
   test "shouting" do
-    assert Teenager.hey("WATCH OUT!") == "Whoa, chill out!"
+    assert Bob.hey("WATCH OUT!") == "Whoa, chill out!"
   end
 
   test "asking a question" do
-    assert Teenager.hey("Does this cryogenic chamber make me look fat?") == "Sure."
+    assert Bob.hey("Does this cryogenic chamber make me look fat?") == "Sure."
   end
 
   test "talking forcefully" do
-    assert Teenager.hey("Let's go make out behind the gym!") == "Whatever."
+    assert Bob.hey("Let's go make out behind the gym!") == "Whatever."
   end
 
   test "talking in capitals" do
-    assert Teenager.hey("This Isn't Shouting!") == "Whatever."
+    assert Bob.hey("This Isn't Shouting!") == "Whatever."
+  end
+
+  test "asking in capitals" do
+    assert Bob.hey("THIS ISN'T SHOUTING?") == "Calm down, I know what I'm doing!"
   end
 
   test "shouting numbers" do
-    assert Teenager.hey("1, 2, 3 GO!") == "Whoa, chill out!"
+    assert Bob.hey("1, 2, 3 GO!") == "Whoa, chill out!"
   end
 
   test "shouting with special characters" do
-    assert Teenager.hey("ZOMG THE %^*@#$(*^ ZOMBIES ARE COMING!!11!!1!") == "Whoa, chill out!"
+    assert Bob.hey("ZOMG THE %^*@#$(*^ ZOMBIES ARE COMING!!11!!1!") == "Whoa, chill out!"
   end
 
   test "shouting with no exclamation mark" do
-    assert Teenager.hey("I HATE YOU") == "Whoa, chill out!"
+    assert Bob.hey("I HATE YOU") == "Whoa, chill out!"
   end
 
   test "statement containing question mark" do
-    assert Teenager.hey("Ending with ? means a question.") == "Whatever."
+    assert Bob.hey("Ending with ? means a question.") == "Whatever."
   end
 
   test "silence" do
-    assert Teenager.hey("") == "Fine. Be that way!"
+    assert Bob.hey("") == "Fine. Be that way!"
   end
 
   test "prolonged silence" do
-    assert Teenager.hey("  ") == "Fine. Be that way!"
+    assert Bob.hey("  ") == "Fine. Be that way!"
   end
 
   test "only numbers" do
-    assert Teenager.hey("1, 2, 3") == "Whatever."
+    assert Bob.hey("1, 2, 3") == "Whatever."
   end
 
   test "question with numbers" do
-    assert Teenager.hey("4?") == "Sure."
+    assert Bob.hey("4?") == "Sure."
   end
 
   test "shouting in Russian" do
-    # Hopefully this is Russian for "GET OUT"
-    assert Teenager.hey("УХОДИТЬ") == "Whoa, chill out!"
+    assert Bob.hey("УХОДИ") == "Whoa, chill out!"
   end
 end

@@ -1,28 +1,38 @@
-defmodule Teenager do
-  @only_digits_and_non_words ~r/\A[\d\W]+\z/
-
+defmodule Bob do
   def hey(input) do
+    remark = String.trim(input)
+
     cond do
-      silence?(input) ->
+      silence?(remark) ->
         "Fine. Be that way!"
-      questioning?(input) ->
+
+      yelling_question?(remark) ->
+        "Calm down, I know what I'm doing!"
+
+      asking_question?(remark) ->
         "Sure."
-      shouting?(input) ->
+
+      yelling?(remark) ->
         "Whoa, chill out!"
+
       true ->
         "Whatever."
     end
   end
 
-  defp silence?(input) do
-    String.trim(input) == ""
+  defp silence?(remark) do
+    remark == ""
   end
 
-  defp questioning?(input) do
-    String.ends_with?(input, "?")
+  defp yelling_question?(remark) do
+    asking_question?(remark) and yelling?(remark)
   end
 
-  defp shouting?(input) do
-    !String.match?(input, @only_digits_and_non_words) and input == String.upcase(input)
+  defp asking_question?(remark) do
+    String.ends_with?(remark, "?")
+  end
+
+  defp yelling?(remark) do
+    remark == String.upcase(remark) and remark != String.downcase(remark)
   end
 end
