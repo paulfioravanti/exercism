@@ -1,11 +1,20 @@
-module Tests exposing (..)
+module Tests exposing
+    ( anyCharacter
+    , character
+    , gibberish
+    , gibberishQuestion
+    , listOfCharacters
+    , tests
+    , uppercaseCharacter
+    , uppercaseGibberish
+    )
 
-import Test exposing (..)
-import Expect
-import String
-import Char
-import Random
 import Bob
+import Char
+import Expect
+import Random
+import String
+import Test exposing (..)
 
 
 tests : Test
@@ -53,7 +62,7 @@ tests =
         , test "forceful questions" <|
             \() ->
                 Expect.equal
-                    "Whoa, chill out!"
+                    "Calm down, I know what I'm doing!"
                     (Bob.hey "WHAT THE HELL WERE YOU THINKING?")
         , test "shouting numbers" <|
             \() ->
@@ -110,6 +119,46 @@ tests =
                 Expect.equal
                     "Whatever."
                     (Bob.hey "\nDoes this cryogenic chamber make me look fat?\nno")
+        , test "ending with whitespace" <|
+            \() ->
+                Expect.equal
+                    "Sure."
+                    (Bob.hey "Okay if like my  spacebar  quite a bit?   ")
+        , test "no letters" <|
+            \() ->
+                Expect.equal
+                    "Whatever."
+                    (Bob.hey "1, 2, 3")
+        , test "question with no letters" <|
+            \() ->
+                Expect.equal
+                    "Sure."
+                    (Bob.hey "4?")
+        , test "statement containing question mark" <|
+            \() ->
+                Expect.equal
+                    "Whatever."
+                    (Bob.hey "Ending with ? means a question.")
+        , test "non-letters with question" <|
+            \() ->
+                Expect.equal
+                    "Sure."
+                    (Bob.hey ":) ?")
+        , test "starting with whitespace" <|
+            \() ->
+                Expect.equal
+                    "Whatever."
+                    (Bob.hey "         hmmmmmmm...")
+        , test "other whitespace" <|
+            \() ->
+                Expect.equal
+                    "Fine. Be that way!"
+                    (Bob.hey "\n\u{000D} \t")
+        , test "non-question ending with whitespace" <|
+            \() ->
+                Expect.equal
+                    "Whatever."
+                    (Bob.hey "This is a statement ending with whitespace      ")
         ]
 
 
@@ -145,4 +194,4 @@ uppercaseGibberish length =
 
 gibberishQuestion : Int -> String
 gibberishQuestion length =
-    (gibberish length anyCharacter) ++ "?"
+    gibberish length anyCharacter ++ "?"

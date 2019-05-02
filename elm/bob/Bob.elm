@@ -1,37 +1,47 @@
 module Bob exposing (hey)
 
-import Regex exposing (regex)
-
 
 hey : String -> String
-hey message =
-    if silence message then
+hey input =
+    let
+        remark =
+            String.trim input
+
+        isSilence =
+            remark == ""
+    in
+    if isSilence then
         "Fine. Be that way!"
-    else if isShouting message then
-        "Whoa, chill out!"
-    else if isQuestion message then
-        "Sure."
+
     else
-        "Whatever."
+        respondToVerbalRemark remark
 
 
-silence : String -> Bool
-silence message =
-    String.trim message == ""
+
+-- PRIVATE
 
 
-isShouting : String -> Bool
-isShouting message =
-    not (onlyDigitsAndNonWords message)
-        && String.toUpper message
-        == message
+respondToVerbalRemark : String -> String
+respondToVerbalRemark remark =
+    let
+        isQuestion =
+            String.endsWith "?" remark
 
+        hasLetters =
+            String.any Char.isAlpha remark
 
-onlyDigitsAndNonWords : String -> Bool
-onlyDigitsAndNonWords message =
-    Regex.contains (regex "^([0-9]|[^a-zA-Z])+$") message
+        isShouting =
+            hasLetters && String.toUpper remark == remark
+    in
+    case ( isQuestion, isShouting ) of
+        ( True, True ) ->
+            "Calm down, I know what I'm doing!"
 
+        ( True, False ) ->
+            "Sure."
 
-isQuestion : String -> Bool
-isQuestion message =
-    String.endsWith "?" message
+        ( False, True ) ->
+            "Whoa, chill out!"
+
+        ( False, False ) ->
+            "Whatever."
