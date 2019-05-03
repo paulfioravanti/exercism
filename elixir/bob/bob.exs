@@ -2,20 +2,25 @@ defmodule Bob do
   def hey(input) do
     remark = String.trim(input)
 
-    cond do
-      silence?(remark) ->
-        "Fine. Be that way!"
+    if silence?(remark) do
+      "Fine. Be that way!"
+    else
+      respond_to_verbal_remark(remark)
+    end
+  end
 
-      yelling_question?(remark) ->
+  defp respond_to_verbal_remark(remark) do
+    case {question?(remark), yelling?(remark)} do
+      {true, true} ->
         "Calm down, I know what I'm doing!"
 
-      asking_question?(remark) ->
+      {true, false} ->
         "Sure."
 
-      yelling?(remark) ->
+      {false, true} ->
         "Whoa, chill out!"
 
-      true ->
+      {false, false} ->
         "Whatever."
     end
   end
@@ -24,11 +29,7 @@ defmodule Bob do
     remark == ""
   end
 
-  defp yelling_question?(remark) do
-    asking_question?(remark) and yelling?(remark)
-  end
-
-  defp asking_question?(remark) do
+  defp question?(remark) do
     String.ends_with?(remark, "?")
   end
 
