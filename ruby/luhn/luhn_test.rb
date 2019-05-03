@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require_relative 'luhn'
 
-# Common test data version: 1.0.0 c826372
+# Common test data version: 1.4.0 4a80663
 class LuhnTest < Minitest::Test
   def test_single_digit_strings_can_not_be_valid
     refute Luhn.valid?("1")
@@ -31,8 +31,16 @@ class LuhnTest < Minitest::Test
     refute Luhn.valid?("8273 1232 7352 0569")
   end
 
+  def test_valid_number_with_an_even_number_of_digits
+    assert Luhn.valid?("095 245 88")
+  end
+
   def test_valid_strings_with_a_non_digit_included_become_invalid
     refute Luhn.valid?("055a 444 285")
+  end
+
+  def test_valid_strings_with_a_non_digit_added_at_the_end_become_invalid
+    refute Luhn.valid?("059a")
   end
 
   def test_valid_strings_with_punctuation_included_become_invalid
@@ -55,24 +63,7 @@ class LuhnTest < Minitest::Test
     assert Luhn.valid?("091")
   end
 
-  # Problems in exercism evolve over time, as we find better ways to ask
-  # questions.
-  # The version number refers to the version of the problem you solved,
-  # not your solution.
-  #
-  # Define a constant named VERSION inside of the top level BookKeeping
-  # module, which may be placed near the end of your file.
-  #
-  # In your file, it will look like this:
-  #
-  # module BookKeeping
-  #   VERSION = 1 # Where the version number matches the one in the test.
-  # end
-  #
-  # If you are curious, read more about constants on RubyDoc:
-  # http://ruby-doc.org/docs/ruby-doc-bundle/UsersGuide/rg/constants.html
-
-  def test_bookkeeping
-    assert_equal 1, BookKeeping::VERSION
+  def test_strings_with_non_digits_is_invalid
+    refute Luhn.valid?(":9")
   end
 end
