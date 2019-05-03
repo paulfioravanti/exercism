@@ -1,8 +1,12 @@
 require 'minitest/autorun'
 require_relative 'rna_transcription'
 
-# Common test data version: 1.0.1 cb1fd3a
+# Common test data version: 1.3.0 294c831
 class RnaTranscriptionTest < Minitest::Test
+  def test_empty_rna_sequence
+    assert_equal '', Complement.of_dna('')
+  end
+
   def test_rna_complement_of_cytosine_is_guanine
     assert_equal 'G', Complement.of_dna('C')
   end
@@ -21,38 +25,5 @@ class RnaTranscriptionTest < Minitest::Test
 
   def test_rna_complement
     assert_equal 'UGCACCAGAAUU', Complement.of_dna('ACGTGGTCTTAA')
-  end
-
-  def test_correctly_handles_invalid_input_rna_instead_of_dna
-    assert_equal '', Complement.of_dna('U')
-  end
-
-  def test_correctly_handles_completely_invalid_dna_input
-    assert_equal '', Complement.of_dna('XXX')
-  end
-
-  def test_correctly_handles_partially_invalid_dna_input
-    assert_equal '', Complement.of_dna('ACGTXXXCTTAA')
-  end
-
-  # Problems in exercism evolve over time, as we find better ways to ask
-  # questions.
-  # The version number refers to the version of the problem you solved,
-  # not your solution.
-  #
-  # Define a constant named VERSION inside of the top level BookKeeping
-  # module, which may be placed near the end of your file.
-  #
-  # In your file, it will look like this:
-  #
-  # module BookKeeping
-  #   VERSION = 1 # Where the version number matches the one in the test.
-  # end
-  #
-  # If you are curious, read more about constants on RubyDoc:
-  # http://ruby-doc.org/docs/ruby-doc-bundle/UsersGuide/rg/constants.html
-
-  def test_bookkeeping
-    assert_equal 4, BookKeeping::VERSION
   end
 end
