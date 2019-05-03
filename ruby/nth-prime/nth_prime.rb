@@ -5,6 +5,7 @@ module Prime
 
   def nth(number)
     raise ArgumentError if number < MINIMUM_PRIME
+
     primes.take(number).to_a.last
   end
 
@@ -17,8 +18,4 @@ module Prime
     2.upto(Math.sqrt(number)).any? { |n| (number % n).zero? }
   end
   private_class_method :composite?
-end
-
-module BookKeeping
-  VERSION = 1
 end
