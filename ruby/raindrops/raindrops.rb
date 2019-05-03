@@ -20,7 +20,3 @@ module Raindrops
   end
   private_class_method :add_raindrop_conversion
 end
-
-module BookKeeping
-  VERSION = 3
-end

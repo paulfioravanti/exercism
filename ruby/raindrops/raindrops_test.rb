@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require_relative 'raindrops'
 
-# Common test data version: 1.0.0 9db5371
+# Common test data version: 1.1.0 99de15d
 class RaindropsTest < Minitest::Test
   def test_the_sound_for_1_is_1
     assert_equal "1", Raindrops.convert(1)
@@ -73,26 +73,5 @@ class RaindropsTest < Minitest::Test
 
   def test_the_sound_for_3125_is_plang_as_it_has_a_factor_5
     assert_equal "Plang", Raindrops.convert(3125)
-  end
-
-  # Problems in exercism evolve over time, as we find better ways to ask
-  # questions.
-  # The version number refers to the version of the problem you solved,
-  # not your solution.
-  #
-  # Define a constant named VERSION inside of the top level BookKeeping
-  # module, which may be placed near the end of your file.
-  #
-  # In your file, it will look like this:
-  #
-  # module BookKeeping
-  #   VERSION = 1 # Where the version number matches the one in the test.
-  # end
-  #
-  # If you are curious, read more about constants on RubyDoc:
-  # http://ruby-doc.org/docs/ruby-doc-bundle/UsersGuide/rg/constants.html
-
-  def test_bookkeeping
-    assert_equal 3, BookKeeping::VERSION
   end
 end
