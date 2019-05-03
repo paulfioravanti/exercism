@@ -27,7 +27,3 @@ module Year
   end
   private_class_method :leap_cycle_year?
 end
-
-module BookKeeping
-  VERSION = 3
-end
