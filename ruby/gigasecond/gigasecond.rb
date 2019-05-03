@@ -8,7 +8,3 @@ module Gigasecond
     date_of_birth + SECONDS
   end
 end
-
-module BookKeeping
-  VERSION = 6
-end
