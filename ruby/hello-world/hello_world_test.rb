@@ -1,31 +1,21 @@
-#!/usr/bin/env ruby
 begin
   gem 'minitest', '>= 5.0.0'
   require 'minitest/autorun'
   require_relative 'hello_world'
 rescue Gem::LoadError => e
   puts "\nMissing Dependency:\n#{e.backtrace.first} #{e.message}"
-  puts 'Minitest 5.0 gem must be installed for the xRuby track.'
+  puts 'Minitest 5.0 gem must be installed for the Ruby track.'
 rescue LoadError => e
   puts "\nError:\n#{e.backtrace.first} #{e.message}"
   puts DATA.read
   exit 1
 end
 
-# Test data version:
-# 7668b09 Added hello world test definition
-
+# Common test data version: 1.1.0 be3ae66
 class HelloWorldTest < Minitest::Test
-  def test_no_name
-    assert_equal 'Hello, World!', HelloWorld.hello
-  end
-
-  def test_sample_name
-    assert_equal 'Hello, Alice!', HelloWorld.hello('Alice')
-  end
-
-  def test_other_sample_name
-    assert_equal 'Hello, Bob!', HelloWorld.hello('Bob')
+  def test_say_hi
+    # skip
+    assert_equal "Hello, World!", HelloWorld.hello
   end
 end
 

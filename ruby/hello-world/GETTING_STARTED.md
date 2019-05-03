@@ -38,16 +38,21 @@ On Windows, it will complain about:
 
 On OS X and Linux, the error will be something like:
 
+
     # Running:
 
-    ESSS
+    E
 
-    Finished in 0.001539s, 2599.0903 runs/s, 0.0000 assertions/s.
+    Finished in 0.001328s, 753.0121 runs/s, 0.0000 assertions/s.
 
-    1) Error:
-    HelloWorldTest#test_no_name:
+      1) Error:
+    HelloWorldTest#test_say_hi:
     NameError: uninitialized constant HelloWorldTest::HelloWorld
-      hello-world/hello_world_test.rb:5:in `test_no_name'
+    Did you mean?  HelloWorldTest
+        hello_world_test.rb:19:in `test_say_hi'
+
+    1 runs, 0 assertions, 0 failures, 1 errors, 0 skips
+
 
 Within the first test, we are referencing a constant named `HelloWorld` when
 we say `HelloWorld.hello`. When Ruby sees a capitalized name like
@@ -65,19 +70,6 @@ To fix it, open up the hello_world.rb file and add the following code:
     class HelloWorld
     end
 
-### Understanding Test Failures
-
-Whether you are on Windows, Mac OS X or Linux, you will eventually be faced with
-errors and failures that look a lot like the Mac OS X / Linux error above.
-
-The letters `ESSS` show that there are four tests altogether,
-that one of them has an error (`E`), and that three of them are skipped (`S`).
-
-The goal is to have four passing tests, which will show as four dots: `....`.
-
-The tests are run in randomized order, which will cause the letters to display
-in random order as well.
-
 ## Step 3
 
 Run the test again.
@@ -85,7 +77,7 @@ Run the test again.
     1) Error:
     HelloWorldTest#test_no_name:
     NoMethodError: undefined method `hello' for HelloWorld:Class
-        hello_world_test.rb:5:in `test_no_name'
+        hello_world_test.rb:20:in `test_no_name'
 
 This time we have a `HelloWorld`, but we're trying tell it to `hello`, and
 `HelloWorld` doesn't understand that message.
@@ -103,8 +95,8 @@ Run the test again.
 
     1) Failure:
     HelloWorldTest#test_no_name [hello_world_test.rb:11]:
-    When given no name, we should greet the world!.
-    Expected: "Hello, world!"
+    When given no name, we should greet the world.
+    Expected: "Hello, World!"
       Actual: nil
 
 Up until now we've been getting errors, this time we get a failure.
@@ -115,10 +107,10 @@ files or syntax errors, or referring to things that don't exist.
 A failure is different. A failure is when Ruby is running just fine
 and the test is expecting one outcome, but getting another.
 
-The test is expecting the `hello` method to return the string `"Hello, world!"`. The easiest way
-to make it pass, is to simply stick the string `"Hello, world!"` inside the method definition.
+The test is expecting the `hello` method to return the string `"Hello, World!"`. The easiest way
+to make it pass, is to simply stick the string `"Hello, World!"` inside the method definition.
 
-## Step 6
+## Step 5
 
 Run the test again.
 
@@ -126,17 +118,6 @@ If it fails you're going to need to read the error message carefully to figure
 out what went wrong, and then try again.
 
 If it passes, then you're ready to move to the next step.
-
-Open the hello_world_test.rb file, and find the word "skip". All but the first test
-start with "skip", which tells Minitest to ignore the test. This is so that
-you don't have to deal with all the failures at once.
-
-To activate the next test, delete the "skip", and run the test suite again.
-
-## Wash, Rinse, Repeat
-
-Delete one "skip" at a time, and make each test pass before you move to the
-next one.
 
 ## Submit
 
