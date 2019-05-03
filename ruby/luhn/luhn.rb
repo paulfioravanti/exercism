@@ -26,8 +26,7 @@ module Luhn
     stripped_string
       .then(&method(:convert_string_to_reversed_numbers))
       .each_slice(2)
-      .reduce([], &method(:append_calculated_pair))
-      .sum
+      .sum(&method(:calculate_pair))
       .then(&CHECK_IF_EVENLY_DIVISIBLE_BY_10)
   end
 
@@ -36,13 +35,13 @@ module Luhn
   end
   private_class_method :convert_string_to_reversed_numbers
 
-  def append_calculated_pair(acc, (left_value, right_value))
-    calculated_right_value =
+  def calculate_pair((left_value, right_value))
+    right_luhn_value =
       right_value
       .then(&DOUBLE)
       .then(&SUBTRACT_9_IF_GREATER_THAN_9)
 
-    acc + [left_value, calculated_right_value]
+    left_value + right_luhn_value
   end
-  private_class_method :append_calculated_pair
+  private_class_method :calculate_pair
 end
