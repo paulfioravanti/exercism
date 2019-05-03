@@ -3,28 +3,26 @@
 class Clock
   TIME_FORMAT = "%02d:%02d"
   private_constant :TIME_FORMAT
-  CLOCK_MINUTES = (0..59)
+  CLOCK_MINUTES = (0..59).freeze
   private_constant :CLOCK_MINUTES
-  CLOCK_HOURS = (0..23)
+  CLOCK_HOURS = (0..23).freeze
   private_constant :CLOCK_HOURS
   MINUTES_IN_HOUR = 60
   private_constant :MINUTES_IN_HOUR
   HOURS_IN_DAY = 24
   private_constant :HOURS_IN_DAY
 
-  def self.at(hours, minutes)
-    new(hours, minutes)
-  end
-
-  private_class_method :new
-
-  def initialize(hour, minutes)
+  def initialize(hour: 0, minute: 0)
     @hour = hour
-    @minutes = minutes
+    @minute = minute
   end
 
   def +(other)
-    tap { |clock| clock.send(:minutes=, minutes + other) }
+    tap { |clock| clock.minute = minute + other.minute }
+  end
+
+  def -(other)
+    tap { |clock| clock.minute = minute - other.minute }
   end
 
   def ==(other)
@@ -32,7 +30,7 @@ class Clock
   end
 
   def to_s
-    display_minutes = minutes
+    display_minutes = minute
     display_hour = hour
 
     unless CLOCK_MINUTES.cover?(display_minutes)
@@ -45,12 +43,11 @@ class Clock
     format(TIME_FORMAT, display_hour, display_minutes)
   end
 
+  protected
+
+  attr_accessor :minute
+
   private
 
   attr_reader :hour
-  attr_accessor :minutes
-end
-
-module BookKeeping
-  VERSION = 2
 end
