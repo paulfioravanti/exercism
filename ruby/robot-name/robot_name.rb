@@ -15,6 +15,7 @@ class Robot
 
     def generate
       raise OutOfNamesError if out_of_names?
+
       @assigned_names += 1
       @names.shift
     end
@@ -49,8 +50,4 @@ class Robot
   private
 
   attr_writer :name
-end
-
-module BookKeeping
-  VERSION = 3
 end
