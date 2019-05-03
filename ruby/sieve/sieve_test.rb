@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require_relative 'sieve'
 
-# Common test data version: 1.0.0 f2b2693
+# Common test data version: 1.1.0 8bbb634
 class SieveTest < Minitest::Test
   def test_no_primes_under_two
     expected = []
@@ -37,26 +37,5 @@ class SieveTest < Minitest::Test
       887, 907, 911, 919, 929, 937, 941, 947, 953, 967, 971, 977, 983, 991, 997
     ]
     assert_equal expected, Sieve.new(1000).primes
-  end
-
-  # Problems in exercism evolve over time, as we find better ways to ask
-  # questions.
-  # The version number refers to the version of the problem you solved,
-  # not your solution.
-  #
-  # Define a constant named VERSION inside of the top level BookKeeping
-  # module, which may be placed near the end of your file.
-  #
-  # In your file, it will look like this:
-  #
-  # module BookKeeping
-  #   VERSION = 1 # Where the version number matches the one in the test.
-  # end
-  #
-  # If you are curious, read more about constants on RubyDoc:
-  # http://ruby-doc.org/docs/ruby-doc-bundle/UsersGuide/rg/constants.html
-
-  def test_bookkeeping
-    assert_equal 1, BookKeeping::VERSION
   end
 end

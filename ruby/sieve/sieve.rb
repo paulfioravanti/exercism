@@ -15,6 +15,7 @@ class Sieve
   def mark_composites
     (2..Math.sqrt(limit)).reduce(range.dup) do |list, number|
       next(list) if list[number] == :composite
+
       mark_multiples_as_composites(list, number)
     end
   end
@@ -28,8 +29,4 @@ class Sieve
   def multiples(number)
     (number**2).step(by: number, to: limit)
   end
-end
-
-module BookKeeping
-  VERSION = 1
 end
