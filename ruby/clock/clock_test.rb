@@ -1,5 +1,4 @@
 require 'minitest/autorun'
-require "minitest/focus"
 require_relative 'clock'
 
 # Common test data version: 2.4.0 b344762
