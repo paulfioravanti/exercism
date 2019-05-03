@@ -5,6 +5,7 @@ class Series
 
   def slices(length)
     raise ArgumentError if length > digits.length
+
     digits.chars.each_cons(length).map(&:join)
   end
 
