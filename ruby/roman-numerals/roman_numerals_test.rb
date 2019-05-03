@@ -1,98 +1,81 @@
 require 'minitest/autorun'
 require_relative 'roman_numerals'
 
-# Common test data version: 1.0.0 070e8d5
+# Common test data version: 1.2.0 3c78ac4
 class RomanNumeralsTest < Minitest::Test
-  def test_1
+  def test_1_is_a_single_i
     assert_equal 'I', 1.to_roman
   end
 
-  def test_2
+  def test_2_is_two_i_s
     assert_equal 'II', 2.to_roman
   end
 
-  def test_3
+  def test_3_is_three_i_s
     assert_equal 'III', 3.to_roman
   end
 
-  def test_4
+  def test_4_being_5_1_is_iv
     assert_equal 'IV', 4.to_roman
   end
 
-  def test_5
+  def test_5_is_a_single_v
     assert_equal 'V', 5.to_roman
   end
 
-  def test_6
+  def test_6_being_5_1_is_vi
     assert_equal 'VI', 6.to_roman
   end
 
-  def test_9
+  def test_9_being_10_1_is_ix
     assert_equal 'IX', 9.to_roman
   end
 
-  def test_27
+  def test_20_is_two_x_s
     assert_equal 'XXVII', 27.to_roman
   end
 
-  def test_48
+  def test_48_is_not_50_2_but_rather_40_8
     assert_equal 'XLVIII', 48.to_roman
   end
 
-  def test_59
+  def test_49_is_not_40_5_4_but_rather_50_10_10_1
+    assert_equal 'XLIX', 49.to_roman
+  end
+
+  def test_50_is_a_single_l
     assert_equal 'LIX', 59.to_roman
   end
 
-  def test_93
+  def test_90_being_100_10_is_xc
     assert_equal 'XCIII', 93.to_roman
   end
 
-  def test_141
+  def test_100_is_a_single_c
     assert_equal 'CXLI', 141.to_roman
   end
 
-  def test_163
+  def test_60_being_50_10_is_lx
     assert_equal 'CLXIII', 163.to_roman
   end
 
-  def test_402
+  def test_400_being_500_100_is_cd
     assert_equal 'CDII', 402.to_roman
   end
 
-  def test_575
+  def test_500_is_a_single_d
     assert_equal 'DLXXV', 575.to_roman
   end
 
-  def test_911
+  def test_900_being_1000_100_is_cm
     assert_equal 'CMXI', 911.to_roman
   end
 
-  def test_1024
+  def test_1000_is_a_single_m
     assert_equal 'MXXIV', 1024.to_roman
   end
 
-  def test_3000
+  def test_3000_is_three_m_s
     assert_equal 'MMM', 3000.to_roman
-  end
-
-  # Problems in exercism evolve over time, as we find better ways to ask
-  # questions.
-  # The version number refers to the version of the problem you solved,
-  # not your solution.
-  #
-  # Define a constant named VERSION inside of the top level BookKeeping
-  # module, which may be placed near the end of your file.
-  #
-  # In your file, it will look like this:
-  #
-  # module BookKeeping
-  #   VERSION = 1 # Where the version number matches the one in the test.
-  # end
-  #
-  # If you are curious, read more about constants on RubyDoc:
-  # http://ruby-doc.org/docs/ruby-doc-bundle/UsersGuide/rg/constants.html
-
-  def test_bookkeeping
-    assert_equal 2, BookKeeping::VERSION
   end
 end
