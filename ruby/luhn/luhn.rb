@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Luhn
-  AT_LEAST_TWO_DIGITS_ONLY = ->(string) { string.match?(/\A\d{2,}\z/) }
-  private_constant :AT_LEAST_TWO_DIGITS_ONLY
+  TWO_OR_MORE_DIGITS_ONLY = ->(string) { string.match?(/\A\d{2,}\z/) }
+  private_constant :TWO_OR_MORE_DIGITS_ONLY
   CHECK_IF_EVENLY_DIVISIBLE_BY_10 = ->(number) { (number % 10).zero? }
   private_constant :CHECK_IF_EVENLY_DIVISIBLE_BY_10
   # NOTE: to_i here will ensure that any potential `nil` values convert to 0
@@ -17,7 +17,7 @@ module Luhn
 
   def valid?(string)
     stripped_string = STRIP_SPACES.call(string)
-    return false unless AT_LEAST_TWO_DIGITS_ONLY.call(stripped_string)
+    return false unless TWO_OR_MORE_DIGITS_ONLY.call(stripped_string)
 
     stripped_string
       .then(&method(:convert_string_to_reversed_numbers))
