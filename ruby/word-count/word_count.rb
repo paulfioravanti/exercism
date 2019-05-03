@@ -1,7 +1,7 @@
 class Phrase
   INCREMENT = 1
   private_constant :INCREMENT
-  WORD = /\b[\w']+\b/
+  WORD = /\b[\w']+\b/.freeze
   private_constant :WORD
   ZERO_DEFAULT_HASH = Hash.new(0).freeze
   private_constant :ZERO_DEFAULT_HASH
@@ -23,8 +23,4 @@ class Phrase
   def convert_to_words(phrase)
     phrase.downcase.scan(WORD)
   end
-end
-
-module BookKeeping
-  VERSION = 1
 end
