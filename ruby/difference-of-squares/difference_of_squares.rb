@@ -22,7 +22,3 @@ class Squares
 
   attr_reader :sum
 end
-
-module BookKeeping
-  VERSION = 4
-end
