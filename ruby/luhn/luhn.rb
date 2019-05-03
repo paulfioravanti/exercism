@@ -8,7 +8,7 @@ module Luhn
   # NOTE: to_i here will ensure that any potential `nil` values convert to 0
   DOUBLE = ->(number) { number.to_i * 2 }
   private_constant :DOUBLE
-  INVALID_LENGTH = ->(collection) { collection.length < 2 }
+  INVALID_LENGTH = ->(string) { string.length < 2 }
   private_constant :INVALID_LENGTH
   STRIP_SPACES = ->(string) { string.gsub(/\s/, "") }
   private_constant :STRIP_SPACES
@@ -19,22 +19,22 @@ module Luhn
 
   def valid?(string)
     stripped_string = STRIP_SPACES.call(string)
-    return false if CONTAINS_NON_DIGITS.call(stripped_string)
+    return false if
+      CONTAINS_NON_DIGITS.call(stripped_string) ||
+      INVALID_LENGTH.call(stripped_string)
 
-    numbers = string_to_reversed_numbers(stripped_string)
-    return false if INVALID_LENGTH.call(numbers)
-
-    numbers
+    stripped_string
+      .then(&method(:convert_string_to_reversed_numbers))
       .each_slice(2)
       .reduce([], &method(:append_calculated_pair))
       .sum
       .then(&CHECK_IF_EVENLY_DIVISIBLE_BY_10)
   end
 
-  def string_to_reversed_numbers(string)
+  def convert_string_to_reversed_numbers(string)
     string.reverse.chars.map(&:to_i)
   end
-  private_class_method :string_to_reversed_numbers
+  private_class_method :convert_string_to_reversed_numbers
 
   def append_calculated_pair(acc, (left_value, right_value))
     calculated_right_value =
