@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require_relative 'run_length_encoding'
 
-# Common test data version: 1.0.0 503a57a
+# Common test data version: 1.1.0 1b7900e
 class RunLengthEncodingTest < Minitest::Test
   def test_encode_empty_string
     input = ''
@@ -77,29 +77,7 @@ class RunLengthEncodingTest < Minitest::Test
 
   def test_consistency_encode_followed_by_decode_gives_original_string
     input = 'zzz ZZ  zZ'
-    output = 'zzz ZZ  zZ'
-    assert_equal output,
-                 RunLengthEncoding.decode(RunLengthEncoding.encode(input))
-  end
-
-  # Problems in exercism evolve over time, as we find better ways to ask
-  # questions.
-  # The version number refers to the version of the problem you solved,
-  # not your solution.
-  #
-  # Define a constant named VERSION inside of the top level BookKeeping
-  # module, which may be placed near the end of your file.
-  #
-  # In your file, it will look like this:
-  #
-  # module BookKeeping
-  #   VERSION = 1 # Where the version number matches the one in the test.
-  # end
-  #
-  # If you are curious, read more about constants on RubyDoc:
-  # http://ruby-doc.org/docs/ruby-doc-bundle/UsersGuide/rg/constants.html
-
-  def test_bookkeeping
-    assert_equal 3, BookKeeping::VERSION
+    encoded = RunLengthEncoding.encode(input)
+    assert_equal input, RunLengthEncoding.decode(encoded)
   end
 end
