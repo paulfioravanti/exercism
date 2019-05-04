@@ -1,95 +1,152 @@
 require 'minitest/autorun'
-require 'minitest/focus'
 require_relative 'ocr_numbers'
 
-# Common test data version: 1.0.0 80782b6
+# Common test data version: 1.2.0 965ecad
 class OcrNumbersTest < Minitest::Test
   def test_recognizes_0
-    assert_equal "0", OcrNumbers.convert(" _ \n| |\n|_|\n   ")
+    input = [" _ ",
+             "| |",
+             "|_|",
+             "   "].join("\n")
+    assert_equal "0", OcrNumbers.convert(input)
   end
 
   def test_recognizes_1
-    assert_equal "1", OcrNumbers.convert("   \n  |\n  |\n   ")
+    input = ["   ",
+             "  |",
+             "  |",
+             "   "].join("\n")
+    assert_equal "1", OcrNumbers.convert(input)
   end
 
-  def test_unreadable_but_correctly_sized_inputs_return_?
-    assert_equal "?", OcrNumbers.convert("   \n  _\n  |\n   ")
+  def test_unreadable_but_correctly_sized_inputs_return_question_mark
+    input = ["   ",
+             "  _",
+             "  |",
+             "   "].join("\n")
+    assert_equal "?", OcrNumbers.convert(input)
   end
 
   def test_input_with_a_number_of_lines_that_is_not_a_multiple_of_four_raises_an_error
-    assert_raises(ArgumentError) { OcrNumbers.convert(" _ \n| |\n   ") }
+    input = [" _ ",
+             "| |",
+             "   "].join("\n")
+    assert_raises(ArgumentError) do
+      OcrNumbers.convert(input)
+    end
   end
 
   def test_input_with_a_number_of_columns_that_is_not_a_multiple_of_three_raises_an_error
-    assert_raises(ArgumentError) { OcrNumbers.convert("    \n   |\n   |\n    ") }
+    input = ["    ",
+             "   |",
+             "   |",
+             "    "].join("\n")
+    assert_raises(ArgumentError) do
+      OcrNumbers.convert(input)
+    end
   end
 
   def test_recognizes_110101100
-    assert_equal "110101100", OcrNumbers.convert("       _     _        _  _ \n  |  || |  || |  |  || || |\n  |  ||_|  ||_|  |  ||_||_|\n                           ")
+    input = ["       _     _        _  _ ",
+             "  |  || |  || |  |  || || |",
+             "  |  ||_|  ||_|  |  ||_||_|",
+             "                           "].join("\n")
+    assert_equal "110101100", OcrNumbers.convert(input)
   end
 
-  def test_garbled_numbers_in_a_string_are_replaced_with_?
-    assert_equal "11?10?1?0", OcrNumbers.convert("       _     _           _ \n  |  || |  || |     || || |\n  |  | _|  ||_|  |  ||_||_|\n                           ")
+  def test_garbled_numbers_in_a_string_are_replaced_with_question_mark
+    input = ["       _     _           _ ",
+             "  |  || |  || |     || || |",
+             "  |  | _|  ||_|  |  ||_||_|",
+             "                           "].join("\n")
+    assert_equal "11?10?1?0", OcrNumbers.convert(input)
   end
 
   def test_recognizes_2
-    assert_equal "2", OcrNumbers.convert(" _ \n _|\n|_ \n   ")
+    input = [" _ ",
+             " _|",
+             "|_ ",
+             "   "].join("\n")
+    assert_equal "2", OcrNumbers.convert(input)
   end
 
   def test_recognizes_3
-    assert_equal "3", OcrNumbers.convert(" _ \n _|\n _|\n   ")
+    input = [" _ ",
+             " _|",
+             " _|",
+             "   "].join("\n")
+    assert_equal "3", OcrNumbers.convert(input)
   end
 
   def test_recognizes_4
-    assert_equal "4", OcrNumbers.convert("   \n|_|\n  |\n   ")
+    input = ["   ",
+             "|_|",
+             "  |",
+             "   "].join("\n")
+    assert_equal "4", OcrNumbers.convert(input)
   end
 
   def test_recognizes_5
-    assert_equal "5", OcrNumbers.convert(" _ \n|_ \n _|\n   ")
+    input = [" _ ",
+             "|_ ",
+             " _|",
+             "   "].join("\n")
+    assert_equal "5", OcrNumbers.convert(input)
   end
 
   def test_recognizes_6
-    assert_equal "6", OcrNumbers.convert(" _ \n|_ \n|_|\n   ")
+    input = [" _ ",
+             "|_ ",
+             "|_|",
+             "   "].join("\n")
+    assert_equal "6", OcrNumbers.convert(input)
   end
 
   def test_recognizes_7
-    assert_equal "7", OcrNumbers.convert(" _ \n  |\n  |\n   ")
+    input = [" _ ",
+             "  |",
+             "  |",
+             "   "].join("\n")
+    assert_equal "7", OcrNumbers.convert(input)
   end
 
   def test_recognizes_8
-    assert_equal "8", OcrNumbers.convert(" _ \n|_|\n|_|\n   ")
+    input = [" _ ",
+             "|_|",
+             "|_|",
+             "   "].join("\n")
+    assert_equal "8", OcrNumbers.convert(input)
   end
 
   def test_recognizes_9
-    assert_equal "9", OcrNumbers.convert(" _ \n|_|\n _|\n   ")
+    input = [" _ ",
+             "|_|",
+             " _|",
+             "   "].join("\n")
+    assert_equal "9", OcrNumbers.convert(input)
   end
 
   def test_recognizes_string_of_decimal_numbers
-    assert_equal "1234567890", OcrNumbers.convert("    _  _     _  _  _  _  _  _ \n  | _| _||_||_ |_   ||_||_|| |\n  ||_  _|  | _||_|  ||_| _||_|\n                              ")
+    input = ["    _  _     _  _  _  _  _  _ ",
+             "  | _| _||_||_ |_   ||_||_|| |",
+             "  ||_  _|  | _||_|  ||_| _||_|",
+             "                              "].join("\n")
+    assert_equal "1234567890", OcrNumbers.convert(input)
   end
 
   def test_numbers_separated_by_empty_lines_are_recognized_lines_are_joined_by_commas
-    assert_equal "123,456,789", OcrNumbers.convert("    _  _ \n  | _| _|\n  ||_  _|\n         \n    _  _ \n|_||_ |_ \n  | _||_|\n         \n _  _  _ \n  ||_||_|\n  ||_| _|\n         ")
-  end
-
-  # Problems in exercism evolve over time, as we find better ways to ask
-  # questions.
-  # The version number refers to the version of the problem you solved,
-  # not your solution.
-  #
-  # Define a constant named VERSION inside of the top level BookKeeping
-  # module, which may be placed near the end of your file.
-  #
-  # In your file, it will look like this:
-  #
-  # module BookKeeping
-  #   VERSION = 1 # Where the version number matches the one in the test.
-  # end
-  #
-  # If you are curious, read more about constants on RubyDoc:
-  # http://ruby-doc.org/docs/ruby-doc-bundle/UsersGuide/rg/constants.html
-
-  def test_bookkeeping
-    assert_equal 1, BookKeeping::VERSION
+    input = ["    _  _ ",
+             "  | _| _|",
+             "  ||_  _|",
+             "         ",
+             "    _  _ ",
+             "|_||_ |_ ",
+             "  | _||_|",
+             "         ",
+             " _  _  _ ",
+             "  ||_||_|",
+             "  ||_| _|",
+             "         "].join("\n")
+    assert_equal "123,456,789", OcrNumbers.convert(input)
   end
 end

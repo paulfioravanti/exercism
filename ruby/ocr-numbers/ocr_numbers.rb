@@ -24,6 +24,7 @@ module OcrNumbers
   def convert(pipes)
     pipes = pipes.split("\n")
     raise ArgumentError unless valid_pipes?(pipes)
+
     pipes
       .map { |row| row.scan(/.{#{WIDTH}}/) }
       .transpose
@@ -43,8 +44,4 @@ module OcrNumbers
     number_array.map { |arr| CONVERSIONS[arr.join] }.join
   end
   private_class_method :ocr_to_number
-end
-
-module BookKeeping
-  VERSION = 1
 end
