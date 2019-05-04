@@ -3,9 +3,9 @@
 module Atbash
   ALPHABET = ("a".."z").to_a.join
   private_constant :ALPHABET
-  NON_LETTERS = /[[[:blank:]][[:punct:]]]/
+  NON_LETTERS = /[[[:blank:]][[:punct:]]]/.freeze
   private_constant :NON_LETTERS
-  TEXT_GROUPING = /(.{5})(?=.)/
+  TEXT_GROUPING = /(.{5})(?=.)/.freeze
   private_constant :TEXT_GROUPING
   GROUPING_OUTPUT = "\\1 \\2"
   private_constant :GROUPING_OUTPUT
