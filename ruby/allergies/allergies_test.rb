@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require_relative 'allergies'
 
-# Common test data version: 1.0.0 879bc89
+# Common test data version: 1.2.0 17a2ab2
 class AllergiesTest < Minitest::Test
   def test_no_allergies_means_not_allergic
     allergies = Allergies.new(0)
@@ -22,69 +22,65 @@ class AllergiesTest < Minitest::Test
     refute allergies.allergic_to?('strawberries')
   end
 
+  def test_allergic_to_strawberries_but_not_peanuts
+    allergies = Allergies.new(9)
+    assert allergies.allergic_to?('eggs')
+    refute allergies.allergic_to?('peanuts')
+    refute allergies.allergic_to?('shellfish')
+    assert allergies.allergic_to?('strawberries')
+  end
+
   def test_no_allergies_at_all
     allergies = Allergies.new(0)
-    assert_equal %w(), allergies.list
+    expected_items = []
+    assert_equal expected_items, allergies.list.sort
   end
 
   def test_allergic_to_just_eggs
     allergies = Allergies.new(1)
-    assert_equal %w(eggs), allergies.list
+    expected_items = ["eggs"]
+    assert_equal expected_items, allergies.list.sort
   end
 
   def test_allergic_to_just_peanuts
     allergies = Allergies.new(2)
-    assert_equal %w(peanuts), allergies.list
+    expected_items = ["peanuts"]
+    assert_equal expected_items, allergies.list.sort
   end
 
   def test_allergic_to_just_strawberries
     allergies = Allergies.new(8)
-    assert_equal %w(strawberries), allergies.list
+    expected_items = ["strawberries"]
+    assert_equal expected_items, allergies.list.sort
   end
 
   def test_allergic_to_eggs_and_peanuts
     allergies = Allergies.new(3)
-    assert_equal %w(eggs peanuts), allergies.list
+    expected_items = ["eggs", "peanuts"]
+    assert_equal expected_items, allergies.list.sort
   end
 
   def test_allergic_to_more_than_eggs_but_not_peanuts
     allergies = Allergies.new(5)
-    assert_equal %w(eggs shellfish), allergies.list
+    expected_items = ["eggs", "shellfish"]
+    assert_equal expected_items, allergies.list.sort
   end
 
   def test_allergic_to_lots_of_stuff
     allergies = Allergies.new(248)
-    assert_equal %w(strawberries tomatoes chocolate pollen cats), allergies.list
+    expected_items = ["cats", "chocolate", "pollen", "strawberries", "tomatoes"]
+    assert_equal expected_items, allergies.list.sort
   end
 
   def test_allergic_to_everything
     allergies = Allergies.new(255)
-    assert_equal %w(eggs peanuts shellfish strawberries tomatoes chocolate pollen cats), allergies.list
+    expected_items = ["cats", "chocolate", "eggs", "peanuts", "pollen", "shellfish", "strawberries", "tomatoes"]
+    assert_equal expected_items, allergies.list.sort
   end
 
   def test_ignore_non_allergen_score_parts
     allergies = Allergies.new(509)
-    assert_equal %w(eggs shellfish strawberries tomatoes chocolate pollen cats), allergies.list
-  end
-
-  # Problems in exercism evolve over time, as we find better ways to ask
-  # questions.
-  # The version number refers to the version of the problem you solved,
-  # not your solution.
-  #
-  # Define a constant named VERSION inside of the top level BookKeeping
-  # module, which may be placed near the end of your file.
-  #
-  # In your file, it will look like this:
-  #
-  # module BookKeeping
-  #   VERSION = 1 # Where the version number matches the one in the test.
-  # end
-  #
-  # If you are curious, read more about constants on RubyDoc:
-  # http://ruby-doc.org/docs/ruby-doc-bundle/UsersGuide/rg/constants.html
-
-  def test_bookkeeping
-    assert_equal 1, BookKeeping::VERSION
+    expected_items = ["cats", "chocolate", "eggs", "pollen", "shellfish", "strawberries", "tomatoes"]
+    assert_equal expected_items, allergies.list.sort
   end
 end
