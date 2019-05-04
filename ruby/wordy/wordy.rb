@@ -7,7 +7,7 @@ class WordProblem
     (?<initial_value>-?\d+)\s            # 1, -1 etc
     (?<messages>(\w+(\sby)?\s-?\d+\s?)+) # plus 1, multiplied by 1 plus 2 etc
     \?                                   # question mark at the end
-    \z/x
+    \z/x.freeze
   private_constant :MATH_QUESTION
   MESSAGES = {
     "plus" => :+,
@@ -17,15 +17,17 @@ class WordProblem
   }.freeze
   private_constant :MESSAGES
 
-  attr_reader :initial_value, :messages
+  attr_reader :question
 
   def initialize(question)
-    raise ArgumentError unless (match = question.match(MATH_QUESTION))
-    @initial_value = match[:initial_value].to_i
-    @messages = parse_messages(match[:messages])
+    @question = question
   end
 
   def answer
+    raise ArgumentError unless (match = question.match(MATH_QUESTION))
+
+    initial_value = match[:initial_value].to_i
+    messages = parse_messages(match[:messages])
     messages.reduce(initial_value) do |acc, (message, value)|
       acc.public_send(message, value)
     end
@@ -40,8 +42,4 @@ class WordProblem
       .each_slice(2)
       .map { |message, value| [MESSAGES[message], value.to_i] }
   end
-end
-
-module BookKeeping
-  VERSION = 1
 end
