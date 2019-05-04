@@ -5,11 +5,12 @@ class Nucleotide
   private_constant :INCREMENT
   NUCLEOTIDE_SEEDS = { "A" => 0, "T" => 0, "C" => 0, "G" => 0 }.freeze
   private_constant :NUCLEOTIDE_SEEDS
-  VALID_DNA_STRAND = /\A[#{NUCLEOTIDE_SEEDS.keys.join}]*\z/
+  VALID_DNA_STRAND = /\A[#{NUCLEOTIDE_SEEDS.keys.join}]*\z/.freeze
   private_constant :VALID_DNA_STRAND
 
   def self.from_dna(string)
     raise ArgumentError unless string.match?(VALID_DNA_STRAND)
+
     new(string)
   end
 
