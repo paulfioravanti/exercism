@@ -20,9 +20,11 @@ class Palindromes
   attr_reader :range, :products
 
   def generate_palindrome_products
-    range.product(range).map { |x, y| x * y }.uniq.select do |product|
-      palindrome?(product)
-    end
+    range
+      .product(range)
+      .map { |x, y| x * y }
+      .uniq
+      .select { |product| palindrome?(product) }
   end
 
   def palindrome?(number)
@@ -44,9 +46,10 @@ class Palindromes
     private
 
     def generate_factors(range)
-      range.repeated_combination(2).to_a.select do |x, y|
-        x * y == value
-      end
+      range
+        .repeated_combination(2)
+        .to_a
+        .select { |x, y| x * y == value }
     end
   end
   private_constant :Palindrome

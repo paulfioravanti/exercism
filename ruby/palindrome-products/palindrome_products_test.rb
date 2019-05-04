@@ -1,5 +1,4 @@
 require 'minitest/autorun'
-require 'minitest/focus'
 require_relative 'palindrome_products'
 
 class PalindromesTest < Minitest::Test
