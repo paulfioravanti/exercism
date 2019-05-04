@@ -14,7 +14,3 @@ module FlattenArray
     end
   end
 end
-
-module BookKeeping
-  VERSION = 1
-end
