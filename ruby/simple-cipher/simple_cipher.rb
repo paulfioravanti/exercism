@@ -7,13 +7,14 @@ class Cipher
   private_constant :ALPHABET
   RANDOM_KEY = -> { (0...100).map { ALPHABET.sample }.join }
   private_constant :RANDOM_KEY
-  VALID_KEY = /\A[a-z]+\z/
+  VALID_KEY = /\A[a-z]+\z/.freeze
   private_constant :VALID_KEY
 
   attr_reader :key
 
   def initialize(key = RANDOM_KEY.call)
     raise ArgumentError unless key.match?(VALID_KEY)
+
     @key = key
   end
 

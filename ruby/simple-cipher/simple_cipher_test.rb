@@ -1,5 +1,4 @@
 require 'minitest/autorun'
-require 'minitest/focus'
 require_relative 'simple_cipher'
 
 class RandomKeyCipherTest < Minitest::Test
