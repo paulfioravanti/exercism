@@ -14,7 +14,3 @@ class SumOfMultiples
 
   attr_reader :multiples
 end
-
-module BookKeeping
-  VERSION = 2
-end
