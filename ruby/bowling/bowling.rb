@@ -1,5 +1,3 @@
-require "forwardable"
-
 class Game
   class BowlingError < StandardError; end
 
@@ -17,8 +15,6 @@ class Game
     private_constant :FINAL_FRAME_SIZE
     STANDARD_FRAME_STRIKE = [MAX_PINS].freeze
     private_constant :STANDARD_FRAME_STRIKE
-
-    extend Forwardable
 
     module Referee
       MIN_PINS = 0
