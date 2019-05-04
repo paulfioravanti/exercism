@@ -66,7 +66,3 @@ module FoodChain
     ANIMALS.map { |animal| VERSES_FOR[animal] }.join("\n") + "\n"
   end
 end
-
-module BookKeeping
-  VERSION = 2
-end
