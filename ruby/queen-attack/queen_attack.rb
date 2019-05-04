@@ -1,5 +1,5 @@
 class Queens
-  BOARD_BOUNDARIES = (0..7)
+  BOARD_BOUNDARIES = (0..7).freeze
   private_constant :BOARD_BOUNDARIES
 
   def initialize(options)
@@ -26,8 +26,4 @@ class Queens
   def same_diagonal?
     positions.transpose.map { |pos1, pos2| (pos1 - pos2).abs }.uniq.one?
   end
-end
-
-module BookKeeping
-  VERSION = 2
 end
