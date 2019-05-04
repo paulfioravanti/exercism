@@ -12,16 +12,14 @@ class School
   end
 
   def students_by_grade
-    enrollments.sort.map do |grade, students|
-      { grade: grade, students: students.sort }
-    end
+    enrollments.sort.map(&method(:enrollment_to_grade))
   end
 
   private
 
   attr_reader :enrollments
-end
 
-module BookKeeping
-  VERSION = 3
+  def enrollment_to_grade((grade, students))
+    { grade: grade, students: students.sort }
+  end
 end
