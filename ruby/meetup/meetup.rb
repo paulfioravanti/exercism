@@ -33,7 +33,3 @@ class Meetup
 
   attr_reader :month
 end
-
-module BookKeeping
-  VERSION = 1
-end
