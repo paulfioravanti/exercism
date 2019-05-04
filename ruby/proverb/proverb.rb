@@ -12,14 +12,20 @@ class Proverb
   end
 
   def to_s
-    chain.each_cons(2).reduce([]) do |acc, (objective, possession)|
-      acc << format(VERSE, objective: objective, possession: possession)
-    end.append(lament).join("\n")
+    chain
+      .each_cons(2)
+      .reduce([], &method(:append_verse))
+      .append(lament)
+      .join("\n")
   end
 
   private
 
   attr_reader :chain, :initial_objective
+
+  def append_verse(acc, (objective, possession))
+    acc << format(VERSE, objective: objective, possession: possession)
+  end
 
   def lament
     format(LAMENT, objective: initial_objective)
