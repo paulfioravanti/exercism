@@ -11,8 +11,10 @@ module PrimeFactors
       MINIMUM_PRIME.upto(number) do |n|
         quotient, modulus = number.divmod(n)
         next if modulus.nonzero?
+
         prime_factors << n
         break if quotient == FINAL_FACTOR
+
         number = quotient
         redo
       end
