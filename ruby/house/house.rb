@@ -35,6 +35,7 @@ module House
     [SUBJECT.call(phrase[:subject])].tap do |array|
       phrases.each.with_index do |hash, phrase_index|
         next unless (action = hash[:action])
+
         array << DESCRIPTION.call(action, phrases[phrase_index + 1][:subject])
       end
     end.join("\n")
