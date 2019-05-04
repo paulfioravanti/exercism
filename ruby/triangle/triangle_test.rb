@@ -1,8 +1,7 @@
 require 'minitest/autorun'
-require 'minitest/focus'
 require_relative 'triangle'
 
-# Common test data version: 1.0.0 8acd78c
+# Common test data version: 1.2.0 55f89ca
 class TriangleTest < Minitest::Test
   def test_triangle_is_equilateral_if_all_sides_are_equal
     triangle = Triangle.new([2, 2, 2])
@@ -54,9 +53,19 @@ class TriangleTest < Minitest::Test
     refute triangle.isosceles?, "Expected 'false', triangle [2, 3, 4] is not isosceles."
   end
 
-  def test_sides_that_violate_triangle_inequality_are_not_isosceles_even_if_two_are_equal
+  def test_sides_that_violate_triangle_inequality_are_not_isosceles_even_if_two_are_equal_1
     triangle = Triangle.new([1, 1, 3])
     refute triangle.isosceles?, "Expected 'false', triangle [1, 1, 3] is not isosceles."
+  end
+
+  def test_sides_that_violate_triangle_inequality_are_not_isosceles_even_if_two_are_equal_2
+    triangle = Triangle.new([1, 3, 1])
+    refute triangle.isosceles?, "Expected 'false', triangle [1, 3, 1] is not isosceles."
+  end
+
+  def test_sides_that_violate_triangle_inequality_are_not_isosceles_even_if_two_are_equal_3
+    triangle = Triangle.new([3, 1, 1])
+    refute triangle.isosceles?, "Expected 'false', triangle [3, 1, 1] is not isosceles."
   end
 
   def test_isosceles_triangle_sides_may_be_floats
@@ -87,26 +96,5 @@ class TriangleTest < Minitest::Test
   def test_scalene_triangle_sides_may_be_floats
     triangle = Triangle.new([0.5, 0.4, 0.6])
     assert triangle.scalene?, "Expected 'true', triangle [0.5, 0.4, 0.6] is scalene."
-  end
-
-  # Problems in exercism evolve over time, as we find better ways to ask
-  # questions.
-  # The version number refers to the version of the problem you solved,
-  # not your solution.
-  #
-  # Define a constant named VERSION inside of the top level BookKeeping
-  # module, which may be placed near the end of your file.
-  #
-  # In your file, it will look like this:
-  #
-  # module BookKeeping
-  #   VERSION = 1 # Where the version number matches the one in the test.
-  # end
-  #
-  # If you are curious, read more about constants on RubyDoc:
-  # http://ruby-doc.org/docs/ruby-doc-bundle/UsersGuide/rg/constants.html
-
-  def test_bookkeeping
-    assert_equal 1, BookKeeping::VERSION
   end
 end
