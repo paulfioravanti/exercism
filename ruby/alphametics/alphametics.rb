@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Alphametics
-  NON_UPPERCASE_CHARACTERS = /[^A-Z]/
+  NON_UPPERCASE_CHARACTERS = /[^A-Z]/.freeze
   private_constant :NON_UPPERCASE_CHARACTERS
   SINGLE_DIGITS = (0..9).to_a
   private_constant :SINGLE_DIGITS
@@ -24,10 +24,9 @@ module Alphametics
   private_class_method :leading_zero?
 
   def evaluate(expression)
-    expression.each_slice(2).reduce(
-      expression.shift.to_i,
-      &method(:accumulate_expression)
-    )
+    expression
+      .each_slice(2)
+      .reduce(expression.shift.to_i, &method(:accumulate_expression))
   end
   private_class_method :evaluate
 
@@ -35,8 +34,4 @@ module Alphametics
     object.public_send(method, value.to_i)
   end
   private_class_method :accumulate_expression
-end
-
-module BookKeeping
-  VERSION = 4
 end
