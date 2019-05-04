@@ -9,7 +9,7 @@ class SecretHandshake
     [:reverse!]
   ].freeze
   private_constant :ACTIONS
-  NUMBER = /\A\d+\z/
+  NUMBER = /\A\d+\z/.freeze
   private_constant :NUMBER
   MASK = ->(number) { 1 << number }
   private_constant :MASK
@@ -20,6 +20,7 @@ class SecretHandshake
 
   def commands
     return [] unless number.to_s.match?(NUMBER)
+
     ACTIONS.each.with_index.with_object([]) do |(action, index), acc|
       acc.public_send(*action) if set?(index)
     end
