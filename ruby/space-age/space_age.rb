@@ -27,7 +27,3 @@ class SpaceAge
 
   attr_reader :age_in_seconds
 end
-
-module BookKeeping
-  VERSION = 1
-end
