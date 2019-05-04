@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Crypto
-  SPACES_AND_PUNCTUATION = /[[[:space:]][[:punct:]]]/
+  SPACES_AND_PUNCTUATION = /[[[:space:]][[:punct:]]]/.freeze
   private_constant :SPACES_AND_PUNCTUATION
 
   def initialize(plaintext)
@@ -10,6 +10,7 @@ class Crypto
 
   def ciphertext
     return plaintext if plaintext.empty?
+
     encode(rectangle)
   end
 
@@ -35,8 +36,4 @@ class Crypto
   def encode(rectangle)
     rectangle.transpose.map(&:join).join(" ")
   end
-end
-
-module BookKeeping
-  VERSION = 1
 end
