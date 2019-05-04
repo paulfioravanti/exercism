@@ -8,13 +8,16 @@ module PigLatin
   VOWEL_SOUND = [*VOWELS.chars, "xr", /\Ay[^#{VOWELS}]/].freeze
   private_constant :VOWEL_SOUND
   CONSONANT_SOUND =
-    /\A(?<consonant_sound>(?:.qu|qu|.)[^#{VOWELS}y]*)(?<rest>.*)/
+    /\A(?<consonant_sound>(?:.qu|qu|.)[^#{VOWELS}y]*)(?<rest>.*)/.freeze
   private_constant :CONSONANT_SOUND
 
   module_function
 
   def translate(phrase)
-    phrase.split.map(&method(:translate_word)).join(" ")
+    phrase
+      .split
+      .map(&method(:translate_word))
+      .join(" ")
   end
 
   def translate_word(word)
@@ -27,8 +30,4 @@ module PigLatin
     end
   end
   private_class_method :translate_word
-end
-
-module BookKeeping
-  VERSION = 2
 end
