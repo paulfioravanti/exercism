@@ -1,3 +1,5 @@
+require "forwardable"
+
 class Game
   class BowlingError < StandardError; end
 
@@ -16,16 +18,19 @@ class Game
     STANDARD_FRAME_STRIKE = [MAX_PINS].freeze
     private_constant :STANDARD_FRAME_STRIKE
 
+    extend Forwardable
+
     module Referee
       MIN_PINS = 0
       private_constant :MIN_PINS
 
       module_function
 
-      def invalid_roll?(frame_number, pins, remaining_pins)
+      def invalid_roll?(frames, frame_number, remaining_pins, pins)
         !pins.between?(MIN_PINS, MAX_PINS) ||
           pins > remaining_pins ||
-          frame_number > FINAL_FRAME
+          frame_number > FINAL_FRAME ||
+          frames[FINAL_FRAME].length >= FINAL_FRAME_SIZE
       end
 
       def unscoreable?(frames)
@@ -110,8 +115,8 @@ class Game
 
     module_function
 
-    def invalid_roll?(frame_number, pins, remaining_pins)
-      Referee.invalid_roll?(frame_number, pins, remaining_pins)
+    def invalid_roll?(frames, frame_number, remaining_pins, pins)
+      Referee.invalid_roll?(frames, frame_number, remaining_pins, pins)
     end
 
     def unscoreable?(frames)
@@ -184,9 +189,10 @@ class Game
   end
 
   def roll(pins)
-    if BowlingRules.invalid_roll?(frame_number, pins, remaining_pins)
+    if BowlingRules.invalid_roll?(frames, frame_number, remaining_pins, pins)
       raise BowlingError
     end
+
     frames[frame_number] << pins
     BowlingRules.next_actions(frames, frame_number, pins).each do |action|
       send(*action)
@@ -195,6 +201,7 @@ class Game
 
   def score
     raise BowlingError if BowlingRules.unscoreable?(frames)
+
     frames.each.with_index.reduce(0) do |acc, (frame, index)|
       acc + BowlingRules.score(frames, frame, index)
     end
@@ -220,8 +227,4 @@ class Game
   def game_over
     self.frame_number = GAME_OVER
   end
-end
-
-module BookKeeping
-  VERSION = 3
 end
