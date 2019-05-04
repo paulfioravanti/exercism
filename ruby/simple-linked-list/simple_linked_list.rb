@@ -62,7 +62,3 @@ end
 
 # Break encapsulation for the tests.
 Element = SimpleLinkedList.const_get(:Element)
-
-module BookKeeping
-  VERSION = 1
-end
