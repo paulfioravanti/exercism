@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class BeerSong
+module BeerSong
   AMOUNT_OF_BEER = "%<amount>s %<container>s of beer"
   private_constant :AMOUNT_OF_BEER
   BEER_ON_WALL = lambda do |amount, container: "bottles"|
@@ -8,6 +8,10 @@ class BeerSong
     "on the wall"
   end
   private_constant :BEER_ON_WALL
+  END_VERSE_NUMBER = lambda do |start_verse_number, num_verses|
+    start_verse_number - num_verses + 1
+  end
+  private_constant :END_VERSE_NUMBER
   LINE_1 = lambda do |amount, container: "bottles"|
     "#{BEER_ON_WALL.call(amount.to_s.capitalize, container: container)}, "\
     "#{format(AMOUNT_OF_BEER, amount: amount, container: container)}."
@@ -44,22 +48,22 @@ class BeerSong
     VERSE
   private_constant :VERSE_0
   VERSES =
-    Hash.new { |_hash, key| const_get("GENERIC_VERSE").call(key) }.tap do |hash|
+    Hash.new { |_hash, key| GENERIC_VERSE.call(key) }.tap do |hash|
       hash[2] = VERSE_2
       hash[1] = VERSE_1
       hash[0] = VERSE_0
     end
   private_constant :VERSES
 
-  def verse(number)
-    VERSES[number]
-  end
+  module_function
 
-  def verses(from, to)
-    from.downto(to).map { |number| verse(number) }.join("\n")
-  end
-end
+  def recite(start_verse_number, num_verses)
+    end_verse_number =
+      END_VERSE_NUMBER.call(start_verse_number, num_verses)
 
-module BookKeeping
-  VERSION = 3
+    start_verse_number
+      .downto(end_verse_number)
+      .map(&VERSES)
+      .join("\n")
+  end
 end
