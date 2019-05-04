@@ -9,7 +9,3 @@ module ETL
     end
   end
 end
-
-module BookKeeping
-  VERSION = 1
-end
