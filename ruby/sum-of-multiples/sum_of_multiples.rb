@@ -1,14 +1,13 @@
 class SumOfMultiples
-  LIMIT_TO_RANGE = ->(limit) { (1...limit) }
-  private_constant :LIMIT_TO_RANGE
+  RANGE_START = 1
+  private_constant :RANGE_START
 
   def initialize(*numbers)
     @numbers = numbers.freeze
   end
 
   def to(limit)
-    limit
-      .then(&LIMIT_TO_RANGE)
+    (RANGE_START..limit)
       .select(&method(:multiples?))
       .sum
   end
