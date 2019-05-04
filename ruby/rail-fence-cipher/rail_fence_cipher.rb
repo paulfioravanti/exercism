@@ -1,15 +1,12 @@
-# frozen_string_literal: true
-
 module RailFenceCipher
-  VERSION = 1
+  RAIL_RANGE = ->(offset, limit) { (offset...(limit - offset)).to_a }
+  private_constant :RAIL_RANGE
+  RAILS = ->(n) { Array.new(n) { [] } }
+  private_constant :RAILS
   ZIG_ZAG_PATTERN = lambda { |limit|
     (RAIL_RANGE.call(0, limit) + RAIL_RANGE.call(1, limit).reverse).cycle
   }
   private_constant :ZIG_ZAG_PATTERN
-  RAILS = ->(n) { Array.new(n) { [] } }
-  private_constant :RAILS
-  RAIL_RANGE = ->(offset, limit) { (offset...(limit - offset)).to_a }
-  private_constant :RAIL_RANGE
 
   module_function
 
