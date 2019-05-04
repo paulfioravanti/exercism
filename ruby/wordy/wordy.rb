@@ -17,8 +17,6 @@ class WordProblem
   }.freeze
   private_constant :MESSAGES
 
-  attr_reader :question
-
   def initialize(question)
     @question = question
   end
@@ -34,6 +32,8 @@ class WordProblem
   end
 
   private
+
+  attr_reader :question
 
   def parse_messages(messages)
     messages
