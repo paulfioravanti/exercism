@@ -17,6 +17,7 @@ class Bst
 
   def each(&block)
     return enum_for(:each) unless block_given?
+
     left&.each(&block)
     yield(data)
     right&.each(&block)
@@ -33,8 +34,4 @@ class Bst
       send("#{branch}=", self.class.new(value))
     end
   end
-end
-
-module BookKeeping
-  VERSION = 1
 end
