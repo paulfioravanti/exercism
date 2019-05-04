@@ -1,25 +1,11 @@
 require 'minitest/autorun'
 require_relative 'anagram'
 
-# Common test data version: 1.0.1 196fc1a
+# Common test data version: 1.4.0 baaf092
 class AnagramTest < Minitest::Test
   def test_no_matches
     detector = Anagram.new('diaper')
     anagrams = detector.match(["hello", "world", "zombies", "pants"])
-    expected = []
-    assert_equal expected, anagrams
-  end
-
-  def test_detects_simple_anagram
-    detector = Anagram.new('ant')
-    anagrams = detector.match(["tan", "stand", "at"])
-    expected = ["tan"]
-    assert_equal expected, anagrams
-  end
-
-  def test_does_not_detect_false_positives
-    detector = Anagram.new('galea')
-    anagrams = detector.match(["eagle"])
     expected = []
     assert_equal expected, anagrams
   end
@@ -52,13 +38,6 @@ class AnagramTest < Minitest::Test
     assert_equal expected, anagrams.sort
   end
 
-  def test_does_not_detect_identical_words
-    detector = Anagram.new('corn')
-    anagrams = detector.match(["corn", "dark", "Corn", "rank", "CORN", "cron", "park"])
-    expected = ["cron"]
-    assert_equal expected, anagrams
-  end
-
   def test_does_not_detect_non_anagrams_with_identical_checksum
     detector = Anagram.new('mass')
     anagrams = detector.match(["last"])
@@ -87,13 +66,6 @@ class AnagramTest < Minitest::Test
     assert_equal expected, anagrams
   end
 
-  def test_does_not_detect_a_word_as_its_own_anagram
-    detector = Anagram.new('banana')
-    anagrams = detector.match(["Banana"])
-    expected = []
-    assert_equal expected, anagrams
-  end
-
   def test_does_not_detect_a_anagram_if_the_original_word_is_repeated
     detector = Anagram.new('go')
     anagrams = detector.match(["go Go GO"])
@@ -108,31 +80,10 @@ class AnagramTest < Minitest::Test
     assert_equal expected, anagrams
   end
 
-  def test_capital_word_is_not_own_anagram
+  def test_words_are_not_anagrams_of_themselves_case_insensitive
     detector = Anagram.new('BANANA')
-    anagrams = detector.match(["Banana"])
+    anagrams = detector.match(["BANANA", "Banana", "banana"])
     expected = []
     assert_equal expected, anagrams
-  end
-
-  # Problems in exercism evolve over time, as we find better ways to ask
-  # questions.
-  # The version number refers to the version of the problem you solved,
-  # not your solution.
-  #
-  # Define a constant named VERSION inside of the top level BookKeeping
-  # module, which may be placed near the end of your file.
-  #
-  # In your file, it will look like this:
-  #
-  # module BookKeeping
-  #   VERSION = 1 # Where the version number matches the one in the test.
-  # end
-  #
-  # If you are curious, read more about constants on RubyDoc:
-  # http://ruby-doc.org/docs/ruby-doc-bundle/UsersGuide/rg/constants.html
-
-  def test_bookkeeping
-    assert_equal 2, BookKeeping::VERSION
   end
 end

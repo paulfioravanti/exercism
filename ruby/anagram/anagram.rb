@@ -15,7 +15,3 @@ class Anagram
 
   attr_reader :word, :letters
 end
-
-module BookKeeping
-  VERSION = 2
-end
