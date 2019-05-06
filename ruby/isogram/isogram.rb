@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Isogram
   WORD_CHARACTERS = /\w/.freeze
   private_constant :WORD_CHARACTERS
