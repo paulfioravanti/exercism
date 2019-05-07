@@ -85,8 +85,8 @@ module TwelveDays
   end
   private_class_method :add_current_gift_to_extra_gifts
 
-  def verse(day, all_gifts)
-    format(DECLARATION_OF_RECEIPT, day: day) + all_gifts + PERIOD + NEWLINE
+  def verse(day, todays_gifts)
+    format(DECLARATION_OF_RECEIPT, day: day) + todays_gifts + PERIOD + NEWLINE
   end
   private_class_method :verse
 end
