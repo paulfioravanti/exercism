@@ -76,11 +76,11 @@ module TwelveDays
   end
   private_class_method :add_verse_to_song
 
-  def add_current_gift_to_extra_gifts(gift_of_the_day, extra_gifts)
+  def add_current_gift_to_extra_gifts(current_gift, extra_gifts)
     if extra_gifts.empty?
-      extra_gifts << COMMA_AND + gift_of_the_day
+      extra_gifts << COMMA_AND + current_gift
     else
-      extra_gifts.prepend(COMMA + gift_of_the_day)
+      extra_gifts.prepend(COMMA + current_gift)
     end
   end
   private_class_method :add_current_gift_to_extra_gifts
