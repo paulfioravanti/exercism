@@ -12,6 +12,10 @@ module TwelveDays
       hash["twelfth"] = "twelve"
     end
   private_constant :CARDINALS
+  COMMA = ", "
+  private_constant :COMMA
+  COMMA_AND = ", and "
+  private_constant :COMMA_AND
   DECLARATION_OF_RECEIPT =
     "On the %<day>s day of Christmas my true love gave to me: "
   private_constant :DECLARATION_OF_RECEIPT
@@ -74,9 +78,9 @@ module TwelveDays
 
   def add_current_gift_to_extra_gifts(gift_of_the_day, extra_gifts)
     if extra_gifts.empty?
-      extra_gifts << ", and #{gift_of_the_day}"
+      extra_gifts << COMMA_AND + gift_of_the_day
     else
-      extra_gifts.prepend(", #{gift_of_the_day}")
+      extra_gifts.prepend(COMMA + gift_of_the_day)
     end
   end
   private_class_method :add_current_gift_to_extra_gifts
