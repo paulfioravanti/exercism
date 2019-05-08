@@ -16,6 +16,7 @@ class Series
 
     digits
       .chars
+      .map(&:to_i)
       .each_cons(series)
       .reduce(INITIAL_PRODUCT, &method(:compare_products))
   end
@@ -33,7 +34,7 @@ class Series
   end
 
   def compare_products(acc, subseries)
-    product = subseries.map(&:to_i).reduce(:*)
+    product = subseries.reduce(:*)
     product > acc ? product : acc
   end
 end
