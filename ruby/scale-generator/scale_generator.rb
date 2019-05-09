@@ -26,10 +26,13 @@ class Scale
   end
 
   def pitches
-    tonic_scale = scale_for_tonic
+    tonic_scale =
+      scale
+      .index(tonic)
+      .then { |index| scale.rotate(index) }
     return tonic_scale unless intervals
 
-    last_index = 0
+    last_index = INITIAL_SCALE_INDEX
     intervals.chars.each_with_object([]) do |interval, acc|
       acc << tonic_scale[last_index]
       last_index += INTERVALS[interval]
@@ -39,10 +42,4 @@ class Scale
   private
 
   attr_reader :tonic, :scale_name, :intervals, :scale
-
-  def scale_for_tonic
-    scale
-      .index(tonic)
-      .then { |index| scale.rotate(index) }
-  end
 end
