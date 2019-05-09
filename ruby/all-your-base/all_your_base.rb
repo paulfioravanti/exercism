@@ -42,14 +42,13 @@ module BaseConverter
 
   def convert_to_output_base(total, output_base)
     conversion = []
-    while total >= output_base
+    loop do
       conversion.append(total % output_base)
+      break if total < output_base
+
       total /= output_base
     end
-
-    conversion
-      .append(total % output_base)
-      .reverse
+    conversion.reverse
   end
   private_class_method :convert_to_output_base
 end
