@@ -41,14 +41,14 @@ module BaseConverter
   private_class_method :add_power
 
   def convert_to_output_base(total, output_base)
-    conversion = []
-    loop do
-      conversion.append(total % output_base)
-      break if total < output_base
+    [].tap do |conversion|
+      loop do
+        conversion.append(total % output_base)
+        break if total < output_base
 
-      total /= output_base
-    end
-    conversion.reverse
+        total /= output_base
+      end
+    end.reverse
   end
   private_class_method :convert_to_output_base
 end
