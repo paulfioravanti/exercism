@@ -7,20 +7,20 @@ module Translation
     case nucleotide_sequence
     when "AUG"
       "Methionine"
-    when "UAA", "UAG", "UGA"
-      TERMINATING_CODON
-    when "UAU", "UAC"
-      "Tyrosine"
-    when "UCU", "UCC", "UCA", "UCG"
-      "Serine"
-    when "UGG"
-      "Tryptophan"
-    when "UGU", "UGC"
-      "Cysteine"
-    when "UUA", "UUG"
-      "Leucine"
     when "UUC", "UUU"
       "Phenylalanine"
+    when "UUA", "UUG"
+      "Leucine"
+    when "UCU", "UCC", "UCA", "UCG"
+      "Serine"
+    when "UAU", "UAC"
+      "Tyrosine"
+    when "UGU", "UGC"
+      "Cysteine"
+    when "UGG"
+      "Tryptophan"
+    when "UAA", "UAG", "UGA"
+      TERMINATING_CODON
     else
       raise InvalidCodonError
     end
