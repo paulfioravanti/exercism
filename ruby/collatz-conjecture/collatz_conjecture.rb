@@ -16,7 +16,7 @@ module CollatzConjecture
     raise ArgumentError unless number.positive?
     return ZERO_STEPS if number == TERMINATING_NUMBER
 
-    ZERO_STEPS.then { |steps| calculate_steps(steps, number) }
+    calculate_steps(ZERO_STEPS, number)
   end
 
   def calculate_steps(steps, number)
