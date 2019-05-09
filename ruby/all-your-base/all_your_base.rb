@@ -21,8 +21,7 @@ module BaseConverter
   private_class_method :invalid_bases?
 
   def invalid_digits?(digits, input_base)
-    digits.any?(&:negative?) ||
-      digits.any? { |digit| digit >= input_base }
+    digits.any? { |digit| digit.negative? || digit >= input_base }
   end
   private_class_method :invalid_digits?
 
