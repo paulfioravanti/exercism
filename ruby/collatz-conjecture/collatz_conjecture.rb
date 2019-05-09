@@ -14,13 +14,12 @@ module CollatzConjecture
     raise ArgumentError unless number.positive?
 
     steps = INITIAL_STEPS
-    return steps if number == TERMINATING_NUMBER
-
     loop do
+      return steps if number == TERMINATING_NUMBER
+
       number =
         number.even? ? N_DIV_TWO.call(number) : THREE_N_PLUS_ONE.call(number)
       steps = steps.next
-      return steps if number == TERMINATING_NUMBER
     end
   end
 end
