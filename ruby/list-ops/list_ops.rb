@@ -10,25 +10,20 @@ module ListOps
 
   module_function
 
-  # rubocop:disable Style/For
   def arrays(array)
-    length = ZERO
-    for _ in array
-      length += ADJUSTMENT
-    end
-    length
+    reducer(
+      array,
+      ZERO,
+      ->(accumulator, _element) { accumulator + ADJUSTMENT }
+    )
   end
-  # rubocop:enable Style/For
 
   def reverser(array)
-    accumulator = INITIAL_ARRAY.dup
-    index = arrays(array) - ADJUSTMENT
-
-    while index >= ZERO
-      accumulator << array[index]
-      index -= ADJUSTMENT
-    end
-    accumulator
+    reducer(
+      array,
+      INITIAL_ARRAY.dup,
+      ->(accumulator, element) { accumulator.prepend(element) }
+    )
   end
 
   def concatter(array1, array2)
@@ -78,8 +73,8 @@ module ListOps
   end
 
   # rubocop:disable Style/For
-  def reducer(array, accumulator, function)
-    for element in array
+  def reducer(collection, accumulator, function)
+    for element in collection
       accumulator = function.call(accumulator, element)
     end
     accumulator
