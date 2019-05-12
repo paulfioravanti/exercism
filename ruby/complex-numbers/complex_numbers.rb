@@ -1,4 +1,9 @@
 class ComplexNumber
+  ADD_POWERS_OF_TWO = lambda do |complex_number|
+    complex_number.real**2 + complex_number.imaginary**2
+  end
+  private_constant :ADD_POWERS_OF_TWO
+
   attr_reader :real, :imaginary
 
   def initialize(real, imaginary)
@@ -45,7 +50,9 @@ class ComplexNumber
 
   # |z| = sqrt(a^2 + b^2)
   def abs
-    Math.sqrt(real**2 + imaginary**2)
+    self
+      .then(&ADD_POWERS_OF_TWO)
+      .then(&Math.method(:sqrt))
   end
 
   # a - b * i
@@ -128,7 +135,9 @@ class ComplexNumber
 
   # (c^2 + d^2)
   def division_denominator(other)
-    (other.real**2 + other.imaginary**2).to_f
+    other
+      .then(&ADD_POWERS_OF_TWO)
+      .to_f
   end
 
   # e^(i * b) = cos(b) + i * sin(b)
