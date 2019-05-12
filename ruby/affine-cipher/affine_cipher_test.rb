@@ -1,10 +1,8 @@
 require 'minitest/autorun'
-require 'minitest/focus'
 require_relative 'affine_cipher'
 
 # Common test data version: 2.0.0 8026923
 class AffineCipherTest < Minitest::Test
-  focus
   def test_encode_yes
     cipher = Affine.new(5, 7)
     plaintext = 'yes'
