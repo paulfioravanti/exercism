@@ -7,8 +7,6 @@ module IsbnVerifier
   private_constant :CONVERT_CHECK
   DASHES = "-"
   private_constant :DASHES
-  INITIAL_SUM = 0
-  private_constant :INITIAL_SUM
   ISBN_10 = /\A\d{9}(\d|X)\z/.freeze
   private_constant :ISBN_10
   MULTIPLE = 11
@@ -27,7 +25,7 @@ module IsbnVerifier
     string
       .then(&method(:generate_isbn_integers))
       .zip(WEIGHTS)
-      .reduce(INITIAL_SUM, &method(:isbn_formula))
+      .sum(&method(:isbn_formula))
       .modulo(MULTIPLE)
       .zero?
   end
@@ -42,8 +40,8 @@ module IsbnVerifier
   end
   private_class_method :generate_isbn_integers
 
-  def isbn_formula(acc, (integer, weight))
-    acc + integer * weight
+  def isbn_formula((integer, weight))
+    integer * weight
   end
   private_class_method :isbn_formula
 end
