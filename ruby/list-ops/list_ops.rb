@@ -1,6 +1,6 @@
 module ListOps
-  ADJUSTMENT = 1
-  private_constant :ADJUSTMENT
+  INCREMENT = 1
+  private_constant :INCREMENT
   INITIAL_ARRAY = [].freeze
   private_constant :INITIAL_ARRAY
   INITIAL_FACTORIAL = 1
@@ -14,7 +14,7 @@ module ListOps
     reducer(
       array,
       ZERO,
-      ->(accumulator, _element) { accumulator + ADJUSTMENT }
+      ->(accumulator, _element) { accumulator + INCREMENT }
     )
   end
 
