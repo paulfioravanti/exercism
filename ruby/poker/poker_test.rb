@@ -1,4 +1,5 @@
 require 'minitest/autorun'
+require 'minitest/focus'
 require_relative 'poker'
 
 class PokerTest < Minitest::Test
@@ -23,7 +24,6 @@ class PokerTest < Minitest::Test
   end
 
   def test_nothing_vs_one_pair
-    skip
     high_of_king = %w(4S 5H 6C 8D KH)
     pair_of_4 = %w(2S 4H 6S 4D JH)
     game = Poker.new([high_of_king, pair_of_4])
@@ -31,7 +31,6 @@ class PokerTest < Minitest::Test
   end
 
   def test_two_pair
-    skip
     pair_of_2 = %w(4S 2H 6S 2D JH)
     pair_of_4 = %w(2S 4H 6C 4D JD)
     game = Poker.new([pair_of_2, pair_of_4])
@@ -39,7 +38,6 @@ class PokerTest < Minitest::Test
   end
 
   def test_one_pair_vs_double_pair
-    skip
     pair_of_8 = %w(2S 8H 6S 8D JH)
     fives_and_fours = %w(4S 5H 4C 8C 5C)
     game = Poker.new([pair_of_8, fives_and_fours])
@@ -190,9 +188,5 @@ class PokerTest < Minitest::Test
     hands = [spade_straight_to_9, diamond_straight_to_9, three_of_4]
     game = Poker.new(hands)
     assert_equal [spade_straight_to_9, diamond_straight_to_9], game.best_hand
-  end
-
-  def test_bookkeeping
-    assert_equal 2, BookKeeping::VERSION
   end
 end
