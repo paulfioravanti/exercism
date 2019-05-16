@@ -3,6 +3,10 @@
 require "pry"
 require "bigdecimal"
 class Poker
+  # Assign a value to a card of less than 1 dependent on its rank
+  # so that:
+  # - cards can be compared to each other
+  # - the value can be tallied along with hand scores
   CARD_VALUE = ->(num) { BigDecimal(num) * BigDecimal("0.01") }
   private_constant :CARD_VALUE
   RANKS = %w[a 2 3 4 5 6 7 8 9 10 J Q K A].freeze
@@ -27,10 +31,6 @@ class Poker
       end
 
       def value(rank = self.rank)
-        # Assign a value to a card of less than 1 dependent on its rank
-        # so that:
-        # - cards can be compared to each other
-        # - the value can be tallied along with hand scores
         RANKS.index(rank).then(&CARD_VALUE)
       end
 
@@ -61,7 +61,10 @@ class Poker
         one_pair: 1,
         two_pair: 2,
         three_of_a_kind: 3,
-        straight: 5
+        straight: 5,
+        flush: 8,
+        full_house: 13,
+        square: 21
       }.freeze
       private_constant :POINTS
       SCORE = /score\z/.freeze
@@ -72,17 +75,41 @@ class Poker
       module_function
 
       def calculate(hand)
-        private_instance_methods
-          .select { |method| method.match?(SCORE) }
-          .sum { |method| send(method, hand) }
+        catch(:halt) do
+          private_instance_methods
+            .select { |method| method.match?(SCORE) }
+            .sum { |method| send(method, hand) }
+        end
       end
+
+      # def square_score(hand)
+
+      # end
+      # private_class_method :square_score
+
+      def full_house_score(hand)
+        ranks = hand.ranks
+        three_of_a_kind, other_cards =
+          hand.cards.sort.partition { |card| multiple?(card, ranks, 2) }
+        return 0 if
+          three_of_a_kind.empty? ||
+          other_cards.none? { |card| multiple?(card, ranks, 1) }
+
+        throw(:halt, POINTS[:full_house] + three_of_a_kind.first.value)
+      end
+      private_class_method :full_house_score
+
+      def flush_score(hand)
+        hand.suits.uniq.one? ? POINTS[:flush] + hand.cards.max.value : 0
+      end
+      private_class_method :flush_score
 
       def straight_score(hand)
         cards = hand.cards.sort
-        straight = straight?(cards) || ace_low_straight?(cards)
+        straight = numbered_straight(cards) || ace_low_straight(cards)
 
         if straight
-          POINTS[:straight] + cards.last.value
+          POINTS[:straight] + straight.last.value
         else
           0
         end
@@ -90,9 +117,7 @@ class Poker
       private_class_method :straight_score
 
       def three_of_a_kind_score(hand)
-        three_of_a_kind_card =
-          catch(:halt) { find_multicard(hand, method(:determine_threes)) }
-          .first
+        three_of_a_kind_card = find_multicard(hand, 2).max
 
         if three_of_a_kind_card
           POINTS[:three_of_a_kind] + three_of_a_kind_card.value
@@ -103,7 +128,7 @@ class Poker
       private_class_method :three_of_a_kind_score
 
       def two_pair_score(hand)
-        pair_cards = find_multicard(hand, method(:determine_pair))
+        pair_cards = find_multicard(hand, 1)
         if pair_cards.length > 1
           POINTS[:two_pair] + pair_cards.max.value
         else
@@ -113,7 +138,7 @@ class Poker
       private_class_method :two_pair_score
 
       def one_pair_score(hand)
-        max_pair_card = find_multicard(hand, method(:determine_pair)).max
+        max_pair_card = find_multicard(hand, 1).max
         max_pair_card ? POINTS[:one_pair] + max_pair_card.value : 0
       end
       private_class_method :one_pair_score
@@ -123,40 +148,44 @@ class Poker
       end
       private_class_method :high_card_score
 
-      def find_multicard(hand, method)
+      def find_multicard(hand, floor)
         hand
           .cards
           .each
           .with_object(hand.ranks)
-          .each_with_object([], &method)
+          .with_object(floor)
+          .each_with_object([], &method(:add_multicard))
           .uniq
       end
       private_class_method :find_multicard
 
-      def determine_pair((card, ranks), acc)
-        acc << card if ranks.count(card.rank) > 1
+      def add_multicard(((card, ranks), floor), acc)
+        acc << card if multiple?(card, ranks, floor)
       end
-      private_class_method :determine_pair
+      private_class_method :add_multicard
 
-      def determine_threes((card, ranks), _acc)
-        throw(:halt, [card]) if ranks.count(card.rank) > 2
+      def multiple?(card, ranks, floor)
+        ranks.count(card.rank) > floor
       end
-      private_class_method :determine_threes
+      private_class_method :multiple?
 
-      def straight?(cards)
-        cards
+      def numbered_straight(cards)
+        straight =
+          cards
           .each_cons(2)
           .all? { |(card1, card2)| card2 - card1 == SINGLE_CARD_GAP }
+        straight ? cards : nil
       end
-      private_class_method :straight?
+      private_class_method :numbered_straight
 
-      def ace_low_straight?(cards)
+      def ace_low_straight(cards)
         aces, other_cards = cards.partition(&ACES)
-        return false unless aces.length == 1
+        return nil unless aces.length == 1
 
         ace_low = Card.new("a#{aces.first.suit}")
-        straight?(other_cards.prepend(ace_low))
+        numbered_straight(other_cards.prepend(ace_low)) || nil
       end
+      private_class_method :ace_low_straight
     end
     private_constant :Score
 
@@ -177,6 +206,10 @@ class Poker
       cards.map(&:rank)
     end
 
+    def suits
+      cards.map(&:suit)
+    end
+
     protected
 
     attr_reader :score
@@ -195,6 +228,7 @@ class Poker
 
   def best_hand
     first_hand, *rest = hands
+    # hands.each { |hand| p hand.send(:score) }
     initial_best_hands =
       { best_hands: [first_hand.to_a], best_hand: first_hand }
     rest
@@ -209,7 +243,7 @@ class Poker
   def compare_best_hand(hand, acc)
     best_hand = acc[:best_hand]
     if hand == best_hand
-      acc[:best_hands] << hand
+      acc[:best_hands] << hand.to_a
     elsif hand > best_hand
       acc[:best_hands] = [hand.to_a]
       acc[:best_hand] = hand
