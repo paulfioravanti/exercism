@@ -285,8 +285,8 @@ class Poker
 
   def best_hand
     first_hand, *rest = hands
-    initial_best_hands =
-      { best_hands: [first_hand.to_a], best_hand: first_hand }
+    initial_best_hands = initial_best_hands(first_hand)
+
     rest
       .each_with_object(initial_best_hands, &method(:compare_best_hand))
       .fetch(:best_hands)
@@ -295,6 +295,10 @@ class Poker
   private
 
   attr_reader :hands
+
+  def initial_best_hands(first_hand)
+    { best_hands: [first_hand.to_a], best_hand: first_hand }
+  end
 
   def compare_best_hand(hand, acc)
     best_hand = acc[:best_hand]
