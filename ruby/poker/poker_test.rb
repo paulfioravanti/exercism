@@ -157,7 +157,6 @@ class PokerTest < Minitest::Test
   end
 
   def test_highest_card_down_to_fifth_card
-    skip
     high_of_8_low_of_3 = %w(3S 5H 6S 8D 7H)
     high_of_8_low_of_2 = %w(2S 5D 6D 8C 7S)
     game = Poker.new([high_of_8_low_of_3, high_of_8_low_of_2])
@@ -165,7 +164,6 @@ class PokerTest < Minitest::Test
   end
 
   def test_three_hand_with_tie
-    skip
     spade_straight_to_9 = %w(9S 8S 7S 6S 5S)
     diamond_straight_to_9 = %w(9D 8D 7D 6D 5D)
     three_of_4 = %w(4D 4S 4H QS KS)
