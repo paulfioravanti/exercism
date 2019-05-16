@@ -1,13 +1,17 @@
 # frozen_string_literal: true
 
 require "pry"
+require "bigdecimal"
 class Poker
+  CARD_VALUE = ->(num) { BigDecimal(num) * BigDecimal("0.01") }
+  private_constant :CARD_VALUE
+  RANKS = %w[a 2 3 4 5 6 7 8 9 10 J Q K A].freeze
+  private_constant :RANKS
+
   class Hand
     class Card
       include Comparable
 
-      RANKS = %w[2 3 4 5 6 7 8 9 10 J Q K A].freeze
-      private_constant :RANKS
       # Lookahead to non-digit character in string
       SUIT = /(?=\D)/.freeze
       private_constant :SUIT
@@ -27,7 +31,11 @@ class Poker
         # so that:
         # - cards can be compared to each other
         # - the value can be tallied along with hand scores
-        RANKS.index(rank).fdiv(RANKS.length)
+        RANKS.index(rank).then(&CARD_VALUE)
+      end
+
+      def -(other)
+        value - value(other.rank)
       end
 
       private
@@ -47,25 +55,57 @@ class Poker
     private_constant :Card
 
     module Score
-      ONE_PAIR_POINTS = 1
-      private_constant :ONE_PAIR_POINTS
+      ACES = ->(card) { card.rank == "A" }
+      private_constant :ACES
+      POINTS = {
+        one_pair: 1,
+        two_pair: 2,
+        three_of_a_kind: 3,
+        straight: 5
+      }.freeze
+      private_constant :POINTS
       SCORE = /score\z/.freeze
       private_constant :SCORE
-      TWO_PAIR_POINTS = 2
-      private_constant :TWO_PAIR_POINTS
+      SINGLE_CARD_GAP = CARD_VALUE.call(1)
+      private_constant :SINGLE_CARD_GAP
 
       module_function
 
       def calculate(hand)
         private_instance_methods
-          .select { |method| method[SCORE] }
-          .reduce(0) { |acc, attribute| acc + send(attribute, hand) }
+          .select { |method| method.match?(SCORE) }
+          .sum { |method| send(method, hand) }
       end
 
+      def straight_score(hand)
+        cards = hand.cards.sort
+        straight = straight?(cards) || ace_low_straight?(cards)
+
+        if straight
+          POINTS[:straight] + cards.last.value
+        else
+          0
+        end
+      end
+      private_class_method :straight_score
+
+      def three_of_a_kind_score(hand)
+        three_of_a_kind_card =
+          catch(:halt) { find_multicard(hand, method(:determine_threes)) }
+          .first
+
+        if three_of_a_kind_card
+          POINTS[:three_of_a_kind] + three_of_a_kind_card.value
+        else
+          0
+        end
+      end
+      private_class_method :three_of_a_kind_score
+
       def two_pair_score(hand)
-        pair_cards = find_pair_cards(hand)
+        pair_cards = find_multicard(hand, method(:determine_pair))
         if pair_cards.length > 1
-          TWO_PAIR_POINTS + pair_cards.max.value
+          POINTS[:two_pair] + pair_cards.max.value
         else
           0
         end
@@ -73,8 +113,8 @@ class Poker
       private_class_method :two_pair_score
 
       def one_pair_score(hand)
-        max_pair_card = find_pair_cards(hand).max
-        max_pair_card ? ONE_PAIR_POINTS + max_pair_card.value : 0
+        max_pair_card = find_multicard(hand, method(:determine_pair)).max
+        max_pair_card ? POINTS[:one_pair] + max_pair_card.value : 0
       end
       private_class_method :one_pair_score
 
@@ -83,18 +123,40 @@ class Poker
       end
       private_class_method :high_card_score
 
-      def find_pair_cards(hand)
+      def find_multicard(hand, method)
         hand
           .cards
-          .find_all { |card| pair?(card, hand) }
+          .each
+          .with_object(hand.ranks)
+          .each_with_object([], &method)
           .uniq
       end
-      private_class_method :find_pair_cards
+      private_class_method :find_multicard
 
-      def pair?(card, hand)
-        hand.ranks.count(card.rank) > 1
+      def determine_pair((card, ranks), acc)
+        acc << card if ranks.count(card.rank) > 1
       end
-      private_class_method :pair?
+      private_class_method :determine_pair
+
+      def determine_threes((card, ranks), _acc)
+        throw(:halt, [card]) if ranks.count(card.rank) > 2
+      end
+      private_class_method :determine_threes
+
+      def straight?(cards)
+        cards
+          .each_cons(2)
+          .all? { |(card1, card2)| card2 - card1 == SINGLE_CARD_GAP }
+      end
+      private_class_method :straight?
+
+      def ace_low_straight?(cards)
+        aces, other_cards = cards.partition(&ACES)
+        return false unless aces.length == 1
+
+        ace_low = Card.new("a#{aces.first.suit}")
+        straight?(other_cards.prepend(ace_low))
+      end
     end
     private_constant :Score
 

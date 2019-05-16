@@ -45,7 +45,6 @@ class PokerTest < Minitest::Test
   end
 
   def test_two_double_pair
-    skip
     eights_and_twos = %w(2S 8H 2D 8D 3H)
     fives_and_fours = %w(4S 5H 4C 8S 5D)
     game = Poker.new([eights_and_twos, fives_and_fours])
@@ -53,7 +52,6 @@ class PokerTest < Minitest::Test
   end
 
   def test_another_two_double_pair
-    skip
     aces_and_twos = %w(2S AH 2C AD JH)
     queens_and_jacks = %w(JD QH JS 8D QC)
     game = Poker.new([aces_and_twos, queens_and_jacks])
@@ -61,7 +59,6 @@ class PokerTest < Minitest::Test
   end
 
   def test_double_pair_vs_three
-    skip
     eights_and_twos = %w(2S 8H 2H 8D JH)
     three_of_4 = %w(4S 5H 4C 8S 4H)
     game = Poker.new([eights_and_twos, three_of_4])
@@ -69,7 +66,6 @@ class PokerTest < Minitest::Test
   end
 
   def test_two_three
-    skip
     three_twos = %w(2S 2H 2C 8D JH)
     three_aces = %w(4S AH AS 8C AD)
     game = Poker.new([three_twos, three_aces])
@@ -77,7 +73,6 @@ class PokerTest < Minitest::Test
   end
 
   def test_three_vs_straight
-    skip
     three_of_4 = %w(4S 5H 4C 8D 4H)
     straight = %w(3S 4D 2S 6D 5C)
     game = Poker.new([three_of_4, straight])
@@ -85,7 +80,6 @@ class PokerTest < Minitest::Test
   end
 
   def test_a_5_high_straight
-    skip
     three_of_4 = %w(4S 5H 4C 8D 4H)
     straight_to_5 = %w(4D AH 3S 2D 5C)
     game = Poker.new([three_of_4, straight_to_5])
@@ -93,7 +87,6 @@ class PokerTest < Minitest::Test
   end
 
   def test_two_straights
-    skip
     straight_to_8 = %w(4S 6C 7S 8D 5H)
     straight_to_9 = %w(5S 7H 8S 9D 6H)
     game = Poker.new([straight_to_8, straight_to_9])
