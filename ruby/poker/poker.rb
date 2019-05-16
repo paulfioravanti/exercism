@@ -92,7 +92,7 @@ class Poker
         return nil unless aces.length == 1
 
         ace_low = Card.new("a#{aces.first.suit}")
-        numbered_straight(other_cards.prepend(ace_low)) || nil
+        numbered_straight(other_cards.prepend(ace_low))
       end
       private_class_method :ace_low_straight
     end
