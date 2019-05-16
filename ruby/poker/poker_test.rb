@@ -129,7 +129,6 @@ class PokerTest < Minitest::Test
   end
 
   def test_full_vs_square
-    skip
     full = %w(4S 5H 4D 5D 4H)
     square_of_3 = %w(3S 3H 2S 3D 3C)
     game = Poker.new([square_of_3, full])
@@ -137,7 +136,6 @@ class PokerTest < Minitest::Test
   end
 
   def test_two_square
-    skip
     square_of_2 = %w(2S 2H 2C 8D 2D)
     square_of_5 = %w(4S 5H 5S 5D 5C)
     game = Poker.new([square_of_2, square_of_5])
@@ -145,7 +143,6 @@ class PokerTest < Minitest::Test
   end
 
   def test_square_vs_straight_flush
-    skip
     square_of_5 = %w(4S 5H 5S 5D 5C)
     straight_flush_to_10 = %w(7S 8S 9S 6S 10S)
     game = Poker.new([square_of_5, straight_flush_to_10])
@@ -153,7 +150,6 @@ class PokerTest < Minitest::Test
   end
 
   def test_two_straight_flushes
-    skip
     straight_flush_to_8 = %w(4H 6H 7H 8H 5H)
     straight_flush_to_9 = %w(5S 7S 8S 9S 6S)
     game = Poker.new([straight_flush_to_8, straight_flush_to_9])

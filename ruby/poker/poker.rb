@@ -64,7 +64,8 @@ class Poker
         straight: 5,
         flush: 8,
         full_house: 13,
-        square: 21
+        square: 21,
+        straight_flush: 34
       }.freeze
       private_constant :POINTS
       SCORE = /score\z/.freeze
@@ -82,10 +83,26 @@ class Poker
         end
       end
 
-      # def square_score(hand)
+      def straight_flush_score(hand)
+        if (straight = straight(hand)) && flush?(hand)
+          throw(:halt, POINTS[:straight_flush] + straight.last.value)
+        else
+          0
+        end
+      end
 
-      # end
-      # private_class_method :square_score
+      def square_score(hand)
+        ranks = hand.ranks
+        square_cards, _other_cards =
+          hand.cards.partition { |card| multiple?(card, ranks, 3) }
+
+        if (square = square_cards.first)
+          POINTS[:square] + square.value
+        else
+          0
+        end
+      end
+      private_class_method :square_score
 
       def full_house_score(hand)
         ranks = hand.ranks
@@ -100,13 +117,12 @@ class Poker
       private_class_method :full_house_score
 
       def flush_score(hand)
-        hand.suits.uniq.one? ? POINTS[:flush] + hand.cards.max.value : 0
+        flush?(hand) ? POINTS[:flush] + hand.cards.max.value : 0
       end
       private_class_method :flush_score
 
       def straight_score(hand)
-        cards = hand.cards.sort
-        straight = numbered_straight(cards) || ace_low_straight(cards)
+        straight = straight(hand)
 
         if straight
           POINTS[:straight] + straight.last.value
@@ -143,10 +159,12 @@ class Poker
       end
       private_class_method :one_pair_score
 
-      def high_card_score(hand)
+      def high_low_card_score(hand)
         hand.cards.max.value
+        # min, max = hand.cards.minmax
+        # min.value + max.value
       end
-      private_class_method :high_card_score
+      private_class_method :high_low_card_score
 
       def find_multicard(hand, floor)
         hand
@@ -169,6 +187,12 @@ class Poker
       end
       private_class_method :multiple?
 
+      def straight(hand)
+        cards = hand.cards.sort
+        numbered_straight(cards) || ace_low_straight(cards)
+      end
+      private_class_method :straight
+
       def numbered_straight(cards)
         straight =
           cards
@@ -186,6 +210,11 @@ class Poker
         numbered_straight(other_cards.prepend(ace_low)) || nil
       end
       private_class_method :ace_low_straight
+
+      def flush?(hand)
+        hand.suits.uniq.one?
+      end
+      private_class_method :flush?
     end
     private_constant :Score
 
