@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "pry"
 require "bigdecimal"
 class Poker
   # Assign a value to a card of less than 1 dependent on its rank
