@@ -22,9 +22,8 @@ class Triplet
   private_class_method :pythagorean_triplet?
 
   def initialize(a_num, b_num, c_num)
-    @a = a_num
-    @b = b_num
-    @c = c_num
+    @sides = [a_num, b_num, c_num].sort
+    @a, @b, @c = sides
   end
 
   def sum
@@ -41,9 +40,5 @@ class Triplet
 
   private
 
-  attr_reader :a, :b, :c
-
-  def sides
-    @sides ||= [a, b, c]
-  end
+  attr_reader :a, :b, :c, :sides
 end
