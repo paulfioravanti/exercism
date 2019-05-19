@@ -31,7 +31,14 @@ module PerfectNumber
   private_class_method :aliquot_sum
 
   def add_factor((candidate_factor, number), acc)
-    acc << candidate_factor if (number % candidate_factor).zero?
+    acc << candidate_factor if factor?(candidate_factor, number)
   end
   private_class_method :add_factor
+
+  def factor?(candidate_factor, number)
+    number
+      .modulo(candidate_factor)
+      .zero?
+  end
+  private_class_method :factor?
 end
