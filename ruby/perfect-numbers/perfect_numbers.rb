@@ -22,11 +22,10 @@ module PerfectNumber
   end
 
   def aliquot_sum(number)
-    (1..number)
+    (1...number)
       .each
       .with_object(number)
       .each_with_object([], &method(:add_factor))
-      .tap(&:pop)
       .sum
   end
   private_class_method :aliquot_sum
