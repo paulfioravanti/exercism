@@ -8,18 +8,14 @@ class CustomSet
     @array = array.sort
   end
 
-  def_delegators :@array,
-                 :each_cons, :empty?, :include?, :length, :member?, :push
+  def_delegators :@array, :empty?, :include?, :member?, :push
 
   def ==(other)
     array == other.array
   end
 
   def subset?(other)
-    return true if empty? || self == other
-    return false if other.empty?
-
-    other.each_cons(length).include?(array)
+    difference(other).empty?
   end
 
   def disjoint?(other)
