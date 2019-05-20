@@ -18,7 +18,7 @@ module Diamond
       .each
       .with_object(letters.length)
       .with_object(max_outer_padding)
-      .each_with_object([], &method(:add_letter))
+      .each_with_object([], &method(:add_line))
       .join
   end
 
@@ -32,7 +32,7 @@ module Diamond
   end
   private_class_method :length_from_center
 
-  def add_letter(((letter, diamond_height), max_outer_padding), acc)
+  def add_line(((letter, diamond_height), max_outer_padding), acc)
     line =
       if letter == DIAMOND_TIP
         diamond_tip(letter, diamond_height)
@@ -41,7 +41,7 @@ module Diamond
       end
     acc << line + NEWLINE
   end
-  private_class_method :add_letter
+  private_class_method :add_line
 
   def diamond_tip(letter, diamond_height)
     letter.center(diamond_height)
