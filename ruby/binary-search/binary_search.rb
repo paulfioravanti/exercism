@@ -2,7 +2,7 @@ class BinarySearch
   INITIAL_INDEX = 0
   private_constant :INITIAL_INDEX
   MAX_INDEX = ->(list) { list.length - 1 }
-  private_constant :INITIAL_INDEX
+  private_constant :MAX_INDEX
   MIDDLE_INDEX = ->(from, to) { from + (to - from) / 2 }
   private_constant :MIDDLE_INDEX
 
