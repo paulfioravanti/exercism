@@ -1,12 +1,12 @@
 class Deque
   class Node
     attr_reader :value
-    attr_accessor :prev, :succ
+    attr_accessor :prev_node, :next_node
 
-    def initialize(value, prev: self, succ: self)
+    def initialize(value, prev_node: self, next_node: self)
       @value = value
-      @prev = prev
-      @succ = succ
+      @prev_node = prev_node
+      @next_node = next_node
     end
   end
   private_constant :Node
@@ -17,41 +17,41 @@ class Deque
 
   def push(value)
     if head
-      tail = head.prev
-      node = Node.new(value, prev: tail, succ: head)
-      tail.succ = node
-      head.prev = node
+      tail = head.prev_node
+      new_tail = Node.new(value, prev_node: tail, next_node: head)
+      tail.next_node = new_tail
+      head.prev_node = new_tail
     else
       self.head = Node.new(value)
     end
   end
 
   def pop
-    if (tail = head.prev) == head
+    if (tail = head.prev_node) == head
       self.head = nil
     else
-      head.prev = tail.prev
-      tail.prev.succ = head
+      head.prev_node = tail.prev_node
+      tail.prev_node.next_node = head
     end
     tail.value
   end
 
   def shift
-    if (node = head) == head.succ
+    if (shifted_head = head) == head.next_node
       self.head = nil
     else
-      self.head = node.succ
-      head.prev = node.prev
-      head.prev.succ = head
+      self.head = shifted_head.next_node
+      head.prev_node = shifted_head.prev_node
+      head.prev_node.next_node = head
     end
-    node.value
+    shifted_head.value
   end
 
   def unshift(value)
     if head
-      node = Node.new(value, prev: head.prev, succ: head)
-      head.prev = node
-      self.head = node
+      new_head = Node.new(value, prev_node: head.prev_node, next_node: head)
+      head.prev_node = new_head
+      self.head = new_head
     else
       self.head = Node.new(value)
     end
