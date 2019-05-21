@@ -28,6 +28,7 @@ class Triangle
     factorial(row_num) / (factorial(row_num - exponent) * factorial(exponent))
   end
 
+  # Provide starting accumulator for 0! == 1
   def factorial(num)
     (1..num).reduce(1, :*)
   end
