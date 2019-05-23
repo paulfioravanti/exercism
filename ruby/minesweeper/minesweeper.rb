@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 module Board
+  ADJACENT_COORDINATES = lambda do |y_index, x_index|
+    [x_index - 1, x_index + 1, y_index - 1, y_index + 1]
+  end
+  private_constant :ADJACENT_COORDINATES
   BLANK = " "
   private_constant :BLANK
   MINE = "*"
@@ -38,43 +42,39 @@ module Board
   private_class_method :transform_line
 
   def transform_character(((char, x_index), y_index), board)
-    return char if [VERTICAL_BORDER, MINE].include?(char)
+    return char if board_element?(char)
     raise ArgumentError unless char == BLANK
 
-    sum = 0
-    if board[y_index - 1]
-      if board[y_index - 1][x_index - 1] == MINE
-        sum += 1
-      end
-      if board[y_index - 1][x_index] == MINE
-        sum += 1
-      end
-      if board[y_index - 1][x_index + 1] == MINE
-        sum += 1
-      end
-    end
-    if board[y_index][x_index - 1] == MINE
-      sum += 1
-    end
-    if board[y_index][x_index + 1] == MINE
-      sum += 1
-    end
-    if board[y_index + 1]
-      if board[y_index + 1][x_index - 1] == MINE
-        sum += 1
-      end
-      if board[y_index + 1][x_index] == MINE
-        sum += 1
-      end
-      if board[y_index + 1][x_index + 1] == MINE
-        sum += 1
-      end
-    end
-    sum.zero? ? char : sum
+    adjacent_coordinates(board, y_index, x_index)
+      .each
+      .with_object(board)
+      .sum(&method(:sum_mine))
+      .then { |sum| sum.positive? ? sum : char }
   end
 
   def all_lines_same_length?(board)
     board.map(&:length).uniq.one?
   end
   private_class_method :all_lines_same_length?
+
+  def board_element?(char)
+    [VERTICAL_BORDER, MINE].include?(char)
+  end
+  private_class_method :board_element?
+
+  def adjacent_coordinates(board, y_index, x_index)
+    left, right, above, below = ADJACENT_COORDINATES.call(y_index, x_index)
+    [[y_index, left], [y_index, right]].then do |coords|
+      board[above] &&
+        coords += [[above, left], [above, x_index], [above, right]]
+      board[below] &&
+        coords + [[below, left], [below, x_index], [below, right]]
+    end
+  end
+  private_class_method :adjacent_coordinates
+
+  def sum_mine(((y, x), board))
+    board[y][x] == MINE ? 1 : 0
+  end
+  private_class_method :sum_mine
 end
