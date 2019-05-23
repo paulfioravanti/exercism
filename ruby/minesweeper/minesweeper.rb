@@ -19,53 +19,58 @@ module Board
       .each
       .with_index
       .with_object(board)
-      .map do |(line, y_index), board|
-        next(line) if line.start_with?(HORIZONTAL_BORDER_START)
-        raise ArgumentError unless line.start_with?(VERTICAL_BORDER)
+      .map(&method(:transform_line))
+  end
 
-        line
-          .chars
-          .each
-          .with_index
-          .with_object(y_index)
-          .with_object(board)
-          .map do |((char, x_index), y_index), board|
-            next(char) if [VERTICAL_BORDER, MINE].include?(char)
-            raise ArgumentError unless char == BLANK
+  def transform_line((line, y_index), board)
+    return line if line.start_with?(HORIZONTAL_BORDER_START)
+    raise ArgumentError unless line.start_with?(VERTICAL_BORDER)
 
-            sum = 0
-            if board[y_index - 1]
-              if board[y_index - 1][x_index - 1] == MINE
-                sum += 1
-              end
-              if board[y_index - 1][x_index] == MINE
-                sum += 1
-              end
-              if board[y_index - 1][x_index + 1] == MINE
-                sum += 1
-              end
-            end
-            if board[y_index][x_index - 1] == MINE
-              sum += 1
-            end
-            if board[y_index][x_index + 1] == MINE
-              sum += 1
-            end
-            if board[y_index + 1]
-              if board[y_index + 1][x_index - 1] == MINE
-                sum += 1
-              end
-              if board[y_index + 1][x_index] == MINE
-                sum += 1
-              end
-              if board[y_index + 1][x_index + 1] == MINE
-                sum += 1
-              end
-            end
-            sum.zero? ? char : sum
-          end
-          .join
+    line
+      .chars
+      .each
+      .with_index
+      .with_object(y_index)
+      .with_object(board)
+      .map(&method(:transform_character))
+      .join
+  end
+  private_class_method :transform_line
+
+  def transform_character(((char, x_index), y_index), board)
+    return char if [VERTICAL_BORDER, MINE].include?(char)
+    raise ArgumentError unless char == BLANK
+
+    sum = 0
+    if board[y_index - 1]
+      if board[y_index - 1][x_index - 1] == MINE
+        sum += 1
       end
+      if board[y_index - 1][x_index] == MINE
+        sum += 1
+      end
+      if board[y_index - 1][x_index + 1] == MINE
+        sum += 1
+      end
+    end
+    if board[y_index][x_index - 1] == MINE
+      sum += 1
+    end
+    if board[y_index][x_index + 1] == MINE
+      sum += 1
+    end
+    if board[y_index + 1]
+      if board[y_index + 1][x_index - 1] == MINE
+        sum += 1
+      end
+      if board[y_index + 1][x_index] == MINE
+        sum += 1
+      end
+      if board[y_index + 1][x_index + 1] == MINE
+        sum += 1
+      end
+    end
+    sum.zero? ? char : sum
   end
 
   def all_lines_same_length?(board)
