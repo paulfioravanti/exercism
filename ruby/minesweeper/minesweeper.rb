@@ -13,25 +13,24 @@ module Board
   module_function
 
   def transform(board)
-    raise ArgumentError unless board.map(&:length).uniq.one?
+    raise ArgumentError unless all_lines_same_length?(board)
 
     board
       .each
       .with_index
       .with_object(board)
-      .each_with_object([]) do |((line, y_index), board), acc|
-        next(acc << line) if line.start_with?(HORIZONTAL_BORDER_START)
+      .map do |(line, y_index), board|
+        next(line) if line.start_with?(HORIZONTAL_BORDER_START)
         raise ArgumentError unless line.start_with?(VERTICAL_BORDER)
 
-        l =
-          line
+        line
           .chars
           .each
           .with_index
           .with_object(y_index)
           .with_object(board)
-          .each_with_object([]) do |(((char, x_index), y_index), board), acc2|
-            next(acc2 << char) if [VERTICAL_BORDER, MINE].include?(char)
+          .map do |((char, x_index), y_index), board|
+            next(char) if [VERTICAL_BORDER, MINE].include?(char)
             raise ArgumentError unless char == BLANK
 
             sum = 0
@@ -63,11 +62,14 @@ module Board
                 sum += 1
               end
             end
-
-            acc2 << (sum.zero? ? char : sum)
+            sum.zero? ? char : sum
           end
           .join
-        acc << l
       end
   end
+
+  def all_lines_same_length?(board)
+    board.map(&:length).uniq.one?
+  end
+  private_class_method :all_lines_same_length?
 end
