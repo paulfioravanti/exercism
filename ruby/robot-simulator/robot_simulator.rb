@@ -18,6 +18,7 @@ class Robot
 
   def at(x_coord, y_coord)
     self.coordinates = [x_coord, y_coord]
+    self
   end
 
   def advance
@@ -45,8 +46,17 @@ class Robot
   def turn(direction)
     bearing
       .then(&BEARINGS.method(:index))
-      .then { |index| BEARINGS.rotate(direction)[index] }
+      .to_enum(:then)
+      .with_object(direction)
+      .next
+      .then(&method(:determine_new_direction))
       .then(&method(:orient))
+  end
+
+  def determine_new_direction((index, direction))
+    direction
+      .then(&BEARINGS.method(:rotate))
+      .fetch(index)
   end
 end
 
@@ -59,13 +69,16 @@ class Simulator
   private_constant :INSTRUCTIONS
 
   def instructions(input)
-    input.chars.map(&INSTRUCTIONS)
+    input
+      .chars
+      .map(&INSTRUCTIONS)
   end
 
   # rubocop:disable Naming/UncommunicativeMethodParamName
   def place(robot, x:, y:, direction:)
-    robot.at(x, y)
-    robot.orient(direction)
+    robot
+      .at(x, y)
+      .orient(direction)
   end
   # rubocop:enable Naming/UncommunicativeMethodParamName
 
