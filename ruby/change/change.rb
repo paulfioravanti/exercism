@@ -5,23 +5,23 @@ module Change
 
   module_function
 
-  def generate(coins, sum)
-    return [] if sum.zero?
-    raise NegativeTargetError if sum.negative?
-    raise ImpossibleCombinationError if sum < coins.min
+  def generate(coins, target)
+    return [] if target.zero?
+    raise NegativeTargetError if target.negative?
+    raise ImpossibleCombinationError if target < coins.min
 
     denominations = generate_denominations(coins)
     a =
       denominations
       .each
       .with_object(denominations)
-      .with_object(sum)
-      .each_with_object(initial_tally) do |((coin, denoms), sum), acc|
-        coin > sum && acc[:index] = denoms.index(coin) + 1
-        next(acc) if acc[:candidate].sum + coin > sum
+      .with_object(target)
+      .each_with_object(initial_tally) do |((coin, denoms), target), acc|
+        coin > target && acc[:index] = denoms.index(coin) + 1
+        next(acc) if acc[:candidate].sum + coin > target
 
         acc[:candidate].prepend(coin)
-        if acc[:candidate].sum == sum
+        if acc[:candidate].sum == target
           if acc[:best].empty? || acc[:candidate].length < acc[:best].length
             acc[:best] = acc[:candidate]
             acc[:candidate] = []
