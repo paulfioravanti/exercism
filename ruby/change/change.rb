@@ -14,25 +14,24 @@ module Change
     a =
       denominations
       .each
-      .with_object(denominations)
-      .with_object(target)
-      .each_with_object(initial_tally) do |((coin, denoms), target), acc|
-        next(acc) if acc[:candidate].sum + coin > target
+      .with_object(denominations.dup)
+      .each_with_object([[], []]) do |(coin, denoms), (candidates, acc)|
+        next if acc.sum + coin > target
 
-        acc[:candidate].prepend(coin)
-        if acc[:candidate].sum == target
-          if acc[:best].empty? || acc[:candidate].length < acc[:best].length
-            acc[:best] = acc[:candidate]
-            acc[:candidate] = []
-          end
-          denoms.append(*denoms[(acc[:index] + 1)..-1])
-          next(acc)
+        acc.prepend(coin)
+        if acc.sum == target
+          candidates << acc.dup
+          idx = denoms.index(acc.last) + 1
+          acc.clear
+          denominations.append(*denoms[idx..-1])
+          next
         end
         redo
       end
     a
-      .fetch(:best)
-      .tap { |change| raise ImpossibleCombinationError if change.empty? }
+      .first
+      .tap { |candidates| raise ImpossibleCombinationError if candidates.empty? }
+      .min_by(&:length)
   end
 
   def generate_denominations(coins, target)
