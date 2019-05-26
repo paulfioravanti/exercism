@@ -34,23 +34,23 @@ module Change
       .with_object(denominations.dup)
       .each_with_object([[], []]) do |(coin, denoms), (candidates, acc)|
         acc.prepend(coin)
-        if acc.sum > target
+        case acc.sum <=> target
+        when 1 # greater
           acc.shift
           if coin == denoms.last
             idx = denoms.index(acc.first) + 1
             acc.shift
             denominations.append(*denoms[idx..-1])
           end
-          next
-        elsif acc.sum == target
+        when 0 # equal
           candidates << acc.dup
           idx = denoms.index(acc.last) + 1
           acc.clear
           denominations.append(*denoms[idx..-1])
-          next
         else
           redo
         end
+        next
       end
     a
       .first
