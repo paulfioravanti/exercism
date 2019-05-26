@@ -29,7 +29,6 @@ class ChangeTest < Minitest::Test
   end
 
   def test_another_possible_change_without_unit_coins_available
-    skip
     assert_equal [4, 4, 4, 5, 5, 5], Change.generate([4, 5], 27)
   end
 
