@@ -10,14 +10,13 @@ module Change
     raise NegativeTargetError if target.negative?
     raise ImpossibleCombinationError if target < coins.min
 
-    denominations = generate_denominations(coins)
+    denominations = generate_denominations(coins, target)
     a =
       denominations
       .each
       .with_object(denominations)
       .with_object(target)
       .each_with_object(initial_tally) do |((coin, denoms), target), acc|
-        coin > target && acc[:index] = denoms.index(coin) + 1
         next(acc) if acc[:candidate].sum + coin > target
 
         acc[:candidate].prepend(coin)
@@ -36,8 +35,9 @@ module Change
       .tap { |change| raise ImpossibleCombinationError if change.empty? }
   end
 
-  def generate_denominations(coins)
+  def generate_denominations(coins, target)
     coins
+      .select { |coin| coin <= target }
       .sort
       .reverse
   end
