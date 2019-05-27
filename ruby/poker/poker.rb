@@ -187,13 +187,12 @@ class Poker
       hand
         .cards
         .each
-        .with_object(hand.ranks)
-        .with_object(floor)
+        .with_object([hand.ranks, floor])
         .each_with_object([], &method(:add_multicard))
         .uniq
     end
 
-    def add_multicard(((card, ranks), floor), acc)
+    def add_multicard((card, (ranks, floor)), acc)
       acc << card if multiple?(card, ranks, floor)
     end
 
