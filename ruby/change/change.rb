@@ -43,6 +43,7 @@ module Change
   end
   private_class_method :generate_change_candidates
 
+  # rubocop:disable Metrics/MethodLength
   def generate_change(denomination_enumerator)
     denomination_enumerator
       .each_with_object([[], []]) \
@@ -60,6 +61,7 @@ module Change
       end
   end
   private_class_method :generate_change
+  # rubocop:enable Metrics/MethodLength
 
   def try_next_smallest_coin(coin, denominations, coin_types, acc)
     acc.shift

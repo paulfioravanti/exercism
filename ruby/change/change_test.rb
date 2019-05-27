@@ -1,5 +1,4 @@
 require 'minitest/autorun'
-require 'minitest/focus'
 require_relative 'change'
 
 # Common test data version: 1.3.0 258c807
