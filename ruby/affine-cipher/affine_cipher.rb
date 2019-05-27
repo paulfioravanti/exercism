@@ -35,16 +35,15 @@ class Affine
 
   attr_reader :key
 
-  def generate_key(a_key, b_key)
+  def generate_key(*keys)
     ALPHABET
       .chars
       .each_index
-      .with_object(a_key)
-      .with_object(b_key)
+      .with_object(keys)
       .reduce("", &method(:affine_character))
   end
 
-  def affine_character(acc, ((index, a_key), b_key))
+  def affine_character(acc, (index, (a_key, b_key)))
     # (ax + b) mod m
     affine_index = (a_key * index + b_key) % ALPHABET.length
     acc + ALPHABET[affine_index]
