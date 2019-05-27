@@ -12,8 +12,7 @@ module Change
 
     denominations = generate_denominations(coins, target)
 
-    a =
-      denominations
+    denominations
       .each
       .with_object(denominations.dup)
       .each_with_object([[], []]) do |(coin, denoms), (candidates, acc)|
@@ -41,7 +40,6 @@ module Change
         end
         next
       end
-    a
       .first
       .tap { |candidates| raise ImpossibleCombinationError if candidates.empty? }
       .min_by(&:length)
