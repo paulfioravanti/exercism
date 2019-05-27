@@ -21,12 +21,17 @@ class SecretHandshake
   def commands
     return [] unless number.to_s.match?(NUMBER)
 
-    ACTIONS.each.with_index.with_object([]) do |(action, index), acc|
-      acc.public_send(*action) if set?(index)
-    end
+    ACTIONS
+      .each
+      .with_index
+      .with_object([], &method(:perform_secret_handshake))
   end
 
   private
+
+  def perform_secret_handshake((action, index), acc)
+    acc.public_send(*action) if set?(index)
+  end
 
   def set?(index)
     (number & MASK[index]).positive?
