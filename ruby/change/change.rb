@@ -3,6 +3,11 @@ module Change
   class ImpossibleCombinationError < StandardError; end
   class NegativeTargetError < StandardError; end
 
+  GREATER = 1
+  private_constant :GREATER
+  EQUAL = 0
+  private_constant :EQUAL
+
   module_function
 
   def generate(coins, target)
@@ -18,7 +23,7 @@ module Change
       .each_with_object([[], []]) do |(coin, denoms), (candidates, acc)|
         acc.prepend(coin)
         case acc.sum <=> target
-        when 1 # greater
+        when GREATER
           acc.shift
           if coin == denoms.last
             acc.delete(coin)
@@ -29,13 +34,13 @@ module Change
               acc.shift
             end
           end
-        when 0 # equal
+        when EQUAL
           idx = denoms.index(acc.last) + 1
           remaining_denoms = denoms[idx..-1]
           denominations.append(*remaining_denoms)
           candidates << acc.dup
           acc.clear
-        else
+        else # SMALLER
           redo
         end
         next
