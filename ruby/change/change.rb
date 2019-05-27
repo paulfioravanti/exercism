@@ -1,4 +1,3 @@
-require "pry"
 module Change
   class ImpossibleCombinationError < StandardError; end
   class NegativeTargetError < StandardError; end
