@@ -41,6 +41,7 @@ module Change
       .then(&method(:generate_change))
       .first
   end
+  private_class_method :generate_change_candidates
 
   def generate_change(denomination_enumerator)
     denomination_enumerator
@@ -49,28 +50,45 @@ module Change
         acc.prepend(coin)
         case acc.sum <=> target
         when GREATER
-          acc.shift
-          if coin == coin_types.last
-            acc.delete(coin)
-            unless acc.empty?
-              next_smallest_coin_type_index = coin_types.index(acc.first) + 1
-              remaining_coin_types =
-                coin_types[next_smallest_coin_type_index..-1]
-              denominations.append(*remaining_coin_types)
-              acc.shift
-            end
-          end
+          try_next_smallest_coin(coin, denominations, coin_types, acc)
         when EQUAL
-          next_smallest_coin_type_index = coin_types.index(acc.last) + 1
-          remaining_coin_types =
-            coin_types[next_smallest_coin_type_index..-1]
-          denominations.append(*remaining_coin_types)
-          candidates << acc.dup
-          acc.clear
+          store_candidate(denominations, coin_types, candidates, acc)
         else # SMALLER
           redo
         end
         next
       end
   end
+  private_class_method :generate_change
+
+  def try_next_smallest_coin(coin, denominations, coin_types, acc)
+    acc.shift
+    return unless smallest_coin?(coin, coin_types)
+
+    acc.delete(coin)
+    return if acc.empty?
+
+    append_coin_type_subset(denominations, coin_types, acc.first)
+    acc.shift
+  end
+  private_class_method :try_next_smallest_coin
+
+  def smallest_coin?(coin, coin_types)
+    coin == coin_types.last
+  end
+  private_class_method :smallest_coin?
+
+  def store_candidate(denominations, coin_types, candidates, acc)
+    append_coin_type_subset(denominations, coin_types, acc.last)
+    candidates << acc.dup
+    acc.clear
+  end
+  private_class_method :store_candidate
+
+  def append_coin_type_subset(denominations, coin_types, coin)
+    next_smallest_coin_type_index = coin_types.index(coin) + 1
+    remaining_coin_types = coin_types[next_smallest_coin_type_index..-1]
+    denominations.append(*remaining_coin_types)
+  end
+  private_class_method :append_coin_type_subset
 end
