@@ -34,9 +34,7 @@ module Change
 
     denominations
       .each
-      .with_object(denominations)
-      .with_object(coin_types)
-      .with_object(target)
+      .with_object([denominations, coin_types, target])
       .then(&method(:generate_change))
       .first
   end
@@ -46,7 +44,7 @@ module Change
   def generate_change(denomination_enumerator)
     denomination_enumerator
       .each_with_object([[], []]) \
-      do |(((coin, denominations), coin_types), target), (candidates, acc)|
+      do |(coin, (denominations, coin_types, target)), (candidates, acc)|
         acc.prepend(coin)
         case acc.sum <=> target
         when GREATER
