@@ -1,55 +1,51 @@
 require "pry"
 module Dominoes
+  PAIR = 2
+  private_constant :PAIR
+
   module_function
 
   def chain?(dominoes)
     return true if dominoes.empty?
-
-    if dominoes.one?
-      return true if single_chainable?(dominoes)
-
-      return false
-    end
+    return adjacent?(dominoes.first) if dominoes.one?
 
     head, *tail = dominoes
     result =
       tail
-      .each_with_object([head]) do |candidate, acc|
-        candidate_left, candidate_right = candidate
-        first_left, _first_right = acc.first
-        _last_left, last_right = acc.last
-        # binding.pry
-        if last_right == candidate_left
-          acc.append(candidate)
-        elsif first_left == candidate_right
-          acc.prepend(candidate)
-        elsif first_left == candidate_left
-          acc.prepend(candidate.reverse)
+      .each_with_object([head]) do |domino, acc|
+        if adjacent?(acc.last, domino)
+          acc.append(domino)
+        elsif adjacent?(acc.last, flipped_domino = domino.reverse)
+          acc.append(flipped_domino)
+        elsif adjacent?(domino, acc.first)
+          acc.prepend(domino)
+        elsif adjacent?(flipped_domino = domino.reverse, acc.first)
+          acc.prepend(flipped_domino)
+        elsif adjacent?(acc.last, acc.first) && acc.length != dominoes.length
+          next if adjacent?(domino)
+
+          tail.push(*acc)
+          acc.clear
+          acc.push(domino)
         else
-          tail << candidate
+          tail.push(domino)
         end
       end
-      .sort
+
+    return false if result.one? || result.length != dominoes.length
+
     domino_chain?(result)
   end
 
-  def single_chainable?(dominoes)
-    dominoes
-      .first
-      .uniq
-      .one?
-  end
-  private_class_method :single_chainable?
-
   def domino_chain?(dominoes)
     head, *_body, tail = dominoes
-    has_adjacent_values?([tail, head]) &&
-      dominoes.each_cons(2).all?(&method(:has_adjacent_values?))
+    adjacent?(tail, head) &&
+      dominoes.each_cons(PAIR).all? { |d1, d2| adjacent?(d1, d2) }
   end
   private_class_method :domino_chain?
 
-  def has_adjacent_values?((left, right))
+  def adjacent?(left, right = left)
     left.last == right.first
   end
-  private_class_method :has_adjacent_values?
+  private_class_method :adjacent?
 end

@@ -35,7 +35,6 @@ class DominoesTest < Minitest::Test
   end
 
   def test_disconnected_simple
-    skip
     dominoes = [[1, 1], [2, 2]]
     refute Dominoes.chain?(dominoes)
   end
@@ -47,13 +46,11 @@ class DominoesTest < Minitest::Test
   end
 
   def test_disconnected_single_isolated
-    skip
     dominoes = [[1, 2], [2, 3], [3, 1], [4, 4]]
     refute Dominoes.chain?(dominoes)
   end
 
   def test_need_backtrack
-    skip
     dominoes = [[1, 2], [2, 3], [3, 1], [2, 4], [2, 4]]
     assert Dominoes.chain?(dominoes)
   end
@@ -65,7 +62,6 @@ class DominoesTest < Minitest::Test
   end
 
   def test_nine_elements
-    skip
     dominoes = [[1, 2], [5, 3], [3, 1], [1, 2], [2, 4], [1, 6], [2, 3], [3, 4], [5, 6]]
     assert Dominoes.chain?(dominoes)
   end
