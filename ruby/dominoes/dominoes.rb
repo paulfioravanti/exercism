@@ -5,6 +5,37 @@ module Dominoes
 
   module_function
 
+  # def chain?(dominoes)
+  #   eulerian_cycle?(dominoes) && connected?(dominoes)
+  # end
+
+  # # https://en.wikipedia.org/wiki/Eulerian_path
+  # def eulerian_cycle?(dominoes)
+  #   dominoes
+  #     .flatten
+  #     .group_by(&:itself)
+  #     .values
+  #     .map(&:length)
+  #     .all?(&:even?)
+  # end
+
+  # def connected?(dominoes)
+  #   return true if dominoes.empty?
+
+  #   head, *tail = dominoes
+  #   loop do
+  #     intersections, tail = tail.partition { |edge| intersects?(edge, head) }
+  #     return true if tail.empty?
+  #     return false if intersections.empty? && tail.any?
+
+  #     head.append(*intersections.flatten)
+  #   end
+  # end
+
+  # def intersects?(edge, head)
+  #   (edge & head).any?
+  # end
+
   def chain?(dominoes)
     return true if dominoes.empty?
     return adjacent?(dominoes.first) if dominoes.one?
