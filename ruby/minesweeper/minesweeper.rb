@@ -34,14 +34,13 @@ module Board
       .chars
       .each
       .with_index
-      .with_object(y_index)
-      .with_object(board)
+      .with_object([y_index, board])
       .map(&method(:transform_character))
       .join
   end
   private_class_method :transform_line
 
-  def transform_character(((char, x_index), y_index), board)
+  def transform_character((char, x_index), (y_index, board))
     return char if board_element?(char)
     raise ArgumentError unless char == BLANK
 
