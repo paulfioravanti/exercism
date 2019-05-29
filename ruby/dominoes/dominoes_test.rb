@@ -1,5 +1,4 @@
 require 'minitest/autorun'
-require 'minitest/focus'
 require_relative 'dominoes'
 
 # Common test data version: 2.1.0 b5bc74d
@@ -40,7 +39,6 @@ class DominoesTest < Minitest::Test
   end
 
   def test_disconnected_double_loop
-    skip
     dominoes = [[1, 2], [2, 1], [3, 4], [4, 3]]
     refute Dominoes.chain?(dominoes)
   end
@@ -56,7 +54,6 @@ class DominoesTest < Minitest::Test
   end
 
   def test_separate_loops
-    skip
     dominoes = [[1, 2], [2, 3], [3, 1], [1, 1], [2, 2], [3, 3]]
     assert Dominoes.chain?(dominoes)
   end
