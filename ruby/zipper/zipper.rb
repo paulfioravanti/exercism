@@ -1,20 +1,6 @@
 require "forwardable"
 
-class Node
-  attr_accessor :value, :left, :right
-
-  def initialize(value, left, right)
-    @value = value
-    @left = left
-    @right = right
-  end
-
-  def ==(other)
-    value == other.value &&
-      left == other.left &&
-      right == other.right
-  end
-end
+Node = Struct.new(:value, :left, :right)
 
 class Zipper
   extend Forwardable
@@ -25,7 +11,7 @@ class Zipper
 
   private_class_method :new
 
-  def_delegators :@focus, :value, :nil?
+  def_delegators :@focus, :value, :value=, :nil?
   def_delegator :self, :tree, :to_tree
   def_delegator self, :from_tree
 
