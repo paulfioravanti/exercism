@@ -11,7 +11,7 @@ class Zipper
 
   private_class_method :new
 
-  def_delegators :@focus, :value, :value=, :nil?
+  def_delegators :@focus, :value, :nil?
   def_delegator :self, :tree, :to_tree
   def_delegator self, :from_tree
 
