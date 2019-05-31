@@ -26,6 +26,8 @@ class Zipper
   private_class_method :new
 
   def_delegators :@focus, :value, :nil?
+  def_delegator :self, :tree, :to_tree
+  def_delegator self, :from_tree
 
   def initialize(tree, focus, parents)
     @tree = tree
@@ -33,20 +35,16 @@ class Zipper
     @parents = parents
   end
 
-  def to_tree
-    tree
-  end
-
   def left
-    self.class.from_tree(tree, focus.left, parents.push(focus))
+    from_tree(tree, focus.left, parents.push(focus))
   end
 
   def right
-    self.class.from_tree(tree, focus.right, parents.push(focus))
+    from_tree(tree, focus.right, parents.push(focus))
   end
 
   def up
-    self.class.from_tree(tree, parents.pop, parents)
+    from_tree(tree, parents.pop, parents)
   end
 
   # rubocop:disable Naming/AccessorMethodName
