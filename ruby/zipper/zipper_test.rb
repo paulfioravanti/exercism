@@ -1,5 +1,4 @@
 require 'minitest/autorun'
-require 'minitest/focus'
 require_relative 'zipper'
 
 # Common test data version: 1.1.0 6fb5601

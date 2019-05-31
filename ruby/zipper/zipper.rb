@@ -1,6 +1,5 @@
 require "forwardable"
 
-require "pry"
 class Node
   attr_accessor :value, :left, :right
 
@@ -68,12 +67,19 @@ class Zipper
   # rubocop:enable Naming/AccessorMethodName
 
   def ==(other)
-    focus == other.focus &&
-      tree == other.tree &&
-      parents == other.parents
+    protected_methods
+      .each
+      .with_object(other)
+      .all?(&method(:equal_to_other?))
   end
 
   protected
 
   attr_reader :focus, :tree, :parents
+
+  private
+
+  def equal_to_other?(method, other)
+    send(method) == other.send(method)
+  end
 end
