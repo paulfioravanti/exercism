@@ -9,7 +9,6 @@ class Board
   private_constant :EMPTY
 
   def initialize(board)
-    p board
     @board = board.map(&:split)
   end
 
@@ -63,10 +62,6 @@ class Board
         children.each do |child|
           stack.push(child) unless stack.include?(child)
         end
-        # binding.pry if piece == "O"
-        # p "node: #{node}"
-        # p "children: #{children}"
-        # p "stack: #{stack}"
         break if stack.last == node
       end
     end
@@ -81,13 +76,13 @@ class Board
         if piece == "X"
           [[above, x_index], [above, right]]
         else
-          [[above, left], [above, x_index]]
+          [[above, x_index], [above, left]]
         end
     end
     if board[below]
       coords +=
         if piece == "X"
-          [[below, left], [below, x_index]]
+          [[below, x_index], [below, left]]
         else
           [[below, x_index], [below, right]]
         end
