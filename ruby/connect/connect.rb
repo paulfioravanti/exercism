@@ -4,8 +4,6 @@ require "pry"
 class Board
   EMPTY = "."
   private_constant :EMPTY
-  PIECE_TYPES = %w[O X].freeze
-  private_constant :PIECE_TYPES
 
   def initialize(board)
     @board = board.map(&:split)
@@ -14,8 +12,13 @@ class Board
   def winner
     return "" if empty_board?
 
-    connection = straight_connection
-    connection || ""
+    if x_wins?
+      "X"
+    elsif o_wins?
+      "O"
+    else
+      ""
+    end
   end
 
   private
@@ -34,24 +37,26 @@ class Board
     column == EMPTY
   end
 
-  def straight_connection
-    connection =
-      board.find(&method(:connection)) ||
-      rotated_board.find(&method(:connection))
-    connection&.first
+  def x_wins?
+    straight_connection_win?(board, "X")
+  end
+
+  def o_wins?
+    straight_connection_win?(rotated_board, "O")
+  end
+
+  def straight_connection_win?(board, piece)
+    board
+      .each
+      .with_object(piece)
+      .find(&method(:straight_connection?))
   end
 
   def rotated_board
     board.transpose.map(&:reverse)
   end
 
-  def connection(row)
-    piece_types = row.uniq
-    return unless piece_types.one?
-
-    piece_type = piece_types.first
-    return unless PIECE_TYPES.include?(piece_type)
-
-    piece_type
+  def straight_connection?((row, piece))
+    row.uniq == [piece]
   end
 end
