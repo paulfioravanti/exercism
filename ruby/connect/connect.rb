@@ -9,6 +9,7 @@ class Board
   private_constant :EMPTY
 
   def initialize(board)
+    p board
     @board = board.map(&:split)
   end
 
@@ -51,7 +52,7 @@ class Board
         return true if x_index == row.length - 1
 
         children =
-          adjacent_coordinates(board, y_index, x_index)
+          adjacent_coordinates(board, piece, y_index, x_index)
           .select do |child|
             y_coord, x_coord = child
             child.all? { |n| !n.negative? } &&
@@ -62,17 +63,35 @@ class Board
         children.each do |child|
           stack.push(child) unless stack.include?(child)
         end
+        # binding.pry if piece == "O"
+        # p "node: #{node}"
+        # p "children: #{children}"
+        # p "stack: #{stack}"
         break if stack.last == node
       end
     end
     false
   end
 
-  def adjacent_coordinates(board, y_index, x_index)
+  def adjacent_coordinates(board, piece, y_index, x_index)
     left, right, above, below = ADJACENT_COORDINATES.call(y_index, x_index)
     coords = [[y_index, left], [y_index, right]]
-    board[above] && coords.push([above, x_index])
-    board[below] && coords.push([below, x_index])
+    if board[above]
+      coords +=
+        if piece == "X"
+          [[above, x_index], [above, right]]
+        else
+          [[above, left], [above, x_index]]
+        end
+    end
+    if board[below]
+      coords +=
+        if piece == "X"
+          [[below, left], [below, x_index]]
+        else
+          [[below, x_index], [below, right]]
+        end
+    end
     coords
   end
 
