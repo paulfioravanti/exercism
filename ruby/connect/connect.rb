@@ -1,20 +1,15 @@
 # frozen_string_literal: true
 
-require "pry"
 class Board
   ADJACENT_COORDINATES = lambda do |y_index, x_index|
     [x_index - 1, x_index + 1, y_index - 1, y_index + 1]
   end
-  EMPTY = "."
-  private_constant :EMPTY
 
   def initialize(board)
     @board = board.map(&:split)
   end
 
   def winner
-    return "" if empty_board?
-
     if win?(board, "X")
       "X"
     elsif win?(rotated_board, "O")
@@ -27,18 +22,6 @@ class Board
   private
 
   attr_reader :board
-
-  def empty_board?
-    board.all?(&method(:empty_rows?))
-  end
-
-  def empty_rows?(row)
-    row.all?(&method(:empty_column?))
-  end
-
-  def empty_column?(column)
-    column == EMPTY
-  end
 
   def win?(board, piece)
     board.each.with_index do |row, y_index|
