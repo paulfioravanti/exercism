@@ -68,7 +68,6 @@ class ConnectTest < Minitest::Test
   end
 
   def test_x_wins_crossing_from_left_to_right
-    skip
     board = [
       '. O . .',
       ' O X X X',

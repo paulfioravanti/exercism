@@ -2,6 +2,9 @@
 
 require "pry"
 class Board
+  ADJACENT_COORDINATES = lambda do |y_index, x_index|
+    [x_index - 1, x_index + 1, y_index - 1, y_index + 1]
+  end
   EMPTY = "."
   private_constant :EMPTY
 
@@ -12,9 +15,9 @@ class Board
   def winner
     return "" if empty_board?
 
-    if x_wins?
+    if win?(board, "X")
       "X"
-    elsif o_wins?
+    elsif win?(rotated_board, "O")
       "O"
     else
       ""
@@ -37,26 +40,43 @@ class Board
     column == EMPTY
   end
 
-  def x_wins?
-    straight_connection_win?(board, "X")
+  def win?(board, piece)
+    board.each.with_index do |row, y_index|
+      next unless row.first == piece
+
+      stack = [[y_index, 0]]
+      loop do
+        y_index, x_index = node = stack.pop
+        return false if y_index.nil?
+        return true if x_index == row.length - 1
+
+        children =
+          adjacent_coordinates(board, y_index, x_index)
+          .select do |child|
+            y_coord, x_coord = child
+            child.all? { |n| !n.negative? } &&
+              board[y_coord][x_coord] == piece
+          end
+
+        stack.push(node)
+        children.each do |child|
+          stack.push(child) unless stack.include?(child)
+        end
+        break if stack.last == node
+      end
+    end
+    false
   end
 
-  def o_wins?
-    straight_connection_win?(rotated_board, "O")
-  end
-
-  def straight_connection_win?(board, piece)
-    board
-      .each
-      .with_object(piece)
-      .find(&method(:straight_connection?))
+  def adjacent_coordinates(board, y_index, x_index)
+    left, right, above, below = ADJACENT_COORDINATES.call(y_index, x_index)
+    coords = [[y_index, left], [y_index, right]]
+    board[above] && coords.push([above, x_index])
+    board[below] && coords.push([below, x_index])
+    coords
   end
 
   def rotated_board
     board.transpose.map(&:reverse)
-  end
-
-  def straight_connection?((row, piece))
-    row.uniq == [piece]
   end
 end
