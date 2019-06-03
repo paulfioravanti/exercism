@@ -1,16 +1,20 @@
-require "pry"
 module BookStore
-  BASE_BOOK_PRICE = 8.0
-  private_constant :BASE_BOOK_PRICE
-  DISCOUNT_TYPES = {
-    1 => 0.0,
-    2 => 0.05,
-    3 => 0.1,
-    4 => 0.2,
-    5 => 0.25
-  }.freeze
+  BASE_PRICE = 8.0
+  private_constant :BASE_PRICE
+  BUNDLE_TYPES = (1..5).freeze
+  private_constant :BUNDLE_TYPES
+  DISCOUNT_TYPES = [0.0, 0.05, 0.1, 0.2, 0.25].freeze
   private_constant :DISCOUNT_TYPES
-  NO_COST = 0.0
+  BUNDLE_PRICE = lambda do |(bundle, discount)|
+    [bundle, BASE_PRICE * bundle * (1 - discount)]
+  end
+  BUNDLE_PRICES =
+    BUNDLE_TYPES
+    .zip(DISCOUNT_TYPES)
+    .map(&BUNDLE_PRICE)
+    .to_h
+  private_constant :BUNDLE_PRICES
+  NO_COST = 0
   private_constant :NO_COST
 
   module_function
@@ -18,26 +22,45 @@ module BookStore
   def calculate_price(basket)
     return NO_COST if basket.empty?
 
-    grouped_basket = group_basket(basket)
-    num_book_types = grouped_basket.length
-    percent_discount = DISCOUNT_TYPES[num_book_types]
-
-    grouped_basket.reduce(0) do |acc, books|
-      price = books.length * BASE_BOOK_PRICE
-      discounted_price = price * (1 - percent_discount)
-      acc + discounted_price
-    end
+    basket
+      .then(&method(:generate_initial_book_tally))
+      .then(&method(:price_books))
   end
 
-  def group_basket(basket)
+  def price_books(book_tally)
+    book_tally = remove_zero_tallies(book_tally)
+    return 0 if book_tally.empty?
+
+    (1..book_tally.length)
+      .each
+      .with_object(book_tally)
+      .map(&method(:price_bundle))
+      .min
+  end
+  private_class_method :price_books
+
+  def generate_initial_book_tally(basket)
     basket
       .group_by(&:itself)
       .values
-      .sort_by(&:length)
+      .map(&:length)
+  end
+  private_class_method :generate_initial_book_tally
+
+  def remove_zero_tallies(book_tally)
+    book_tally
+      .sort
+      .drop_while(&:zero?)
       .reverse
   end
+  private_class_method :remove_zero_tallies
 
-  def discounted_price(volume)
-    BASE_BOOK_PRICE * volume * (1 - DISCOUNT_TYPES[volume])
+  def price_bundle(bundle, book_tally)
+    head = book_tally.take(bundle).map(&:pred)
+    tail = book_tally.drop(bundle)
+    next_bundle_tally = head.push(*tail)
+
+    price_books(next_bundle_tally) + BUNDLE_PRICES[bundle]
   end
+  private_class_method :price_bundle
 end
