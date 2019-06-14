@@ -1,9 +1,9 @@
 defmodule RNATranscription do
   @rna_transcriptions %{
-    "A" => 'U',
-    "C" => 'G',
-    "G" => 'C',
-    "T" => 'A'
+    ?A => ?U,
+    ?C => ?G,
+    ?G => ?C,
+    ?T => ?A
   }
 
   @doc """
@@ -17,14 +17,11 @@ defmodule RNATranscription do
   @spec to_rna([char]) :: [char]
   def to_rna(dna) do
     dna
-    |> to_string()
-    |> String.split("", trim: true)
-    |> Enum.reduce('', &append_rna_transcription/2)
+    |> Enum.map(&rna_transcription/1)
   end
 
-  defp append_rna_transcription(dna, acc) do
+  defp rna_transcription(dna) do
     @rna_transcriptions
     |> Map.fetch!(dna)
-    |> (fn dna -> acc ++ dna end).()
   end
 end
