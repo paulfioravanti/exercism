@@ -3,19 +3,17 @@ module RNATranscription exposing (toRNA)
 import Dict exposing (Dict)
 
 
-toRNA : String -> Result String String
+toRNA : String -> Result Char String
 toRNA dna =
     dna
-        |> String.split ""
-        |> List.foldl rnaTranscription ""
-        |> Ok
+        |> String.foldr rnaTranscription (Ok "")
 
 
 
 -- PRIVATE
 
 
-rnaTranscription : String -> String -> String
+rnaTranscription : Char -> Result Char String -> Result Char String
 rnaTranscription dna acc =
     let
         transcription =
@@ -24,17 +22,18 @@ rnaTranscription dna acc =
     in
     case transcription of
         Just rna ->
-            acc ++ rna
+            acc
+                |> Result.map (String.cons rna)
 
         Nothing ->
-            ""
+            Err dna
 
 
-rnaTranscriptions : Dict String String
+rnaTranscriptions : Dict Char Char
 rnaTranscriptions =
     Dict.fromList
-        [ ( "A", "U" )
-        , ( "C", "G" )
-        , ( "G", "C" )
-        , ( "T", "A" )
+        [ ( 'A', 'U' )
+        , ( 'C', 'G' )
+        , ( 'G', 'C' )
+        , ( 'T', 'A' )
         ]
