@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RomanNumerals
   ROMAN_NUMERALS = {
     "M" => 1000,
