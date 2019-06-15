@@ -3,7 +3,7 @@
 class Hexadecimal
   HEX_DIGITS = "0123456789ABCDEF"
   private_constant :HEX_DIGITS
-  HEX_STRING = /\A[#{HEX_DIGITS}]+\z/
+  HEX_STRING = /\A[#{HEX_DIGITS}]+\z/.freeze
   private_constant :HEX_STRING
   BASE = 16
   private_constant :BASE
@@ -14,6 +14,7 @@ class Hexadecimal
 
   def to_decimal
     return 0 unless string.match?(HEX_STRING)
+
     string.chars.reverse.each.with_index.sum(&method(:hex_to_dec))
   end
 
