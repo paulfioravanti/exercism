@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "forwardable"
 
 Node = Struct.new(:value, :left, :right)
