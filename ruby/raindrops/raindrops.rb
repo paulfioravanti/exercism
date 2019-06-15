@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Raindrops
   CONVERSIONS = {
     3 => "Pling",
