@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SpaceAge
   EARTH_ORBITAL_PERIOD = 31_557_600.0
   private_constant :EARTH_ORBITAL_PERIOD
