@@ -1,5 +1,5 @@
 class Trinary
-  TRINARY_STRING = /\A[012]+\z/
+  TRINARY_STRING = /\A[012]+\z/.freeze
   private_constant :TRINARY_STRING
   BASE = 3
   private_constant :BASE
@@ -14,6 +14,7 @@ class Trinary
 
   def to_decimal
     return INVALID_TRINARY unless string.match?(TRINARY_STRING)
+
     string.chars.reverse.each.with_index.reduce(
       DECIMAL_SEED, &method(:add_decimal_value)
     )
