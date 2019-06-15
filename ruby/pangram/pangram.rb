@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Pangram
   NON_ASCII_LETTERS = /[^a-z]/.freeze
   private_constant :NON_ASCII_LETTERS
