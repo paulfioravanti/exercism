@@ -1,5 +1,5 @@
 module Binary
-  BINARY_STRING = /\A[01]+\z/
+  BINARY_STRING = /\A[01]+\z/.freeze
   private_constant :BINARY_STRING
   BASE = 2
   private_constant :BASE
@@ -10,6 +10,7 @@ module Binary
 
   def to_decimal(string)
     raise ArgumentError unless string.match?(BINARY_STRING)
+
     string.chars.reverse.each.with_index.reduce(
       DECIMAL_SEED, &method(:add_decimal_value)
     )
