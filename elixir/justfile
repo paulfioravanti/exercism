@@ -1,0 +1,5 @@
+# Credo used outside of mix as a standalone archive. Installation instructions:
+# https://github.com/rrrene/credo#using-credo-as-stand-alone
+tests exercise_filename test_filename:
+  elixir {{test_filename}}
+  mix credo --strict {{exercise_filename}}
