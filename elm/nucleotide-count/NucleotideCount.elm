@@ -16,15 +16,15 @@ nucleotideCounts sequence =
             { a = 0, t = 0, c = 0, g = 0 }
     in
     sequence
-        |> String.foldl histogram initialCounts
+        |> String.foldl countNucleotide initialCounts
 
 
 
 -- PRIVATE
 
 
-histogram : Char -> NucleotideCounts -> NucleotideCounts
-histogram nucleotide counts =
+countNucleotide : Char -> NucleotideCounts -> NucleotideCounts
+countNucleotide nucleotide counts =
     case nucleotide of
         'A' ->
             { counts | a = counts.a + 1 }
