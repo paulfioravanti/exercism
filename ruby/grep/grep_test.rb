@@ -1,4 +1,5 @@
 require 'minitest/autorun'
+require 'minitest/focus'
 require_relative 'grep'
 
 # Common test data version: 1.2.0 4f2efaa
@@ -56,7 +57,6 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_one_match_print_line_numbers_flag
-    skip
     pattern = "Forbidden"
     flags = ["-n"]
     files = ["paradise-lost.txt"]
@@ -68,7 +68,6 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_one_match_case_insensitive_flag
-    skip
     pattern = "FORBIDDEN"
     flags = ["-i"]
     files = ["paradise-lost.txt"]
@@ -80,7 +79,6 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_one_match_print_file_names_flag
-    skip
     pattern = "Forbidden"
     flags = ["-l"]
     files = ["paradise-lost.txt"]
