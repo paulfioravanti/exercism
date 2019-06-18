@@ -4,12 +4,8 @@ module TwoFer exposing (twoFer)
 twoFer : Maybe String -> String
 twoFer name =
     let
-        message string =
-            "One for " ++ string ++ ", one for me."
+        companion =
+            name
+                |> Maybe.withDefault "you"
     in
-    case name of
-        Just string ->
-            message string
-
-        Nothing ->
-            message "you"
+    "One for " ++ companion ++ ", one for me."
