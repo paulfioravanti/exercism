@@ -9,16 +9,24 @@ module Grep
 
   def grep(pattern, flags, files)
     regexp = generate_regexp(pattern, flags)
+    has_multiple_files = files.length > 1
     files.each_with_object([]) do |filename, acc|
       File.open(filename) do |file|
         file.each.with_index(STARTING_INDEX) do |line, index|
-          next unless line.match?(regexp)
+          if flags.include?("-v")
+            next if line.match?(regexp)
+          else
+            next unless line.match?(regexp)
+          end
 
           acc <<
             if flags.include?("-l")
               filename
             else
               "".tap do |result|
+                if has_multiple_files
+                  result << filename + ":"
+                end
                 if flags.include?("-n")
                   result << index.to_s + ":"
                 end
@@ -27,17 +35,23 @@ module Grep
             end
         end
       end
-    end.join("/n")
+    end.join("\n")
   end
 
   def generate_regexp(pattern, flags)
+    string =
+      if flags.include?("-x")
+        "\\A#{pattern}\n\\z"
+      else
+        pattern
+      end
     options =
       if flags.include?("-i")
         Regexp::IGNORECASE
       else
         NO_OPTIONS
       end
-    Regexp.new(pattern, options)
+    Regexp.new(string, options)
   end
   private_class_method :generate_regexp
 end
