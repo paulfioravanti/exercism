@@ -15,13 +15,18 @@ recite start stop =
 
 
 verse : Int -> String
-verse num =
+verse number =
     let
         index =
-            num - 1
+            number - 1
 
         ordinal =
             valueAtIndex index ordinals
+
+        declarationOfReceipt =
+            "On the "
+                ++ ordinal
+                ++ " day of Christmas my true love gave to me: "
 
         amount =
             cardinalFromOrdinal ordinal
@@ -31,12 +36,8 @@ verse num =
 
         extraGifts =
             calculateExtraGifts index
-
-        declaration =
-            declarationOfReceipt
-                |> String.replace dayPlaceholder ordinal
     in
-    declaration ++ amount ++ currentGift ++ extraGifts ++ "."
+    declarationOfReceipt ++ amount ++ currentGift ++ extraGifts ++ "."
 
 
 valueAtIndex : Int -> List String -> String
@@ -49,18 +50,22 @@ valueAtIndex index list =
 
 cardinalFromOrdinal : String -> String
 cardinalFromOrdinal ordinal =
+    let
+        removeOrdinalEnding ord =
+            ord
+                |> String.replace "th" ""
+    in
     cardinals
         |> Dict.get ordinal
         |> Maybe.withDefault (removeOrdinalEnding ordinal)
 
 
-removeOrdinalEnding : String -> String
-removeOrdinalEnding ordinal =
-    String.replace "th" "" ordinal
-
-
 calculateExtraGifts : Int -> String
 calculateExtraGifts index =
+    let
+        giftsForEachDayOfChristmas =
+            List.map2 Tuple.pair ordinals gifts
+    in
     giftsForEachDayOfChristmas
         |> List.take index
         |> List.foldl addGift []
@@ -126,18 +131,3 @@ gifts =
     , " Pipers Piping"
     , " Drummers Drumming"
     ]
-
-
-giftsForEachDayOfChristmas : List ( String, String )
-giftsForEachDayOfChristmas =
-    List.map2 Tuple.pair ordinals gifts
-
-
-declarationOfReceipt : String
-declarationOfReceipt =
-    "On the " ++ dayPlaceholder ++ " day of Christmas my true love gave to me: "
-
-
-dayPlaceholder : String
-dayPlaceholder =
-    "{day}"
