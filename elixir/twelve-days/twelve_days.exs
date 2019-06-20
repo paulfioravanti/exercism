@@ -10,6 +10,11 @@ defmodule TwelveDays do
   }
   @comma ", "
   @comma_and ", and "
+  @day_placeholder "{day}"
+  @declaration_of_receipt "On the " <>
+                            @day_placeholder <>
+                            " day of Christmas my true love gave to me: "
+
   @gifts [
     " Partridge in a Pear Tree",
     " Turtle Doves",
@@ -24,8 +29,6 @@ defmodule TwelveDays do
     " Pipers Piping",
     " Drummers Drumming"
   ]
-  @i_got " day of Christmas my true love gave to me: "
-  @on_the "On the "
   @ordinals ~w(
     first
     second
@@ -57,8 +60,8 @@ defmodule TwelveDays do
     current_gift = Enum.at(@gifts, index)
     extra_gifts = calculate_extra_gifts(index)
 
-    ordinal
-    |> declaration_of_receipt()
+    @declaration_of_receipt
+    |> String.replace(@day_placeholder, ordinal)
     |> Kernel.<>(amount)
     |> Kernel.<>(current_gift)
     |> Kernel.<>(extra_gifts)
@@ -82,10 +85,6 @@ defmodule TwelveDays do
   @spec sing() :: String.t()
   def sing do
     verses(1, 12)
-  end
-
-  defp declaration_of_receipt(day) do
-    @on_the <> day <> @i_got
   end
 
   defp cardinal_from_ordinal(ordinal) do
