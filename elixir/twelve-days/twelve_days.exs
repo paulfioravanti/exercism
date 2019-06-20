@@ -1,13 +1,47 @@
 defmodule TwelveDays do
   @cardinals %{
-    "first" => "a"
+    "first" => "a",
+    "second" => "two",
+    "third" => "three",
+    "fifth" => "five",
+    "eighth" => "eight",
+    "ninth" => "nine",
+    "twelfth" => "twelve"
   }
-  @gifts %{
-    "first" => " Partridge in a Pear Tree"
-  }
-  @ordinals %{
-    1 => "first"
-  }
+  @comma ", "
+  @comma_and ", and "
+  @gifts [
+    " Partridge in a Pear Tree",
+    " Turtle Doves",
+    " French Hens",
+    " Calling Birds",
+    " Gold Rings",
+    " Geese-a-Laying",
+    " Swans-a-Swimming",
+    " Maids-a-Milking",
+    " Ladies Dancing",
+    " Lords-a-Leaping",
+    " Pipers Piping",
+    " Drummers Drumming"
+  ]
+  @i_got " day of Christmas my true love gave to me: "
+  @on_the "On the "
+  @ordinals ~w(
+    first
+    second
+    third
+    fourth
+    fifth
+    sixth
+    seventh
+    eighth
+    nineth
+    tenth
+    eleventh
+    twelfth
+  )
+  @gifts_for_each_day_of_christmas Enum.zip(@ordinals, @gifts)
+  @ordinal_ending ~r/th\z/
   @period "."
 
   @doc """
@@ -16,14 +50,17 @@ defmodule TwelveDays do
   """
   @spec verse(number :: integer) :: String.t()
   def verse(number) do
-    ordinal =
-      @ordinals
-      |> Map.get(number)
+    index = number - 1
+    ordinal = Enum.at(@ordinals, index)
+    amount = cardinal_from_ordinal(ordinal)
+    current_gift = Enum.at(@gifts, index)
+    extra_gifts = generate_extra_gifts(index)
 
     ordinal
     |> declaration_of_receipt()
-    |> Kernel.<>(Map.get(@cardinals, ordinal))
-    |> Kernel.<>(Map.get(@gifts, ordinal))
+    |> Kernel.<>(amount)
+    |> Kernel.<>(current_gift)
+    |> Kernel.<>(extra_gifts)
     |> Kernel.<>(@period)
   end
 
@@ -43,6 +80,35 @@ defmodule TwelveDays do
   end
 
   defp declaration_of_receipt(day) do
-    "On the " <> day <> " day of Christmas my true love gave to me: "
+    @on_the <> day <> @i_got
+  end
+
+  defp cardinal_from_ordinal(ordinal) do
+    @cardinals
+    |> Map.get(ordinal, remove_ordinal_ending(ordinal))
+  end
+
+  defp remove_ordinal_ending(ordinal) do
+    ordinal
+    |> String.replace(@ordinal_ending, "")
+  end
+
+  defp generate_extra_gifts(index) do
+    @gifts_for_each_day_of_christmas
+    |> Enum.take(index)
+    |> Enum.reduce([], &add_gift/2)
+    |> Enum.join()
+  end
+
+  defp add_gift({ordinal, gift}, acc) do
+    amount = cardinal_from_ordinal(ordinal)
+
+    case acc do
+      [] ->
+        [@comma_and <> amount <> gift]
+
+      _ ->
+        [@comma <> amount <> gift | acc]
+    end
   end
 end
