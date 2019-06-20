@@ -35,13 +35,14 @@ defmodule TwelveDays do
     sixth
     seventh
     eighth
-    nineth
+    ninth
     tenth
     eleventh
     twelfth
   )
   @gifts_for_each_day_of_christmas Enum.zip(@ordinals, @gifts)
   @ordinal_ending ~r/th\z/
+  @newline "\n"
   @period "."
 
   @doc """
@@ -54,7 +55,7 @@ defmodule TwelveDays do
     ordinal = Enum.at(@ordinals, index)
     amount = cardinal_from_ordinal(ordinal)
     current_gift = Enum.at(@gifts, index)
-    extra_gifts = generate_extra_gifts(index)
+    extra_gifts = calculate_extra_gifts(index)
 
     ordinal
     |> declaration_of_receipt()
@@ -70,6 +71,9 @@ defmodule TwelveDays do
   """
   @spec verses(starting_verse :: integer, ending_verse :: integer) :: String.t()
   def verses(starting_verse, ending_verse) do
+    starting_verse..ending_verse
+    |> Enum.map(&verse/1)
+    |> Enum.join(@newline)
   end
 
   @doc """
@@ -77,6 +81,7 @@ defmodule TwelveDays do
   """
   @spec sing() :: String.t()
   def sing do
+    verses(1, 12)
   end
 
   defp declaration_of_receipt(day) do
@@ -93,7 +98,7 @@ defmodule TwelveDays do
     |> String.replace(@ordinal_ending, "")
   end
 
-  defp generate_extra_gifts(index) do
+  defp calculate_extra_gifts(index) do
     @gifts_for_each_day_of_christmas
     |> Enum.take(index)
     |> Enum.reduce([], &add_gift/2)
