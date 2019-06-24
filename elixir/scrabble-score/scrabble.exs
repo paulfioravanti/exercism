@@ -1,11 +1,11 @@
 defmodule Scrabble do
-  @one_point_letters ~w(a e i o u l n r s t)
-  @two_point_letters ~w(d g)
-  @three_point_letters ~w(b c m p)
-  @four_point_letters ~w(f h v w y)
-  @five_point_letters ~w(k)
-  @eight_point_letters ~w(j x)
-  @ten_point_letters ~w(q z)
+  @one_point_letters 'aeioulnrst'
+  @two_point_letters 'dg'
+  @three_point_letters 'bcmp'
+  @four_point_letters 'fhvwy'
+  @five_point_letters 'k'
+  @eight_point_letters 'jx'
+  @ten_point_letters 'qz'
 
   defguardp one_point(letter) when letter in @one_point_letters
   defguardp two_points(letter) when letter in @two_point_letters
@@ -21,8 +21,8 @@ defmodule Scrabble do
   @spec score(String.t()) :: non_neg_integer
   def score(word) do
     word
-    |> String.split("", trim: true)
-    |> Stream.map(&String.downcase/1)
+    |> String.downcase()
+    |> String.to_charlist()
     |> Enum.reduce(0, &add_score_for_letter/2)
   end
 
