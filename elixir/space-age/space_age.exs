@@ -28,30 +28,30 @@ defmodule SpaceAge do
   end
 
   def age_on(:mercury, seconds) do
-    seconds / (@earth_orbital_period * @mercury_orbital_factor)
+    age_on(:earth, seconds) / @mercury_orbital_factor
   end
 
   def age_on(:venus, seconds) do
-    seconds / (@earth_orbital_period * @venus_orbital_factor)
+    age_on(:earth, seconds) / @venus_orbital_factor
   end
 
   def age_on(:mars, seconds) do
-    seconds / (@earth_orbital_period * @mars_orbital_factor)
+    age_on(:earth, seconds) / @mars_orbital_factor
   end
 
   def age_on(:jupiter, seconds) do
-    seconds / (@earth_orbital_period * @jupiter_orbital_factor)
+    age_on(:earth, seconds) / @jupiter_orbital_factor
   end
 
   def age_on(:saturn, seconds) do
-    seconds / (@earth_orbital_period * @saturn_orbital_factor)
+    age_on(:earth, seconds) / @saturn_orbital_factor
   end
 
   def age_on(:uranus, seconds) do
-    seconds / (@earth_orbital_period * @uranus_orbital_factor)
+    age_on(:earth, seconds) / @uranus_orbital_factor
   end
 
   def age_on(:neptune, seconds) do
-    seconds / (@earth_orbital_period * @neptune_orbital_factor)
+    age_on(:earth, seconds) / @neptune_orbital_factor
   end
 end
