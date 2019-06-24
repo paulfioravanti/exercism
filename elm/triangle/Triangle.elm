@@ -21,38 +21,33 @@ triangleKind x y z =
         validInequality =
             triangleInequality sides
     in
-    case ( validSides, validInequality ) of
-        ( Err err, _ ) ->
-            Err err
+    if not validSides then
+        Err "Invalid lengths"
 
-        ( _, Err err ) ->
-            Err err
+    else if not validInequality then
+        Err "Violates inequality"
 
-        _ ->
-            sides
-                |> Set.fromList
-                |> Set.size
-                |> determineTriangleType
+    else
+        sides
+            |> Set.fromList
+            |> Set.size
+            |> determineTriangleType
 
 
 
 -- PRIVATE
 
 
-allSidesPositive : List number -> Result String Bool
+allSidesPositive : List number -> Bool
 allSidesPositive sides =
     let
         isPositive num =
             num > 0
     in
-    if List.all isPositive sides then
-        Ok True
-
-    else
-        Err "Invalid lengths"
+    List.all isPositive sides
 
 
-triangleInequality : List number -> Result String Bool
+triangleInequality : List number -> Bool
 triangleInequality sides =
     let
         ( head, tail ) =
@@ -63,11 +58,7 @@ triangleInequality sides =
                 [] ->
                     ( 0, [] )
     in
-    if List.sum tail > head then
-        Ok True
-
-    else
-        Err "Violates inequality"
+    List.sum tail > head
 
 
 determineTriangleType : Int -> Result String Triangle
