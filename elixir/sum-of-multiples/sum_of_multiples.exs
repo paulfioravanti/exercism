@@ -20,6 +20,6 @@ defmodule SumOfMultiples do
   end
 
   defp multiple?(range_number, factor) do
-    Integer.mod(range_number, factor) == 0
+    rem(range_number, factor) == 0
   end
 end
