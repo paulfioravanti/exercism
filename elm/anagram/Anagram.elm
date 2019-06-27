@@ -31,7 +31,7 @@ isAnagram word letters candidate =
         candidateWord =
             String.toLower candidate
     in
-    not (isSameWord word candidateWord) && areSameLetters letters candidateWord
+    not (isSameWord word candidateWord) && hasSameLetters letters candidateWord
 
 
 isSameWord : String -> String -> Bool
@@ -39,6 +39,6 @@ isSameWord word candidate =
     word == candidate
 
 
-areSameLetters : List String -> String -> Bool
-areSameLetters letters candidate =
+hasSameLetters : List String -> String -> Bool
+hasSameLetters letters candidate =
     letters == toSortedLetters candidate
