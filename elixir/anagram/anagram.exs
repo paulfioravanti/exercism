@@ -8,17 +8,22 @@ defmodule Anagram do
     letters = to_sorted_letters(word)
 
     candidates
-    |> Enum.filter(&anagram?(&1, word, letters))
+    |> Enum.filter(&anagram?(String.downcase(&1), word, letters))
   end
 
   defp to_sorted_letters(word) do
     word
-    |> String.split("", trim: true)
+    |> String.graphemes()
     |> Enum.sort()
   end
 
   defp anagram?(candidate, word, letters) do
-    candidate_word = String.downcase(candidate)
-    word != candidate_word && letters == to_sorted_letters(candidate_word)
+    not same_word?(word, candidate) and same_letters?(letters, candidate)
+  end
+
+  defp same_word?(word, candidate), do: word == candidate
+
+  defp same_letters?(letters, candidate) do
+    letters == to_sorted_letters(candidate)
   end
 end
