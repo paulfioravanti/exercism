@@ -4,8 +4,8 @@ defmodule CollatzConjecture do
 
   require Integer
 
-  defguardp positive_number?(input) when is_integer(input) and input > 0
-  defguardp terminating_number?(input) when input == @terminating_number
+  defguardp positive_integer?(input) when is_integer(input) and input > 0
+  defguardp even?(input) when Integer.is_even(input)
 
   @doc """
   calc/1 takes an integer and returns the number of steps required to get the
@@ -14,26 +14,24 @@ defmodule CollatzConjecture do
     - if number is even, divide by 2
   """
   @spec calc(input :: pos_integer()) :: non_neg_integer()
-  def calc(input) when positive_number?(input) do
-    do_calc(input, @initial_steps)
+  def calc(input) when positive_integer?(input) do
+    calc(input, @initial_steps)
   end
 
-  defp do_calc(input, steps) when terminating_number?(input), do: steps
+  defp calc(@terminating_number, steps), do: steps
 
-  defp do_calc(input, steps) do
+  defp calc(input, steps) when even?(input) do
     input
-    |> perform_calc()
-    |> do_calc(steps + 1)
+    |> n_div_two()
+    |> calc(steps + 1)
   end
 
-  defp perform_calc(input) do
-    if Integer.is_even(input) do
-      n_div_two(input)
-    else
-      three_n_plus_one(input)
-    end
+  defp calc(input, steps) do
+    input
+    |> three_n_plus_one()
+    |> calc(steps + 1)
   end
 
-  defp n_div_two(input), do: div(input, 2)
-  defp three_n_plus_one(input), do: 3 * input + 1
+  defp n_div_two(n), do: div(n, 2)
+  defp three_n_plus_one(n), do: 3 * n + 1
 end
