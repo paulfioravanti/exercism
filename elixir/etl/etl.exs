@@ -13,15 +13,15 @@ defmodule ETL do
     |> Enum.reduce(%{}, &transform_words/2)
   end
 
-  defp transform_words({point_value, words}, new_scores) do
+  defp transform_words({score, words}, new_scores) do
     words
-    |> Enum.reduce(new_scores, &score_by_word(point_value, &1, &2))
+    |> Enum.reduce(new_scores, &score_by_word(score, &1, &2))
   end
 
-  defp score_by_word(point_value, word, new_scores) do
+  defp score_by_word(score, word, new_scores) do
     word_key = String.downcase(word)
 
     new_scores
-    |> Map.put(word_key, point_value)
+    |> Map.put(word_key, score)
   end
 end
