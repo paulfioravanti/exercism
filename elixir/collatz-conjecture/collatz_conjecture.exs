@@ -5,7 +5,6 @@ defmodule CollatzConjecture do
   require Integer
 
   defguardp positive_integer?(input) when is_integer(input) and input > 0
-  defguardp even?(input) when Integer.is_even(input)
 
   @doc """
   calc/1 takes an integer and returns the number of steps required to get the
@@ -20,7 +19,7 @@ defmodule CollatzConjecture do
 
   defp calc(@terminating_number, steps), do: steps
 
-  defp calc(input, steps) when even?(input) do
+  defp calc(input, steps) when Integer.is_even(input) do
     input
     |> n_div_two()
     |> calc(steps + 1)
