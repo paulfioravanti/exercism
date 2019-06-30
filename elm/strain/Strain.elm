@@ -18,4 +18,4 @@ keep predicate list =
 discard : (a -> Bool) -> List a -> List a
 discard predicate list =
     list
-        |> keep (\element -> not (predicate element))
+        |> keep (not << predicate)
