@@ -6,10 +6,15 @@ defmodule Strain do
   Do not use `Enum.filter`.
   """
   @spec keep(list :: list(any), fun :: (any -> boolean)) :: list(any)
-  def keep(list, fun) do
-    list
-    |> filter(fn elem, acc -> if fun.(elem), do: [elem | acc], else: acc end)
+  def keep([head | tail], fun) do
+    if fun.(head) do
+      [head | keep(tail, fun)]
+    else
+      keep(tail, fun)
+    end
   end
+
+  def keep([], _fun), do: []
 
   @doc """
   Given a `list` of items and a function `fun`, return the list of items where
@@ -19,13 +24,6 @@ defmodule Strain do
   """
   @spec discard(list :: list(any), fun :: (any -> boolean)) :: list(any)
   def discard(list, fun) do
-    list
-    |> keep(fn elem -> not fun.(elem) end)
-  end
-
-  defp filter(list, fun) do
-    list
-    |> Enum.reduce([], &fun.(&1, &2))
-    |> Enum.reverse()
+    keep(list, &(not fun.(&1)))
   end
 end
