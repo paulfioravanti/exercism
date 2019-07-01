@@ -38,10 +38,16 @@ addStudent grade student school =
 
 studentsInGrade : Grade -> School -> List Student
 studentsInGrade grade school =
-    school
-        |> Dict.get grade
-        |> Maybe.withDefault []
-        |> List.sort
+    let
+        allStudentsInGrade =
+            Dict.get grade school
+    in
+    case allStudentsInGrade of
+        Just students ->
+            List.sort students
+
+        Nothing ->
+            []
 
 
 allStudents : School -> List ( Grade, List Student )
