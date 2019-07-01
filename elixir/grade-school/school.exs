@@ -11,7 +11,7 @@ defmodule School do
   @spec add(map, String.t(), integer) :: map
   def add(db, name, grade) do
     db
-    |> Map.put(grade, [name | grade(db, grade)])
+    |> Map.update(grade, [name], fn names -> [name | names] end)
   end
 
   @doc """
