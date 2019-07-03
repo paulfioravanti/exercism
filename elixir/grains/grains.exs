@@ -13,7 +13,7 @@ defmodule Grains do
     {:ok, calculate_square(number)}
   end
 
-  def square(number) do
+  def square(_number) do
     {:error, "The requested square must be between 1 and 64 (inclusive)"}
   end
 
