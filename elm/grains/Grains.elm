@@ -16,7 +16,11 @@ square n =
 
 validChessboardSquare : Int -> Bool
 validChessboardSquare n =
-    List.range 1 64
+    let
+        chessboard =
+            List.range 1 64
+    in
+    chessboard
         |> List.member n
 
 
