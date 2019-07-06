@@ -1,6 +1,10 @@
 defmodule Hamming do
+  defguardp same_length?(strand1, strand2)
+            when length(strand1) == length(strand2)
+
   @doc """
-  Returns number of differences between two strands of DNA, known as the Hamming Distance.
+  Returns number of differences between two strands of DNA, known as the Hamming
+  Distance.
 
   ## Examples
 
@@ -9,21 +13,16 @@ defmodule Hamming do
   """
   @spec hamming_distance([char], [char]) ::
           {:ok, non_neg_integer} | {:error, String.t()}
-  def hamming_distance(strand1, strand2) do
-    strand_length = length(strand1)
+  def hamming_distance(strand, strand), do: {:ok, 0}
 
-    cond do
-      strand_length != length(strand2) ->
-        {:error, "Lists must be the same length"}
+  def hamming_distance(strand1, strand2) when same_length?(strand1, strand2) do
+    0..length(strand1)
+    |> Enum.count(&difference?(strand1, strand2, &1))
+    |> (&{:ok, &1}).()
+  end
 
-      strand1 == strand2 ->
-        {:ok, 0}
-
-      true ->
-        0..strand_length
-        |> Enum.count(&difference?(strand1, strand2, &1))
-        |> (&{:ok, &1}).()
-    end
+  def hamming_distance(_strand1, _strand2) do
+    {:error, "Lists must be the same length"}
   end
 
   defp difference?(strand1, strand2, nucleotide) do
