@@ -1,7 +1,6 @@
 module WordCount exposing (wordCount)
 
 import Dict exposing (Dict)
-import Regex
 
 
 wordCount : String -> Dict String Int
@@ -18,15 +17,14 @@ wordCount sentence =
 convertToWords : String -> List String
 convertToWords sentence =
     let
-        wordRegex =
-            "[^\\w-]"
-                |> Regex.fromString
-                |> Maybe.withDefault Regex.never
+        alphaNumOrSpaceOnly : Char -> Bool
+        alphaNumOrSpaceOnly char =
+            Char.isAlphaNum char || char == ' '
     in
     sentence
         |> String.toLower
-        |> Regex.split wordRegex
-        |> List.filter (not << String.isEmpty)
+        |> String.filter alphaNumOrSpaceOnly
+        |> String.words
 
 
 incrementTallyForWord : String -> Dict String Int -> Dict String Int
