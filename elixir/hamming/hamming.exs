@@ -16,16 +16,19 @@ defmodule Hamming do
   def hamming_distance(strand, strand), do: {:ok, 0}
 
   def hamming_distance(strand1, strand2) when same_length?(strand1, strand2) do
-    0..length(strand1)
-    |> Enum.count(&difference?(strand1, strand2, &1))
-    |> (&{:ok, &1}).()
+    distance =
+      strand1
+      |> Enum.zip(strand2)
+      |> Enum.count(&difference?/1)
+
+    {:ok, distance}
   end
 
   def hamming_distance(_strand1, _strand2) do
     {:error, "Lists must be the same length"}
   end
 
-  defp difference?(strand1, strand2, nucleotide) do
-    Enum.at(strand1, nucleotide) != Enum.at(strand2, nucleotide)
+  defp difference?({nucleotide1, nucleotide2}) do
+    nucleotide1 != nucleotide2
   end
 end
