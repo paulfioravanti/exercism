@@ -1,6 +1,5 @@
 defmodule Pangram do
-  @non_ascii_letters ~r([^a-z])
-  @number_of_letters_in_alphabet 26
+  @alphabet Enum.to_list(?a..?z)
 
   @doc """
   Determines if a word or sentence is a pangram.
@@ -19,10 +18,8 @@ defmodule Pangram do
   def pangram?(sentence) do
     sentence
     |> String.downcase()
-    |> String.replace(@non_ascii_letters, "")
     |> String.to_charlist()
-    |> Enum.uniq()
-    |> Enum.count()
-    |> Kernel.==(@number_of_letters_in_alphabet)
+    |> (fn charlist -> @alphabet -- charlist end).()
+    |> Enum.empty?()
   end
 end
