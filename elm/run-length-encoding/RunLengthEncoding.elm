@@ -1,11 +1,12 @@
 module RunLengthEncoding exposing (decode, encode)
 
-import Regex
+import Regex exposing (Regex)
 
 
 encode : String -> String
 encode string =
     let
+        consecutiveDataElements : Regex
         consecutiveDataElements =
             "([A-Za-z\\s])\\1+"
                 |> Regex.fromString
@@ -17,8 +18,9 @@ encode string =
 decode : String -> String
 decode string =
     let
+        runTimeEncoding : Regex
         runTimeEncoding =
-            "(\\d+)(\\D)"
+            "\\d+\\D"
                 |> Regex.fromString
                 |> Maybe.withDefault Regex.never
     in
@@ -30,18 +32,14 @@ decode string =
 
 
 compress : Regex.Match -> String
-compress match =
+compress { match } =
     let
         character =
-            case match.submatches of
-                letter :: _ ->
-                    Maybe.withDefault "" letter
-
-                _ ->
-                    ""
+            match
+                |> String.left 1
 
         count =
-            match.match
+            match
                 |> String.length
                 |> String.fromInt
     in
@@ -49,25 +47,16 @@ compress match =
 
 
 reconstruct : Regex.Match -> String
-reconstruct match =
+reconstruct { match } =
     let
-        ( count, character ) =
-            case match.submatches of
-                int :: char :: _ ->
-                    let
-                        number =
-                            int
-                                |> Maybe.withDefault ""
-                                |> String.toInt
-                                |> Maybe.withDefault 0
+        character =
+            match
+                |> String.right 1
 
-                        letter =
-                            Maybe.withDefault "" char
-                    in
-                    ( number, letter )
-
-                _ ->
-                    ( 0, "" )
+        count =
+            match
+                |> String.slice 0 -1
+                |> String.toInt
+                |> Maybe.withDefault 0
     in
-    character
-        |> String.repeat count
+    String.repeat count character
