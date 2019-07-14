@@ -62,7 +62,7 @@ tallyEncoding character acc =
                 { head | count = head.count + 1 } :: tail
 
             else
-                initEncoding character :: head :: tail
+                initEncoding character :: acc
 
 
 encodingsParser : Parser (List Encoding)
