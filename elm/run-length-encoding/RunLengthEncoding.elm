@@ -1,7 +1,6 @@
 module RunLengthEncoding exposing (decode, encode)
 
 import Parser exposing ((|=), Parser, Step)
-import Regex exposing (Regex)
 
 
 type alias Encoding =
@@ -11,13 +10,20 @@ type alias Encoding =
 encode : String -> String
 encode string =
     let
-        consecutiveDataElements : Regex
-        consecutiveDataElements =
-            "([A-Za-z\\s])\\1+"
-                |> Regex.fromString
-                |> Maybe.withDefault Regex.never
+        compress : Encoding -> String
+        compress ( count, character ) =
+            case count of
+                1 ->
+                    character
+
+                _ ->
+                    String.fromInt count ++ character
     in
-    Regex.replace consecutiveDataElements compress string
+    string
+        |> String.split ""
+        |> List.foldr tallyEncoding []
+        |> List.map compress
+        |> String.concat
 
 
 decode : String -> String
@@ -38,19 +44,18 @@ decode string =
 -- PRIVATE
 
 
-compress : Regex.Match -> String
-compress { match } =
-    let
-        character =
-            match
-                |> String.left 1
+tallyEncoding : String -> List Encoding -> List Encoding
+tallyEncoding char acc =
+    case acc of
+        [] ->
+            [ ( 1, char ) ]
 
-        count =
-            match
-                |> String.length
-                |> String.fromInt
-    in
-    count ++ character
+        ( count, character ) :: tail ->
+            if character == char then
+                ( count + 1, character ) :: tail
+
+            else
+                ( 1, char ) :: ( count, character ) :: tail
 
 
 encodingsParser : Parser (List Encoding)
