@@ -48,16 +48,21 @@ decode string =
 
 tallyEncoding : String -> List Encoding -> List Encoding
 tallyEncoding character acc =
+    let
+        initEncoding : String -> Encoding
+        initEncoding char =
+            { count = 1, character = char }
+    in
     case acc of
         [] ->
-            [ { count = 1, character = character } ]
+            [ initEncoding character ]
 
         head :: tail ->
             if character == head.character then
                 { head | count = head.count + 1 } :: tail
 
             else
-                { count = 1, character = character } :: head :: tail
+                initEncoding character :: head :: tail
 
 
 encodingsParser : Parser (List Encoding)
