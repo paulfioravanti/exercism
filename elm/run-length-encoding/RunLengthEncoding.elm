@@ -1,6 +1,11 @@
 module RunLengthEncoding exposing (decode, encode)
 
+import Parser exposing ((|=), Parser, Step)
 import Regex exposing (Regex)
+
+
+type alias Encoding =
+    ( Int, String )
 
 
 encode : String -> String
@@ -18,13 +23,15 @@ encode string =
 decode : String -> String
 decode string =
     let
-        runTimeEncoding : Regex
-        runTimeEncoding =
-            "\\d+\\D"
-                |> Regex.fromString
-                |> Maybe.withDefault Regex.never
+        reconstruct : Encoding -> String
+        reconstruct ( count, character ) =
+            String.repeat count character
     in
-    Regex.replace runTimeEncoding reconstruct string
+    string
+        |> Parser.run encodingsParser
+        |> Result.withDefault []
+        |> List.map reconstruct
+        |> String.concat
 
 
 
@@ -46,17 +53,44 @@ compress { match } =
     count ++ character
 
 
-reconstruct : Regex.Match -> String
-reconstruct { match } =
+encodingsParser : Parser (List Encoding)
+encodingsParser =
     let
-        character =
-            match
-                |> String.right 1
-
-        count =
-            match
-                |> String.slice 0 -1
-                |> String.toInt
-                |> Maybe.withDefault 0
+        encodingsIterationParser :
+            List ( Int, String )
+            -> Parser (Step (List Encoding) (List Encoding))
+        encodingsIterationParser encodings =
+            Parser.oneOf
+                [ Parser.succeed
+                    (\encoding -> Parser.Loop (encoding :: encodings))
+                    |= encodingParser
+                , Parser.succeed ()
+                    |> Parser.map (\_ -> Parser.Done (List.reverse encodings))
+                ]
     in
-    String.repeat count character
+    Parser.loop [] encodingsIterationParser
+
+
+encodingParser : Parser Encoding
+encodingParser =
+    let
+        countParser : Parser Int
+        countParser =
+            Parser.oneOf
+                [ Parser.succeed identity
+                    |= Parser.int
+                , Parser.succeed 1
+                ]
+
+        alphaOrSpaceParser : Parser String
+        alphaOrSpaceParser =
+            let
+                isAlphaOrSpace char =
+                    Char.isAlpha char || char == ' '
+            in
+            Parser.chompIf isAlphaOrSpace
+                |> Parser.getChompedString
+    in
+    Parser.succeed Tuple.pair
+        |= countParser
+        |= alphaOrSpaceParser
