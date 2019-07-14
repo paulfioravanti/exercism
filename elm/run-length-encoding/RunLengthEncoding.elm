@@ -4,14 +4,16 @@ import Parser exposing ((|=), Parser, Step)
 
 
 type alias Encoding =
-    ( Int, String )
+    { count : Int
+    , character : String
+    }
 
 
 encode : String -> String
 encode string =
     let
         compress : Encoding -> String
-        compress ( count, character ) =
+        compress { count, character } =
             case count of
                 1 ->
                     character
@@ -30,7 +32,7 @@ decode : String -> String
 decode string =
     let
         reconstruct : Encoding -> String
-        reconstruct ( count, character ) =
+        reconstruct { count, character } =
             String.repeat count character
     in
     string
@@ -45,24 +47,24 @@ decode string =
 
 
 tallyEncoding : String -> List Encoding -> List Encoding
-tallyEncoding char acc =
+tallyEncoding character acc =
     case acc of
         [] ->
-            [ ( 1, char ) ]
+            [ { count = 1, character = character } ]
 
-        ( count, character ) :: tail ->
-            if character == char then
-                ( count + 1, character ) :: tail
+        head :: tail ->
+            if character == head.character then
+                { head | count = head.count + 1 } :: tail
 
             else
-                ( 1, char ) :: ( count, character ) :: tail
+                { count = 1, character = character } :: head :: tail
 
 
 encodingsParser : Parser (List Encoding)
 encodingsParser =
     let
         encodingsIterationParser :
-            List ( Int, String )
+            List Encoding
             -> Parser (Step (List Encoding) (List Encoding))
         encodingsIterationParser encodings =
             Parser.oneOf
@@ -96,6 +98,6 @@ encodingParser =
             Parser.chompIf isAlphaOrSpace
                 |> Parser.getChompedString
     in
-    Parser.succeed Tuple.pair
+    Parser.succeed Encoding
         |= countParser
         |= alphaOrSpaceParser
