@@ -2,9 +2,7 @@ defmodule RunLengthEncoder do
   # NOTE: \1 backreferences the single character match in parentheses.
   # The parentheses only serve to provide a match for the backreference.
   @consecutive_data_elements ~r{([A-Za-z\s])\1+}
-  @run_length_encoding ~r{(\d+)(\D)}
-
-  defguardp empty?(string) when string == ""
+  @run_length_encoding ~r{\d+\D}
 
   @doc """
   Generates a string where consecutive elements are represented as a data value and count.
@@ -14,7 +12,7 @@ defmodule RunLengthEncoder do
   "2A3B4C" => "AABBBCCCC"
   """
   @spec encode(String.t()) :: String.t()
-  def encode(string) when empty?(string), do: ""
+  def encode(""), do: ""
 
   def encode(string) do
     @consecutive_data_elements
@@ -22,22 +20,19 @@ defmodule RunLengthEncoder do
   end
 
   @spec decode(String.t()) :: String.t()
-  def decode(string) when empty?(string), do: ""
+  def decode(""), do: ""
 
   def decode(string) do
     @run_length_encoding
-    |> Regex.replace(string, &reconstruct/3)
+    |> Regex.replace(string, &reconstruct/1)
   end
 
   defp compress(whole_match, letter) do
-    whole_match
-    |> String.length()
-    |> to_string()
-    |> Kernel.<>(letter)
+    "#{String.length(whole_match)}#{letter}"
   end
 
-  defp reconstruct(_whole_match, count, character) do
-    character
-    |> String.duplicate(String.to_integer(count))
+  defp reconstruct(whole_match) do
+    {count, character} = Integer.parse(whole_match)
+    String.duplicate(character, count)
   end
 end
