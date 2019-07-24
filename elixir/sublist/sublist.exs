@@ -24,7 +24,6 @@ defmodule Sublist do
   defp contains?(x, y) when x |> shorter?(y), do: false
 
   defp contains?(x, y) do
-    sublist_of_x = Enum.take(x, length(y))
-    sublist_of_x === y or tl(x) |> contains?(y)
+    x |> List.starts_with?(y) or tl(x) |> contains?(y)
   end
 end
