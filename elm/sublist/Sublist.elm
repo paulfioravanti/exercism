@@ -42,7 +42,7 @@ isContainedIn xlist ylist =
             [] ->
                 False
 
-            xhead :: xtail ->
+            _ :: xtail ->
                 isContainedIn xtail ylist
 
 

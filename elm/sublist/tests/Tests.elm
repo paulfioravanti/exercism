@@ -2,7 +2,7 @@ module Tests exposing (tests)
 
 import Expect
 import Sublist exposing (ListComparison(..), sublist)
-import Test exposing (..)
+import Test exposing (Test, describe, test)
 
 
 tests : Test
