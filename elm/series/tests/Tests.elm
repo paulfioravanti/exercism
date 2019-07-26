@@ -2,7 +2,7 @@ module Tests exposing (tests)
 
 import Expect
 import Series exposing (slices)
-import Test exposing (..)
+import Test exposing (Test, describe, test)
 
 
 tests : Test
