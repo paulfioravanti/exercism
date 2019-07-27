@@ -3,8 +3,7 @@ module Tests exposing (tests)
 import Expect
 import Gigasecond exposing (add)
 import Iso8601
-import Parser
-import Test exposing (..)
+import Test exposing (Test, describe, test)
 import Time
 
 
