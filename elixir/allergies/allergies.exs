@@ -20,7 +20,7 @@ defmodule Allergies do
     @allergens
     |> Enum.with_index()
     |> Enum.filter(&allergen?(&1, flags))
-    |> Enum.map(&elem(&1, 0))
+    |> Enum.map(&allergen/1)
   end
 
   @doc """
@@ -37,7 +37,7 @@ defmodule Allergies do
     (flags &&& allergen_score(index)) > 0
   end
 
-  defp allergen_score(index) do
-    1 <<< index
-  end
+  defp allergen({item, _index}), do: item
+
+  defp allergen_score(index), do: 1 <<< index
 end
