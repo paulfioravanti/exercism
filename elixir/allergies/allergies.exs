@@ -1,5 +1,5 @@
 defmodule Allergies do
-  import Bitwise
+  use Bitwise, only_operators: true
 
   @allergens ~w[
     eggs
@@ -34,7 +34,7 @@ defmodule Allergies do
   end
 
   defp allergen?({_item, index}, flags) do
-    (flags &&& allergen_score(index)) != 0
+    (flags &&& allergen_score(index)) > 0
   end
 
   defp allergen_score(index) do
