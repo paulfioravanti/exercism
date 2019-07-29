@@ -35,14 +35,14 @@ defaultRobot =
 turnRight : Robot -> Robot
 turnRight robot =
     bearingsList
-        |> leftRotate 1
+        |> rotate 1
         |> turn robot
 
 
 turnLeft : Robot -> Robot
 turnLeft robot =
     bearingsList
-        |> rightRotate 1
+        |> rotate -1
         |> turn robot
 
 
@@ -85,25 +85,23 @@ bearingsList =
     [ North, East, South, West ]
 
 
-leftRotate : Int -> List Bearing -> List Bearing
-leftRotate count bearings =
-    case ( count, bearings ) of
-        ( _, [] ) ->
+rotate : Int -> List Bearing -> List Bearing
+rotate count bearings =
+    case ( compare count 0, bearings ) of
+        ( GT, [] ) ->
             []
 
-        ( 0, _ ) ->
+        ( GT, head :: tail ) ->
+            rotate (count - 1) (tail ++ [ head ])
+
+        ( LT, _ ) ->
             bearings
+                |> List.reverse
+                |> rotate (abs count)
+                |> List.reverse
 
-        ( _, head :: tail ) ->
-            leftRotate (count - 1) (tail ++ [ head ])
-
-
-rightRotate : Int -> List Bearing -> List Bearing
-rightRotate count bearings =
-    bearings
-        |> List.reverse
-        |> leftRotate count
-        |> List.reverse
+        ( EQ, _ ) ->
+            bearings
 
 
 turn : Robot -> List Bearing -> Robot
