@@ -7,24 +7,24 @@ defmodule ListOps do
 
   @spec count(list) :: non_neg_integer
   def count(l), do: count(l, 0)
-  def count([], num), do: num
-  def count([_head | tail], num), do: count(tail, num + 1)
+  defp count([], num), do: num
+  defp count([_head | tail], num), do: count(tail, num + 1)
 
   @spec reverse(list) :: list
   def reverse(l), do: reverse(l, [])
-  def reverse([], acc), do: acc
-  def reverse([head | tail], acc), do: reverse(tail, [head | acc])
+  defp reverse([], acc), do: acc
+  defp reverse([head | tail], acc), do: reverse(tail, [head | acc])
 
   @spec map(list, (any -> any)) :: list
   def map(l, f), do: map(l, [], f)
-  def map([], acc, _f), do: reverse(acc)
-  def map([head | tail], acc, f), do: map(tail, [f.(head) | acc], f)
+  defp map([], acc, _f), do: reverse(acc)
+  defp map([head | tail], acc, f), do: map(tail, [f.(head) | acc], f)
 
   @spec filter(list, (any -> as_boolean(term))) :: list
   def filter(l, f), do: filter(l, [], f)
-  def filter([], acc, _f), do: reverse(acc)
+  defp filter([], acc, _f), do: reverse(acc)
 
-  def filter([head | tail], acc, f) do
+  defp filter([head | tail], acc, f) do
     if f.(head) do
       filter(tail, [head | acc], f)
     else
@@ -39,8 +39,8 @@ defmodule ListOps do
 
   @spec append(list, list) :: list
   def append(a, b), do: do_append(reverse(a), b)
-  def do_append([], b), do: b
-  def do_append([head | tail], b), do: do_append(tail, [head | b])
+  defp do_append([], b), do: b
+  defp do_append([head | tail], b), do: do_append(tail, [head | b])
 
   @spec concat([[any]]) :: [any]
   def concat(ll) do
