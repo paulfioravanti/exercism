@@ -81,13 +81,13 @@ defmodule RobotSimulator do
 
   def turn_left(robot) do
     @bearings
-    |> right_rotate(1)
+    |> rotate(-1)
     |> turn(robot)
   end
 
   def turn_right(robot) do
     @bearings
-    |> left_rotate(1)
+    |> rotate(1)
     |> turn(robot)
   end
 
@@ -124,16 +124,16 @@ defmodule RobotSimulator do
     %RobotSimulator{robot | direction: new_direction}
   end
 
-  defp left_rotate(list, 0), do: list
+  defp rotate(list, 0), do: list
 
-  defp left_rotate([head | tail], count) do
-    left_rotate(tail ++ [head], count - 1)
+  defp rotate([head | tail], count) when count > 0 do
+    rotate(tail ++ [head], count - 1)
   end
 
-  defp right_rotate(list, count) do
+  defp rotate(list, count) when count < 0 do
     list
     |> Enum.reverse()
-    |> left_rotate(count)
+    |> rotate(abs(count))
     |> Enum.reverse()
   end
 end
