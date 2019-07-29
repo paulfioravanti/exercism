@@ -127,8 +127,8 @@ turn robot newBearings =
 
 
 performDirection : Char -> Robot -> Robot
-performDirection instruction robot =
-    case instruction of
+performDirection direction robot =
+    case direction of
         'L' ->
             turnLeft robot
 
