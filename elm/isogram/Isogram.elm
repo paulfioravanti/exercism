@@ -10,9 +10,10 @@ isIsogram sentence =
             sentence
                 |> String.filter Char.isAlpha
                 |> String.toLower
-                |> String.toList
 
         uniqueLetters =
-            Set.fromList letters
+            letters
+                |> String.toList
+                |> Set.fromList
     in
-    List.length letters == Set.size uniqueLetters
+    String.length letters == Set.size uniqueLetters
