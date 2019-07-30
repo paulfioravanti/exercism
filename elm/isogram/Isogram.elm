@@ -8,9 +8,9 @@ isIsogram sentence =
     let
         letters =
             sentence
+                |> String.filter Char.isAlpha
                 |> String.toLower
                 |> String.toList
-                |> List.filter Char.isAlpha
 
         uniqueLetters =
             Set.fromList letters
