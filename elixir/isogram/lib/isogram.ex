@@ -1,5 +1,5 @@
 defmodule Isogram do
-  @word_characters ~r/\w/
+  @word_characters ?A..?z
 
   @doc """
   Determines if a word or sentence is an isogram
@@ -7,9 +7,9 @@ defmodule Isogram do
   @spec isogram?(String.t()) :: boolean
   def isogram?(sentence) do
     letters =
-      sentence
-      |> String.downcase()
-      |> (fn sentence -> Regex.scan(@word_characters, sentence) end).()
+      for <<letter <- sentence>>,
+          letter in @word_characters,
+          do: letter
 
     Enum.uniq(letters) == letters
   end
