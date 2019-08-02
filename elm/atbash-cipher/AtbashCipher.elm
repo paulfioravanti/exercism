@@ -9,68 +9,50 @@ encode plain =
     in
     plain
         |> String.toLower
-        |> toTransposedList
+        |> toTransposedString
         |> chunkEvery groupSize
-        |> List.map joinChars
-        |> String.join " "
 
 
 decode : String -> String
 decode cipher =
-    cipher
-        |> toTransposedList
-        |> joinChars
+    toTransposedString cipher
 
 
 
 -- PRIVATE
 
 
-toTransposedList : String -> List Char
-toTransposedList string =
+toTransposedString : String -> String
+toTransposedString string =
     string
-        |> String.toList
-        |> List.foldr transpose []
+        |> String.filter Char.isAlphaNum
+        |> String.map transpose
 
 
-joinChars : List Char -> String
-joinChars list =
-    list
-        |> List.map String.fromChar
-        |> String.join ""
-
-
-transpose : Char -> List Char -> List Char
-transpose char acc =
+transpose : Char -> Char
+transpose char =
     if Char.isAlpha char then
         let
             alphabetBounds =
                 Char.toCode 'a' + Char.toCode 'z'
-
-            shift character =
-                (alphabetBounds - Char.toCode character)
-                    |> Char.fromCode
         in
-        shift char :: acc
-
-    else if Char.isDigit char then
-        char :: acc
+        Char.fromCode (alphabetBounds - Char.toCode char)
 
     else
-        acc
+        char
 
 
-chunkEvery : Int -> List Char -> List (List Char)
-chunkEvery size list =
-    if size >= List.length list then
-        [ list ]
+chunkEvery : Int -> String -> String
+chunkEvery size string =
+    if size >= String.length string then
+        string
 
     else
         let
             chunk =
-                List.take size list
+                String.left size string
 
             tail =
-                List.drop size list
+                String.dropLeft size string
         in
-        chunk :: chunkEvery size tail
+        chunk ++ " " ++ chunkEvery size tail
