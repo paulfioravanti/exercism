@@ -133,9 +133,16 @@ defmodule Say do
       |> Integer.digits()
       |> Enum.split(-scale)
 
-    head = Integer.undigits(head_list)
-    tail = Integer.undigits(tail_list)
+    head =
+      head_list
+      |> Integer.undigits()
+      |> full_word()
 
-    full_word(head) <> " " <> @scales[scale] <> " " <> full_word(tail)
+    tail =
+      tail_list
+      |> Integer.undigits()
+      |> full_word()
+
+    head <> " " <> @scales[scale] <> " " <> tail
   end
 end
