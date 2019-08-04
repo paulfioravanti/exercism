@@ -127,15 +127,15 @@ defmodule Say do
   defp format_tail_word(""), do: ""
   defp format_tail_word(word), do: " " <> word
 
-  defp split_list_by_scale(number, split) do
+  defp split_list_by_scale(number, scale) do
     {head_list, tail_list} =
       number
       |> Integer.digits()
-      |> Enum.split(-split)
+      |> Enum.split(-scale)
 
     head = Integer.undigits(head_list)
     tail = Integer.undigits(tail_list)
 
-    full_word(head) <> " " <> @scales[split] <> " " <> full_word(tail)
+    full_word(head) <> " " <> @scales[scale] <> " " <> full_word(tail)
   end
 end
