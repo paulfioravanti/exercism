@@ -8,42 +8,51 @@ import Test exposing (..)
 tests : Test
 tests =
     describe "Series"
-        [ test "one" <|
-            \() ->
-                Expect.equal (Ok "one")
-                    (say 1)
-        , test "fourteen" <|
-            \() ->
-                Expect.equal (Ok "fourteen")
-                    (say 14)
-        , test "twenty" <|
-            \() ->
-                Expect.equal (Ok "twenty")
-                    (say 20)
-        , test "twenty-two" <|
-            \() ->
-                Expect.equal (Ok "twenty-two")
-                    (say 22)
-        , test "one hundred" <|
-            \() ->
-                Expect.equal (Ok "one hundred")
-                    (say 100)
-        , test "one hundred twenty" <|
-            \() ->
-                Expect.equal (Ok "one hundred and twenty")
-                    (say 120)
-        , test "one hundred twenty-three" <|
-            \() ->
-                Expect.equal (Ok "one hundred and twenty-three")
-                    (say 123)
-        , test "one thousand" <|
-            \() ->
-                Expect.equal (Ok "one thousand")
-                    (say 1000)
-        , test "one thousand two hundred thirty-four" <|
-            \() ->
-                Expect.equal (Ok "one thousand two hundred and thirty-four")
-                    (say 1234)
+        [ skip <|
+            test "one" <|
+                \() ->
+                    Expect.equal (Ok "one")
+                        (say 1)
+        , skip <|
+            test "fourteen" <|
+                \() ->
+                    Expect.equal (Ok "fourteen")
+                        (say 14)
+        , skip <|
+            test "twenty" <|
+                \() ->
+                    Expect.equal (Ok "twenty")
+                        (say 20)
+        , skip <|
+            test "twenty-two" <|
+                \() ->
+                    Expect.equal (Ok "twenty-two")
+                        (say 22)
+        , skip <|
+            test "one hundred" <|
+                \() ->
+                    Expect.equal (Ok "one hundred")
+                        (say 100)
+        , skip <|
+            test "one hundred twenty" <|
+                \() ->
+                    Expect.equal (Ok "one hundred and twenty")
+                        (say 120)
+        , skip <|
+            test "one hundred twenty-three" <|
+                \() ->
+                    Expect.equal (Ok "one hundred and twenty-three")
+                        (say 123)
+        , skip <|
+            test "one thousand" <|
+                \() ->
+                    Expect.equal (Ok "one thousand")
+                        (say 1000)
+        , skip <|
+            test "one thousand two hundred thirty-four" <|
+                \() ->
+                    Expect.equal (Ok "one thousand two hundred and thirty-four")
+                        (say 1234)
         , skip <|
             test "one million" <|
                 \() ->
@@ -64,18 +73,21 @@ tests =
                 \() ->
                     Expect.equal (Ok "one billion")
                         (say 1000000000)
-        , test "number too large" <|
-            \() ->
-                Expect.equal (Err TooLarge)
-                    (say 10000000000000000)
-        , test "negative number" <|
-            \() ->
-                Expect.equal (Err Negative)
-                    (say -42)
-        , test "zero" <|
-            \() ->
-                Expect.equal (Ok "zero")
-                    (say 0)
+        , skip <|
+            test "number too large" <|
+                \() ->
+                    Expect.equal (Err TooLarge)
+                        (say 10000000000000000)
+        , skip <|
+            test "negative number" <|
+                \() ->
+                    Expect.equal (Err Negative)
+                        (say -42)
+        , skip <|
+            test "zero" <|
+                \() ->
+                    Expect.equal (Ok "zero")
+                        (say 0)
         , skip <|
             test "987654321123" <|
                 \() ->

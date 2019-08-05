@@ -10,21 +10,21 @@ type SayError
 
 say : Int -> Result SayError String
 say number =
-    if number < 0 then
+    if isTooSmall number then
         Err Negative
 
-    else if number > 999999999999 then
+    else if isTooLarge number then
         Err TooLarge
 
-    else if number == 0 then
+    else if isZero number then
         Ok "zero"
 
-    else if number < 21 then
+    else if isUpToTwenty number then
         numberWords
             |> Dict.get number
             |> Result.fromMaybe Negative
 
-    else if number < 100 then
+    else if isUpToNinetyNine number then
         Ok (hypenatedWord number)
 
     else
@@ -33,6 +33,31 @@ say number =
 
 
 -- PRIVATE
+
+
+isTooSmall : Int -> Bool
+isTooSmall number =
+    number < 0
+
+
+isTooLarge : Int -> Bool
+isTooLarge number =
+    number > 999999999999
+
+
+isZero : Int -> Bool
+isZero number =
+    number == 0
+
+
+isUpToTwenty : Int -> Bool
+isUpToTwenty number =
+    number < 21
+
+
+isUpToNinetyNine : Int -> Bool
+isUpToNinetyNine number =
+    number < 100
 
 
 hypenatedWord : Int -> String
@@ -59,48 +84,27 @@ hypenatedWord number =
     tensWord ++ "-" ++ onesWord
 
 
-digits : List Int -> Int -> List Int
-digits acc int =
-    let
-        base =
-            10
-    in
-    if abs int < base then
-        int :: acc
-
-    else
-        digits (remainderBy base int :: acc) (int // base)
-
-
-undigits : Int -> List Int -> Int
-undigits acc digitList =
-    let
-        base =
-            10
-    in
-    case digitList of
-        [] ->
-            acc
-
-        head :: tail ->
-            undigits (acc * base + head) tail
-
-
 fullWord : Int -> String
 fullWord number =
-    if number == 0 then
+    if isZero number then
         ""
 
-    else if number < 21 then
+    else if isUpToTwenty number then
         numberWords
             |> Dict.get number
             |> Maybe.withDefault ""
 
-    else if number < 100 then
+    else if isUpToNinetyNine number then
         hypenatedWord number
 
-    else if number > 999 && number < 1000000 then
+    else if number > 9999 && number < 1000000 then
         splitListByScale 3 number
+
+    else if number > 9999999 && number < 1000000000 then
+        splitListByScale 6 number
+
+    else if number > 9999999999 && number < 1000000000000 then
+        splitListByScale 9 number
 
     else
         let
@@ -126,19 +130,29 @@ fullWord number =
                 tail
                     |> undigits 0
                     |> fullWord
-                    |> formatTailWord
+                    |> formatTailWord head scale tail
         in
         headWord ++ " " ++ scale ++ tailWords
 
 
-formatTailWord : String -> String
-formatTailWord word =
-    case word of
-        "" ->
-            ""
+formatTailWord : Int -> String -> List Int -> String -> String
+formatTailWord head scale tail tailWord =
+    let
+        _ =
+            Debug.log "head" head
 
-        _ ->
-            " and " ++ word
+        _ =
+            Debug.log "scale" scale
+
+        _ =
+            Debug.log "tail" tail
+
+        _ =
+            Debug.log "tailWord" tailWord
+    in
+    case ( scale, tail, tailWord ) of
+        ( _, _, _ ) ->
+            " " ++ tailWord
 
 
 splitListByScale : Int -> Int -> String
@@ -168,6 +182,41 @@ splitListByScale scale number =
                 |> Maybe.withDefault ""
     in
     head ++ " " ++ scale_ ++ " " ++ tail
+
+
+digits : List Int -> Int -> List Int
+digits acc int =
+    let
+        base =
+            10
+    in
+    if abs int < base then
+        int :: acc
+
+    else
+        let
+            {- Integer division won't work because of this weirdness:
+               > 987654321123 // 10
+               -18815696
+            -}
+            flooredInt =
+                floor (toFloat int / base)
+        in
+        digits (remainderBy base int :: acc) flooredInt
+
+
+undigits : Int -> List Int -> Int
+undigits acc digitList =
+    let
+        base =
+            10
+    in
+    case digitList of
+        [] ->
+            acc
+
+        head :: tail ->
+            undigits (acc * base + head) tail
 
 
 scales : Dict Int String
