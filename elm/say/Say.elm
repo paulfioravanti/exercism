@@ -35,50 +35,25 @@ say number =
 -- PRIVATE
 
 
-isTooSmall : Int -> Bool
-isTooSmall number =
-    number < 0
-
-
-isTooLarge : Int -> Bool
-isTooLarge number =
-    number > 999999999999
-
-
-isZero : Int -> Bool
-isZero number =
-    number == 0
-
-
-isUpToTwenty : Int -> Bool
-isUpToTwenty number =
-    number < 21
-
-
-isUpToNinetyNine : Int -> Bool
-isUpToNinetyNine number =
-    number < 100
-
-
 hypenatedWord : Int -> String
 hypenatedWord number =
     let
-        ones =
+        onesValue =
             case digits [] number of
-                _ :: ones_ :: [] ->
-                    ones_
+                _ :: ones :: [] ->
+                    ones
 
                 _ ->
                     0
 
         tensWord =
             numberWords
-                |> Dict.get (number - ones)
+                |> Dict.get (number - onesValue)
                 |> Maybe.withDefault ""
 
         onesWord =
             numberWords
-                |> Dict.get ones
+                |> Dict.get onesValue
                 |> Maybe.withDefault ""
     in
     tensWord ++ "-" ++ onesWord
@@ -97,62 +72,69 @@ fullWord number =
     else if isUpToNinetyNine number then
         hypenatedWord number
 
-    else if number > 9999 && number < 1000000 then
+    else if isTenThousandUpToOneMillion number then
         splitListByScale 3 number
 
-    else if number > 9999999 && number < 1000000000 then
+    else if isTenMillionUpToOneBillion number then
         splitListByScale 6 number
 
-    else if number > 9999999999 && number < 1000000000000 then
+    else if isTenBillionUpToOneTrillion number then
         splitListByScale 9 number
 
     else
-        let
-            ( head, tail ) =
-                case digits [] number of
-                    head_ :: tail_ ->
-                        ( head_, tail_ )
-
-                    _ ->
-                        ( 0, [] )
-
-            headWord =
-                numberWords
-                    |> Dict.get head
-                    |> Maybe.withDefault ""
-
-            scale =
-                scales
-                    |> Dict.get (List.length tail)
-                    |> Maybe.withDefault ""
-
-            tailWords =
-                tail
-                    |> undigits 0
-                    |> fullWord
-                    |> formatTailWord head scale tail
-        in
-        headWord ++ " " ++ scale ++ tailWords
+        constructFullWord number
 
 
-formatTailWord : Int -> String -> List Int -> String -> String
-formatTailWord head scale tail tailWord =
+constructFullWord : Int -> String
+constructFullWord number =
     let
-        _ =
-            Debug.log "head" head
+        ( headDigit, tailDigits ) =
+            case digits [] number of
+                head :: tail ->
+                    ( head, tail )
 
-        _ =
-            Debug.log "scale" scale
+                _ ->
+                    ( 0, [] )
 
-        _ =
-            Debug.log "tail" tail
+        headWord =
+            numberWords
+                |> Dict.get headDigit
+                |> Maybe.withDefault ""
 
-        _ =
-            Debug.log "tailWord" tailWord
+        scale =
+            scales
+                |> Dict.get (List.length tailDigits)
+                |> Maybe.withDefault ""
+
+        tailWords =
+            tailDigits
+                |> undigits 0
+                |> fullWord
+                |> formatTailWord tailDigits
     in
-    case ( scale, tail, tailWord ) of
-        ( _, _, _ ) ->
-            " " ++ tailWord
+    headWord ++ " " ++ scale ++ tailWords
+
+
+formatTailWord : List Int -> String -> String
+formatTailWord tail word =
+    let
+        numRemainingNonZeroDigits =
+            tail
+                |> dropWhile (\int -> int == 0)
+                |> List.length
+    in
+    case numRemainingNonZeroDigits of
+        0 ->
+            ""
+
+        1 ->
+            " and " ++ word
+
+        2 ->
+            " and " ++ word
+
+        _ ->
+            " " ++ word
 
 
 splitListByScale : Int -> Int -> String
@@ -176,12 +158,12 @@ splitListByScale scale number =
                 |> undigits 0
                 |> fullWord
 
-        scale_ =
+        scaleWord =
             scales
                 |> Dict.get scale
                 |> Maybe.withDefault ""
     in
-    head ++ " " ++ scale_ ++ " " ++ tail
+    head ++ " " ++ scaleWord ++ " " ++ tail
 
 
 digits : List Int -> Int -> List Int
@@ -217,6 +199,60 @@ undigits acc digitList =
 
         head :: tail ->
             undigits (acc * base + head) tail
+
+
+dropWhile : (a -> Bool) -> List a -> List a
+dropWhile predicate list =
+    case list of
+        [] ->
+            []
+
+        head :: tail ->
+            if predicate head then
+                dropWhile predicate tail
+
+            else
+                list
+
+
+isTooSmall : Int -> Bool
+isTooSmall number =
+    number < 0
+
+
+isTooLarge : Int -> Bool
+isTooLarge number =
+    number > 999999999999
+
+
+isZero : Int -> Bool
+isZero number =
+    number == 0
+
+
+isUpToTwenty : Int -> Bool
+isUpToTwenty number =
+    number < 21
+
+
+isUpToNinetyNine : Int -> Bool
+isUpToNinetyNine number =
+    number < 100
+
+
+isTenThousandUpToOneMillion : Int -> Bool
+isTenThousandUpToOneMillion number =
+    number > 9999 && number < 1000000
+
+
+isTenMillionUpToOneBillion : Int -> Bool
+isTenMillionUpToOneBillion number =
+    number > 9999999 && number < 1000000000
+
+
+isTenBillionUpToOneTrillion : Int -> Bool
+isTenBillionUpToOneTrillion number =
+    number > 9999999999 && number < 1000000000000
 
 
 scales : Dict Int String
