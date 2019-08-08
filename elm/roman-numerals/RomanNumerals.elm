@@ -13,13 +13,13 @@ toRoman number =
 
 
 appendRomanNumeral : ( String, Int ) -> ( String, Int ) -> ( String, Int )
-appendRomanNumeral ( roman, decimal ) ( numeral, number ) =
+appendRomanNumeral ( roman, arabic ) ( numeral, number ) =
     let
         quotient =
-            number // decimal
+            number // arabic
 
         remainder =
-            remainderBy decimal number
+            remainderBy arabic number
 
         string =
             numeral ++ String.repeat quotient roman
