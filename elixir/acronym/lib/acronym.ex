@@ -1,11 +1,12 @@
 defmodule Acronym do
   @character_after_acronym_target ~r/
-    (?!     # negative lookahead - check current position is not:
+    (?!     # negative lookahead - after asserting that what follows the
+            # current position is not:
       \b\w  # 1. a border character then a letter
       |     # or
       [A-Z] # 2. a capital letter
     )       # (ie an acronym target)
-    .       # then match any single character after
+    .       # match any single character
   /x
 
   @doc """
