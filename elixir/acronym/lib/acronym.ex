@@ -15,7 +15,7 @@ defmodule Acronym do
   @spec abbreviate(String.t()) :: String.t()
   def abbreviate(string) do
     string
-    |> String.replace(@letter_after_acronym_target, "")
+    |> String.replace(@character_after_acronym_target, "")
     |> String.upcase()
   end
 end
