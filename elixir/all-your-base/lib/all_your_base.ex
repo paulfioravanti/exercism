@@ -11,8 +11,14 @@ defmodule AllYourBase do
   @spec convert(list, integer, integer) :: list
   def convert([], _base_a, _base_b), do: nil
 
-  def convert(_list, base_a, base_b) when invalid_bases?(base_a, base_b) do
+  def convert(_digits, base_a, base_b) when invalid_bases?(base_a, base_b) do
     nil
+  end
+
+  def convert([0], _base_a, _base_b), do: [0]
+
+  def convert([0 | digits], from_base, to_base) do
+    convert(digits, from_base, to_base)
   end
 
   def convert(digits, base_a, base_b) do
