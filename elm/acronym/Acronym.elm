@@ -5,7 +5,7 @@ abbreviate : String -> String
 abbreviate phrase =
     phrase
         |> String.replace "-" " "
-        |> String.split " "
+        |> String.words
         |> List.map (String.left 1)
-        |> String.join ""
+        |> String.concat
         |> String.toUpper
