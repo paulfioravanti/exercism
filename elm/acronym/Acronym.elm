@@ -1,11 +1,16 @@
 module Acronym exposing (abbreviate)
 
+import Regex
+
 
 abbreviate : String -> String
 abbreviate phrase =
+    let
+        characterAfterAcronymTarget =
+            "(?!\\b\\w)."
+                |> Regex.fromString
+                |> Maybe.withDefault Regex.never
+    in
     phrase
-        |> String.replace "-" " "
-        |> String.words
-        |> List.map (String.left 1)
-        |> String.concat
+        |> Regex.replace characterAfterAcronymTarget (always "")
         |> String.toUpper
