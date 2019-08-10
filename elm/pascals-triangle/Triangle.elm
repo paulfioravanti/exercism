@@ -32,9 +32,5 @@ binomial rowNum exponent =
 
 factorial : Int -> Int
 factorial n =
-    case n of
-        0 ->
-            1
-
-        _ ->
-            n * factorial (n - 1)
+    List.range 1 n
+        |> List.product
