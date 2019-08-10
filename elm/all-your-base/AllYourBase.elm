@@ -43,6 +43,7 @@ hasInvalidBases inBase outBase =
 containsInvalidDigits : Int -> List Int -> Bool
 containsInvalidDigits inBase digits =
     let
+        isInvalidDigit : Int -> Int -> Bool
         isInvalidDigit base digit =
             digit < 0 || digit >= base
     in
@@ -52,15 +53,15 @@ containsInvalidDigits inBase digits =
 
 sumInput : Int -> List Int -> Int
 sumInput inBase digits =
+    let
+        addPower : Int -> ( Int, Int ) -> Int -> Int
+        addPower base ( index, digit ) acc =
+            acc + digit * base ^ index
+    in
     digits
         |> List.reverse
         |> List.indexedMap Tuple.pair
         |> List.foldl (addPower inBase) 0
-
-
-addPower : Int -> ( Int, Int ) -> Int -> Int
-addPower inBase ( index, digit ) acc =
-    acc + digit * inBase ^ index
 
 
 convertToOutBaseDigits : Int -> List Int -> Int -> List Int
