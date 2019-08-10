@@ -1,7 +1,5 @@
 module Luhn exposing (valid)
 
-import Regex
-
 
 valid : String -> Bool
 valid input =
@@ -19,13 +17,7 @@ valid input =
 
 isValidFormat : String -> Bool
 isValidFormat number =
-    let
-        twoOrMoreDigitsOnly =
-            "^\\d{2,}$"
-                |> Regex.fromString
-                |> Maybe.withDefault Regex.never
-    in
-    Regex.contains twoOrMoreDigitsOnly number
+    String.length number > 1 && String.all Char.isDigit number
 
 
 isValidValue : String -> Bool
