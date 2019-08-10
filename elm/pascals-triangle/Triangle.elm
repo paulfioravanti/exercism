@@ -37,5 +37,4 @@ factorial n =
             1
 
         _ ->
-            List.range 1 n
-                |> List.foldl (*) 1
+            n * factorial (n - 1)
