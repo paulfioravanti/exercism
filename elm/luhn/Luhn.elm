@@ -36,17 +36,10 @@ isValidValue number =
 
 toReversedNumbers : String -> List Int
 toReversedNumbers number =
-    let
-        toInt : String -> Int
-        toInt string =
-            string
-                |> String.toInt
-                |> Maybe.withDefault 0
-    in
     number
         |> String.reverse
         |> String.split ""
-        |> List.map toInt
+        |> List.filterMap String.toInt
 
 
 chunkEvery : Int -> List Int -> List (List Int)
