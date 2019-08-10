@@ -6,35 +6,31 @@ defmodule Luhn do
   """
   @spec valid?(String.t()) :: boolean
   def valid?(number) do
-    stripped_string = String.replace(number, " ", "")
+    number = String.replace(number, " ", "")
 
-    if valid_format?(stripped_string) do
-      valid_number?(stripped_string)
-    else
-      false
-    end
+    valid_format?(number) and valid_value?(number)
   end
 
-  defp valid_format?(stripped_string) do
-    String.match?(stripped_string, @two_or_more_digits_only)
+  defp valid_format?(number) do
+    String.match?(number, @two_or_more_digits_only)
   end
 
-  defp valid_number?(stripped_string) do
-    stripped_string
-    |> convert_string_to_reversed_numbers()
+  defp valid_value?(number) do
+    number
+    |> to_reversed_numbers()
     |> Enum.chunk_every(2)
-    |> Enum.reduce(0, &calculate_luhn_value/2)
+    |> Enum.reduce(0, &add_luhn_value/2)
     |> evenly_divisible_by_10?()
   end
 
-  defp convert_string_to_reversed_numbers(string) do
-    string
+  defp to_reversed_numbers(number) do
+    number
     |> String.reverse()
     |> String.codepoints()
     |> Enum.map(&String.to_integer/1)
   end
 
-  defp calculate_luhn_value([left_value, right_value], acc) do
+  defp add_luhn_value([left_value, right_value], acc) do
     right_luhn_value =
       right_value
       |> double()
@@ -43,7 +39,7 @@ defmodule Luhn do
     acc + left_value + right_luhn_value
   end
 
-  defp calculate_luhn_value([left_value], acc), do: acc + left_value
+  defp add_luhn_value([left_value], acc), do: acc + left_value
 
   defp double(number), do: number * 2
 
