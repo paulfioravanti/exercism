@@ -36,15 +36,15 @@ defmodule Transpose do
     |> Enum.max()
   end
 
-  defp generate_right_padded_row(rows, max_row_width) do
-    rows
+  defp generate_right_padded_row(row, max_row_width) do
+    row
     |> String.pad_trailing(max_row_width)
     |> String.codepoints()
   end
 
   defp transpose_rows(rows) do
     rows
-    |> List.zip()
+    |> Enum.zip()
     |> Enum.map(&Tuple.to_list/1)
   end
 end
