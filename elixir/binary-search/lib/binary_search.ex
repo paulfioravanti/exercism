@@ -39,11 +39,11 @@ defmodule BinarySearch do
     middle_element = elem(numbers, middle_index)
 
     cond do
-      key > middle_element ->
-        search(numbers, key, middle_index + 1, right)
-
-      key < middle_element ->
+      middle_element > key ->
         search(numbers, key, left, middle_index - 1)
+
+      middle_element < key ->
+        search(numbers, key, middle_index + 1, right)
 
       true ->
         {:ok, middle_index}
