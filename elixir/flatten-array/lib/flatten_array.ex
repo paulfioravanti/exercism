@@ -19,8 +19,8 @@ defmodule FlattenArray do
   defp flatten([nil | tail], acc), do: flatten(tail, acc)
 
   defp flatten([head | tail], acc) when is_list(head) do
-    flattened_tail = flatten(tail, acc)
-    flatten(head, flattened_tail)
+    acc = flatten(tail, acc)
+    flatten(head, acc)
   end
 
   defp flatten([head | tail], acc), do: [head | flatten(tail, acc)]
