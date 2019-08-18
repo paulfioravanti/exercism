@@ -5,19 +5,20 @@ defmodule ArmstrongNumber do
 
   @spec valid?(integer) :: boolean
   def valid?(number) do
-    sum =
+    sum_of_powers =
       number
       |> Integer.digits()
       |> sum_powers()
 
-    sum == number
+    number == sum_of_powers
   end
 
   defp sum_powers(digits) do
-    Enum.reduce(digits, 0, &power(&1, &2, length(digits)))
+    length = length(digits)
+    Enum.reduce(digits, 0, &power(length, &1, &2))
   end
 
-  defp power(digit, acc, length) do
+  defp power(length, digit, acc) do
     acc + :math.pow(digit, length)
   end
 end
