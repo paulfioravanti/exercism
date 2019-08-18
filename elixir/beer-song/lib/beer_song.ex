@@ -34,14 +34,9 @@ defmodule BeerSong do
   @doc """
   Get the entire beer song for a given range of numbers of bottles.
   """
-  @spec lyrics() :: String.t()
-  def lyrics, do: lyrics(99..0)
-
   @spec lyrics(Range.t()) :: String.t()
-  def lyrics(range) do
-    range
-    |> Enum.map(&verse/1)
-    |> Enum.join("\n")
+  def lyrics(range \\ 99..0) do
+    Enum.map_join(range, "\n", &verse/1)
   end
 
   defp line_1(amount, container \\ "bottles") do
@@ -57,12 +52,12 @@ defmodule BeerSong do
   end
 
   defp line_2(amount, options \\ []) do
-    default = [container: "bottles", subject: "one"]
-    options = Keyword.merge(default, options)
+    subject = Keyword.get(options, :subject, "one")
+    container = Keyword.get(options, :container, "bottles")
 
     """
-    Take #{options[:subject]} down and pass it around, \
-    #{beer_on_wall(amount, options[:container])}.\
+    Take #{subject} down and pass it around, \
+    #{beer_on_wall(amount, container)}.\
     """
   end
 
