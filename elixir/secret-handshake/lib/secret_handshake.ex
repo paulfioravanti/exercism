@@ -33,7 +33,7 @@ defmodule SecretHandshake do
     |> Enum.reverse()
   end
 
-  def perform_secret_handshake(code, {{mod, fun, args}, index}, acc) do
+  defp perform_secret_handshake(code, {{mod, fun, args}, index}, acc) do
     if set?(code, index) do
       apply(mod, fun, [acc | args])
     else
@@ -41,11 +41,7 @@ defmodule SecretHandshake do
     end
   end
 
-  def set?(code, index) do
-    (code &&& mask(index)) > 0
-  end
+  defp set?(code, index), do: (code &&& mask(index)) > 0
 
-  def mask(number) do
-    1 <<< number
-  end
+  defp mask(number), do: 1 <<< number
 end
