@@ -15,20 +15,19 @@ defmodule RotationalCipher do
   def rotate(text, shift) do
     text
     |> String.to_charlist()
-    |> Enum.reduce([], &rotate(shift, &1, &2))
-    |> Enum.reverse()
+    |> Enum.map(&rotate_char(&1, shift))
     |> List.to_string()
   end
 
-  defp rotate(shift, char, acc) when is_lowercase?(char) do
-    [rotate_char(?a, char, shift) | acc]
+  defp rotate_char(char, shift) when is_lowercase?(char) do
+    rotate_char(?a, char, shift)
   end
 
-  defp rotate(shift, char, acc) when is_uppercase?(char) do
-    [rotate_char(?A, char, shift) | acc]
+  defp rotate_char(char, shift) when is_uppercase?(char) do
+    rotate_char(?A, char, shift)
   end
 
-  defp rotate(_shift, char, acc), do: [char | acc]
+  defp rotate_char(char, _shift), do: char
 
   defp rotate_char(base, char, shift) do
     rem(char - base + shift, @alphabet_length) + base
