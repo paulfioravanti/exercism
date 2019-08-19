@@ -32,7 +32,7 @@ defmodule ProteinTranslation do
 
     {:ok, proteins}
   catch
-    {:stop, proteins} ->
+    {:halt, proteins} ->
       {:ok, proteins}
 
     :error ->
@@ -77,7 +77,7 @@ defmodule ProteinTranslation do
     |> apply_protein(acc)
   end
 
-  defp apply_protein({:ok, @stop}, acc), do: throw({:stop, Enum.reverse(acc)})
+  defp apply_protein({:ok, @stop}, acc), do: throw({:halt, Enum.reverse(acc)})
   defp apply_protein({:ok, protein}, acc), do: [protein | acc]
   defp apply_protein({:error, _message}, _acc), do: throw(:error)
 end
