@@ -12,17 +12,12 @@ isLeapYear year =
 
 isLeap : Int -> Bool
 isLeap year =
-    year
-        |> modBy leapYear
-        |> (==) 0
+    modBy leapYear year == 0
 
 
 isNonCenturialYear : Int -> Bool
 isNonCenturialYear year =
-    year
-        |> modBy centurialYear
-        |> (==) 0
-        |> not
+    not (modBy centurialYear year == 0)
 
 
 isLeapCycleYear : Int -> Bool
@@ -31,9 +26,7 @@ isLeapCycleYear year =
         leapCycleLength =
             leapYear * centurialYear
     in
-    year
-        |> modBy leapCycleLength
-        |> (==) 0
+    modBy leapCycleLength year == 0
 
 
 leapYear : Int
