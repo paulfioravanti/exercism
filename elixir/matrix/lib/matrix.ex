@@ -1,8 +1,6 @@
 defmodule Matrix do
   defstruct matrix: nil
 
-  @spaces ~r/\s/
-
   @doc """
   Convert an `input` string, with rows separated by newlines and values
   separated by single spaces, into a `Matrix` struct.
@@ -66,13 +64,12 @@ defmodule Matrix do
 
   defp split_row(row) do
     row
-    |> String.replace(@spaces, "")
-    |> String.to_integer()
-    |> Integer.digits()
+    |> String.split(" ")
+    |> Enum.map(&String.to_integer/1)
   end
 
   defp join_row(row) do
     row
-    |> Enum.map_join(" ", &Kernel.to_string/1)
+    |> Enum.map_join(" ", &Integer.to_string/1)
   end
 end
