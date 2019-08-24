@@ -1,4 +1,5 @@
 defmodule Garden do
+  @student_cups_per_row 2
   @plants %{
     ?C => :clover,
     ?G => :grass,
@@ -51,7 +52,7 @@ defmodule Garden do
     plants_string
     |> String.to_charlist()
     |> Enum.map(&@plants[&1])
-    |> Enum.chunk_every(2)
+    |> Enum.chunk_every(@student_cups_per_row)
   end
 
   defp cup_sets_to_tuple({cup_set1, cup_set2}) do
