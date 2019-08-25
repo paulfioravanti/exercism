@@ -1,6 +1,7 @@
 defmodule Binary do
   @binary_string ~r/\A[01]+\z/
   @base 2
+  @invalid_binary 0
 
   @doc """
   Convert a string containing a binary number to an integer.
@@ -16,7 +17,7 @@ defmodule Binary do
       |> Enum.with_index()
       |> Enum.reduce(0, &add_decimal_value/2)
     else
-      0
+      @invalid_binary
     end
   end
 
