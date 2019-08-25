@@ -27,7 +27,7 @@ defmodule Change do
     else
       {_coins, change_candidates, _acc} =
         coins
-        |> generate_usable_coins(target)
+        |> generate_useable_coins(target)
         |> generate_change_candidates(target)
 
       case change_candidates do
@@ -41,7 +41,7 @@ defmodule Change do
     end
   end
 
-  defp generate_usable_coins(coins, target) do
+  defp generate_useable_coins(coins, target) do
     coins
     |> Enum.filter(&(&1 <= target))
     |> Enum.sort(&(&1 >= &2))
