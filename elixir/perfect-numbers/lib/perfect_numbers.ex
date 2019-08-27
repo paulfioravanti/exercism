@@ -39,13 +39,12 @@ defmodule PerfectNumbers do
 
   defp aliquot_sum(number) do
     1..(number - 1)
-    |> Enum.reduce([], &add_factor(number, &1, &2))
-    |> Enum.sum()
+    |> Enum.reduce(0, &add_factor(number, &1, &2))
   end
 
   defp add_factor(number, candidate_factor, acc) do
     if factor?(number, candidate_factor) do
-      [candidate_factor | acc]
+      acc + candidate_factor
     else
       acc
     end
