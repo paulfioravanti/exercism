@@ -5,6 +5,7 @@ cpp/
 csharp/
 ecmascript/
 elisp/
+elixir/erl_crash.dump
 elm/**/elm-stuff
 elm/**/node_modules
 erlang/
