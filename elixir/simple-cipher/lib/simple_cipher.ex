@@ -77,7 +77,7 @@ defmodule SimpleCipher do
       fun
       |> apply([text_char - @a_ordinal, key_char - @a_ordinal])
       |> Kernel.+(@alphabet_length)
-      |> Integer.mod(@alphabet_length)
+      |> rem(@alphabet_length)
       |> Kernel.+(@a_ordinal)
 
     <<value::utf8>>
