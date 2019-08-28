@@ -1,8 +1,8 @@
 defmodule IsbnVerifier do
   @check -1
   @isbn_10 ~r/\A\d{9}(\d|X)\z/
-  @weights Enum.to_list(1..10) |> Enum.reverse()
   @multiple 11
+  @weights 10..1
 
   @doc """
     Checks if a string is a valid ISBN-10 identifier
