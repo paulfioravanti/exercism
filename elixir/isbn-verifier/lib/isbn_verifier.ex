@@ -1,6 +1,6 @@
 defmodule IsbnVerifier do
   @check -1
-  @isbn_10 ~r/\A\d{9}(\d|X)\z/
+  @isbn_10 ~r/\A\d{9}[\dX]\z/
   @multiple 11
   @weights 10..1
 
