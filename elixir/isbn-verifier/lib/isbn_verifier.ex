@@ -21,13 +21,12 @@ defmodule IsbnVerifier do
     isbn = String.replace(isbn, "-", "")
 
     if String.match?(isbn, @isbn_10) do
-      value =
-        isbn
-        |> generate_isbn_integers()
-        |> Enum.zip(@weights)
-        |> Enum.reduce(0, &add_isbn_formula/2)
-        |> rem(@multiple)
-        |> Kernel.==(0)
+      isbn
+      |> generate_isbn_integers()
+      |> Enum.zip(@weights)
+      |> Enum.reduce(0, &add_isbn_formula/2)
+      |> rem(@multiple)
+      |> Kernel.==(0)
     else
       false
     end
