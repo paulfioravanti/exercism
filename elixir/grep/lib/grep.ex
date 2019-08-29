@@ -56,28 +56,29 @@ defmodule Grep do
   defp grep_line(params, {line, index}, acc) do
     {flags, regex, multiple_files, line_guard, filename} = params
     line_guard.(line, regex, acc)
-    add_filename_only(flags, filename, acc)
-    [build_line(flags, multiple_files, filename, index, line) | acc]
+
+    if Enum.member?(flags, @filenames_only) do
+      add_filename_only(filename, acc)
+    else
+      add_line(flags, multiple_files, filename, index, line, acc)
+    end
   catch
     {:next, acc} ->
       acc
   end
 
-  defp add_filename_only(flags, filename, acc) do
-    if Enum.member?(flags, @filenames_only) do
-      filename = filename <> "\n"
-      acc = if Enum.member?(acc, filename), do: acc, else: [filename | acc]
-      throw({:next, acc})
-    end
+  defp add_filename_only(filename, acc) do
+    filename = filename <> "\n"
+    if Enum.member?(acc, filename), do: acc, else: [filename | acc]
   end
 
-  defp build_line(flags, multiple_files, filename, index, line) do
+  defp add_line(flags, multiple_files, filename, index, line, acc) do
     header =
       ""
       |> maybe_add_filename(filename, multiple_files)
       |> maybe_add_line_number(flags, index)
 
-    header <> line
+    [header <> line | acc]
   end
 
   defp maybe_add_filename(string, filename, true), do: string <> filename <> ":"
