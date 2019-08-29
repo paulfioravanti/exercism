@@ -56,7 +56,7 @@ defmodule Grep do
   defp grep_line(params, {line, index}, acc) do
     {flags, regex, multiple_files, line_guard, filename} = params
     line_guard.(line, regex, acc)
-    acc = add_filename_only(flags, filename, acc)
+    add_filename_only(flags, filename, acc)
     [build_line(flags, multiple_files, filename, index, line) | acc]
   catch
     {:next, acc} ->
@@ -68,8 +68,6 @@ defmodule Grep do
       filename = filename <> "\n"
       acc = if Enum.member?(acc, filename), do: acc, else: [filename | acc]
       throw({:next, acc})
-    else
-      acc
     end
   end
 
