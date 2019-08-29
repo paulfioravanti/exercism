@@ -60,7 +60,8 @@ defmodule Grep do
     if Enum.member?(flags, @filenames_only) do
       add_filename_only(filename, acc)
     else
-      add_line(flags, multiple_files, filename, index, line, acc)
+      header = generate_header(flags, multiple_files, filename, index)
+      [header <> line | acc]
     end
   catch
     {:next, acc} ->
@@ -72,13 +73,10 @@ defmodule Grep do
     if Enum.member?(acc, filename), do: acc, else: [filename | acc]
   end
 
-  defp add_line(flags, multiple_files, filename, index, line, acc) do
-    header =
-      ""
-      |> maybe_add_filename(filename, multiple_files)
-      |> maybe_add_line_number(flags, index)
-
-    [header <> line | acc]
+  defp generate_header(flags, multiple_files, filename, index) do
+    ""
+    |> maybe_add_filename(filename, multiple_files)
+    |> maybe_add_line_number(flags, index)
   end
 
   defp maybe_add_filename(string, filename, true), do: string <> filename <> ":"
