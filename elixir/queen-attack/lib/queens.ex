@@ -13,7 +13,7 @@ defmodule Queens do
   @spec new() :: Queens.t()
   @spec new({integer, integer}, {integer, integer}) :: Queens.t()
   def new(white \\ {0, 3}, black \\ {7, 3})
-  def new(space, space), do: raise(ArgumentError)
+  def new(queen, queen), do: raise(ArgumentError)
   def new(white, black), do: %Queens{white: white, black: black}
 
   @doc """
@@ -31,14 +31,11 @@ defmodule Queens do
   Checks if the queens can attack each other
   """
   @spec can_attack?(Queens.t()) :: boolean
-  def can_attack?(queens) do
-    %Queens{
-      white: {white_row, white_col},
-      black: {black_row, black_col}
-    } = queens
+  def can_attack?(%Queens{black: {row, _col1}, white: {row, _col2}}), do: true
+  def can_attack?(%Queens{black: {_row1, col}, white: {_row2, col}}), do: true
 
-    same_row_or_column?(white_row, white_col, black_row, black_col) or
-      same_diagonal?(white_row, white_col, black_row, black_col)
+  def can_attack?(%Queens{black: {row1, col1}, white: {row2, col2}}) do
+    abs(row1 - row2) == abs(col1 - col2)
   end
 
   defp generate_row(fun) do
@@ -60,7 +57,7 @@ defmodule Queens do
           generate_row(&add_column(nil, black_col, &1, &2))
 
         _ ->
-          List.duplicate("_", @board_length)
+          List.duplicate(@blank, @board_length)
       end
 
     [row | acc]
@@ -69,17 +66,4 @@ defmodule Queens do
   defp add_column(white_col, _black_col, white_col, acc), do: [@white | acc]
   defp add_column(_white_col, black_col, black_col, acc), do: [@black | acc]
   defp add_column(_white_col, _black_col, _column, acc), do: [@blank | acc]
-
-  defp same_row_or_column?(white_row, white_col, black_row, black_col) do
-    white_row == black_row or white_col == black_col
-  end
-
-  defp same_diagonal?(white_row, white_col, black_row, black_col) do
-    [{white_row, black_row}, {white_col, black_col}]
-    |> Enum.map(&position_abs/1)
-    |> Enum.uniq()
-    |> length() == 1
-  end
-
-  defp position_abs({position1, position2}), do: abs(position1 - position2)
 end
