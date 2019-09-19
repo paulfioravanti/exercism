@@ -3,7 +3,7 @@ defmodule Meetup do
   Calculate meetup dates.
   """
 
-  @day_numbers %{
+  @weekdays %{
     monday: 1,
     tuesday: 2,
     wednesday: 3,
@@ -34,21 +34,20 @@ defmodule Meetup do
   @spec meetup(pos_integer, pos_integer, weekday, schedule) :: :calendar.date()
   def meetup(year, month, weekday, schedule) do
     generate_date_range(year, month)
-    |> Enum.filter(&date_falls_on_day?(&1, @day_numbers[weekday]))
+    |> Enum.filter(&date_falls_on_day?(&1, @weekdays[weekday]))
     |> select_date_by_schedule(schedule)
+    |> Date.to_erl()
   end
 
   defp generate_date_range(year, month) do
     {:ok, start_date} = Date.new(year, month, 1)
-    last_day_of_the_month = :calendar.last_day_of_the_month(year, month)
-    {:ok, end_date} = Date.new(year, month, last_day_of_the_month)
+    {:ok, end_date} = Date.new(year, month, Date.days_in_month(start_date))
 
     Date.range(start_date, end_date)
-    |> Enum.map(&Date.to_erl/1)
   end
 
-  defp date_falls_on_day?({year, month, day}, day_number) do
-    :calendar.day_of_the_week(year, month, day) == day_number
+  defp date_falls_on_day?(date, day_number) do
+    Date.day_of_week(date) == day_number
   end
 
   defp select_date_by_schedule(dates, :first), do: Enum.at(dates, 0)
@@ -61,5 +60,5 @@ defmodule Meetup do
     Enum.find(dates, &teenth_date?/1)
   end
 
-  defp teenth_date?({_year, _month, day}), do: day in @teenth_range
+  defp teenth_date?(%Date{day: day}), do: day in @teenth_range
 end
