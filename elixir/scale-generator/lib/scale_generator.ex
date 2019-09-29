@@ -4,7 +4,7 @@ defmodule ScaleGenerator do
   @flat_scale ~w[C Db D Eb E F Gb G Ab A Bb B]
   @flat_scale_tonics ~w[F Bb Eb Ab Db Gb d g c f bb eb]
 
-  defguard flat_scale_tonic?(tonic) when tonic in @flat_scale_tonics
+  defguardp flat_scale_tonic?(tonic) when tonic in @flat_scale_tonics
 
   @doc """
   Find the note for a given interval (`step`) in a `scale` after the `tonic`.
