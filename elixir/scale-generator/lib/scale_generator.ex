@@ -4,6 +4,8 @@ defmodule ScaleGenerator do
   @flat_scale ~w[C Db D Eb E F Gb G Ab A Bb B]
   @flat_scale_tonics ~w[F Bb Eb Ab Db Gb d g c f bb eb]
 
+  defguard flat_scale_tonic?(tonic) when tonic in @flat_scale_tonics
+
   @doc """
   Find the note for a given interval (`step`) in a `scale` after the `tonic`.
 
@@ -72,13 +74,11 @@ defmodule ScaleGenerator do
   For all others, use the regular chromatic scale.
   """
   @spec find_chromatic_scale(tonic :: String.t()) :: list(String.t())
-  def find_chromatic_scale(tonic) do
-    if Enum.member?(@flat_scale_tonics, tonic) do
-      flat_chromatic_scale(tonic)
-    else
-      chromatic_scale(tonic)
-    end
+  def find_chromatic_scale(tonic) when flat_scale_tonic?(tonic) do
+    flat_chromatic_scale(tonic)
   end
+
+  def find_chromatic_scale(tonic), do: chromatic_scale(tonic)
 
   @doc """
   The `pattern` string will let you know how many steps to make for the next
@@ -103,14 +103,14 @@ defmodule ScaleGenerator do
     |> Enum.reverse()
   end
 
-  defp rotate(list, 0), do: list
-  defp rotate([head | tail], count), do: rotate(tail ++ [head], count - 1)
-
   defp generate_scale(scale, tonic) do
     tonic = String.capitalize(tonic)
     index = Enum.find_index(scale, &(&1 == tonic))
     rotate(scale, index) ++ [tonic]
   end
+
+  defp rotate(list, 0), do: list
+  defp rotate([head | tail], count), do: rotate(tail ++ [head], count - 1)
 
   defp add_chromatic_scale(chromatic_scale, interval, {last_index, acc}) do
     acc = [Enum.at(chromatic_scale, last_index) | acc]
