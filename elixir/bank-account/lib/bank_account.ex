@@ -4,7 +4,8 @@ defmodule BankAccount do
   """
 
   use Agent
-  alias __MODULE__, as: BankAccount
+
+  @initial_balance 0
 
   @typedoc """
   An account handle.
@@ -16,7 +17,7 @@ defmodule BankAccount do
   """
   @spec open_bank() :: account
   def open_bank do
-    {:ok, account} = Agent.start_link(fn -> 0 end)
+    {:ok, account} = Agent.start(fn -> @initial_balance end)
     account
   end
 
@@ -25,7 +26,7 @@ defmodule BankAccount do
   """
   @spec close_bank(account) :: none
   def close_bank(account) do
-    Agent.update(account, fn _balance -> nil end)
+    Agent.stop(account)
   end
 
   @doc """
@@ -33,13 +34,12 @@ defmodule BankAccount do
   """
   @spec balance(account) :: integer
   def balance(account) do
-    case Agent.get(account, & &1) do
-      nil ->
-        {:error, :account_closed}
-
-      balance ->
-        balance
-    end
+    account
+    |> confirm_account_availability()
+    |> Agent.get(& &1)
+  catch
+    error ->
+      {:error, error}
   end
 
   @doc """
@@ -47,12 +47,15 @@ defmodule BankAccount do
   """
   @spec update(account, integer) :: any
   def update(account, amount) do
-    case Agent.get(account, & &1) do
-      nil ->
-        {:error, :account_closed}
+    account
+    |> confirm_account_availability()
+    |> Agent.update(&(&1 + amount))
+  catch
+    error ->
+      {:error, error}
+  end
 
-      _balance ->
-        Agent.update(account, &(&1 + amount))
-    end
+  defp confirm_account_availability(account) do
+    if Process.alive?(account), do: account, else: throw(:account_closed)
   end
 end
