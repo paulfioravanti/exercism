@@ -28,12 +28,17 @@ defmodule SaddlePoints do
   """
   @spec saddle_points(String.t()) :: [{integer, integer}]
   def saddle_points(str) do
-    columns = columns(str)
+    for {row, row_index} <- indexed(:rows, str),
+        {column, column_index} <- indexed(:columns, str),
+        saddle_point?(row, column) do
+      {row_index, column_index}
+    end
+  end
 
-    str
-    |> rows()
+  defp indexed(fun, str) do
+    SaddlePoints
+    |> apply(fun, [str])
     |> Enum.with_index()
-    |> Enum.reduce([], &check_row_saddle_points(columns, &1, &2))
   end
 
   defp row_to_integers(row) do
@@ -42,29 +47,5 @@ defmodule SaddlePoints do
     |> Enum.map(&String.to_integer/1)
   end
 
-  defp check_row_saddle_points(columns, {row, row_index}, acc) do
-    acc = {row, row_index, acc}
-
-    row
-    |> Enum.with_index()
-    |> Enum.reduce(acc, &check_column_saddle_points(columns, &1, &2))
-    |> elem(2)
-    |> Enum.sort()
-  end
-
-  defp check_column_saddle_points(columns, {value, column_index}, acc) do
-    {row, row_index, acc} = acc
-    column = Enum.at(columns, column_index)
-
-    if saddle_point?(value, row, column) do
-      acc = [{row_index, column_index} | acc]
-      {row, row_index, acc}
-    else
-      {row, row_index, acc}
-    end
-  end
-
-  defp saddle_point?(value, row, column) do
-    value == Enum.max(row) and value == Enum.min(column)
-  end
+  defp saddle_point?(row, column), do: Enum.max(row) == Enum.min(column)
 end
