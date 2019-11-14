@@ -19,8 +19,7 @@ defmodule Sieve do
       |> :math.sqrt()
       |> floor()
 
-    2..primes_limit
-    |> Enum.reverse()
+    primes_limit..2
     |> Enum.reduce(primes_range, &check_composite(limit, &1, &2))
   end
 
