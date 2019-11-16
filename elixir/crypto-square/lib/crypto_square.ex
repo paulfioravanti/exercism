@@ -26,7 +26,7 @@ defmodule CryptoSquare do
 
   defp generate_rectangle(normalised_str) do
     num_columns = calculate_num_columns(normalised_str)
-    leftover = List.duplicate(" ", num_columns)
+    leftover = List.duplicate("", num_columns)
 
     normalised_str
     |> String.codepoints()
@@ -43,7 +43,6 @@ defmodule CryptoSquare do
   defp encode_rectangle(rectangle) do
     rectangle
     |> transpose()
-    |> Enum.map(&trim_join/1)
     |> Enum.join(" ")
   end
 
@@ -51,11 +50,5 @@ defmodule CryptoSquare do
     rows
     |> Enum.zip()
     |> Enum.map(&Tuple.to_list/1)
-  end
-
-  defp trim_join(row) do
-    row
-    |> Enum.join()
-    |> String.trim_trailing()
   end
 end
