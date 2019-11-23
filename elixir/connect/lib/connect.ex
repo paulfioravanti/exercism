@@ -5,14 +5,7 @@ defmodule Connect do
     @x_piece => :black,
     @o_piece => :white
   }
-  @over_edge_index -1
-
-  defguardp horizontal_edge?(board, col)
-            when col ==
-                   board
-                   |> hd()
-                   |> length()
-                   |> Kernel.-(1)
+  @out_of_bounds_index -1
 
   @doc """
   Calculates the winner (if any) of a board
@@ -43,28 +36,37 @@ defmodule Connect do
     |> Enum.any?(&opposite_side_connection?(board, piece, &1))
   end
 
-  defp opposite_side_connection?(board, piece, {[square | _rest], row_idx}) do
-    piece == square && opposite_side_reached?(board, piece, [{row_idx, 0}])
+  defp opposite_side_connection?(board, piece, {[square | _rest], row_index}) do
+    piece == square and opposite_side_reached?(board, piece, [{row_index, 0}])
   end
 
-  defp opposite_side_reached?(board, _piece, [{_row_idx, col_idx} | _rest])
-       when horizontal_edge?(board, col_idx),
-       do: true
+  defp opposite_side_reached?(board, piece, [square | _rest] = path) do
+    {row_index, column_index} = square
 
-  defp opposite_side_reached?(board, piece, [{row_idx, col_idx} | _rest] = path) do
+    if column_index == horizontal_edge(board) do
+      true
+    else
+      board
+      |> adjacent_squares(row_index, column_index)
+      |> Enum.reject(&square_already_in_path?(path, &1))
+      |> Enum.filter(&square_contains_piece?(board, piece, &1))
+      |> Enum.any?(&opposite_side_reached?(board, piece, [&1 | path]))
+    end
+  end
+
+  defp horizontal_edge(board) do
     board
-    |> adjacent_squares(row_idx, col_idx)
-    |> Enum.reject(&already_in_path?(path, &1))
-    |> Enum.filter(&contains_piece?(board, piece, &1))
-    |> Enum.any?(&opposite_side_reached?(board, piece, [&1 | path]))
+    |> hd()
+    |> length()
+    |> Kernel.-(1)
   end
 
-  defp already_in_path?(path, coordinate), do: coordinate in path
+  defp square_already_in_path?(path, square), do: square in path
 
-  defp contains_piece?(board, piece, {row, col}) do
+  defp square_contains_piece?(board, piece, {row, column}) do
     board
     |> Enum.at(row)
-    |> Enum.at(col)
+    |> Enum.at(column)
     |> Kernel.==(piece)
   end
 
@@ -74,24 +76,14 @@ defmodule Connect do
     |> Enum.map(&Tuple.to_list/1)
   end
 
-  defp adjacent_squares(board, row_index, col_index) do
+  defp adjacent_squares(board, row_index, column_index) do
     for y <- adjacent_range(row_index),
-        x <- adjacent_range(col_index),
-        y > @over_edge_index,
-        x > @over_edge_index,
-        y < length(board),
-        x <= horizontal_edge(board),
-        {y, x} != {row_index, col_index} do
+        x <- adjacent_range(column_index),
+        y > @out_of_bounds_index and y < length(board),
+        x > @out_of_bounds_index and x <= horizontal_edge(board) do
       {y, x}
     end
   end
 
   defp adjacent_range(index), do: (index - 1)..(index + 1)
-
-  defp horizontal_edge(board) do
-    board
-    |> hd()
-    |> length()
-    |> Kernel.-(1)
-  end
 end
