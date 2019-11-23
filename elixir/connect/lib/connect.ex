@@ -33,17 +33,17 @@ defmodule Connect do
   defp winner?(board, piece) do
     board
     |> Enum.with_index()
-    |> Enum.any?(&opposite_side_connection?(board, piece, &1))
+    |> Enum.any?(&opposite_side_connected?(board, piece, &1))
   end
 
-  defp opposite_side_connection?(board, piece, {[square | _rest], row_index}) do
+  defp opposite_side_connected?(board, piece, {[square | _rest], row_index}) do
     piece == square and opposite_side_reached?(board, piece, [{row_index, 0}])
   end
 
   defp opposite_side_reached?(board, piece, [square | _rest] = path) do
     {row_index, column_index} = square
 
-    if column_index == horizontal_edge(board) do
+    if column_index == opposite_edge(board) do
       true
     else
       board
@@ -54,7 +54,7 @@ defmodule Connect do
     end
   end
 
-  defp horizontal_edge(board) do
+  defp opposite_edge(board) do
     board
     |> hd()
     |> length()
@@ -80,7 +80,7 @@ defmodule Connect do
     for y <- adjacent_range(row_index),
         x <- adjacent_range(column_index),
         y > @out_of_bounds_index and y < length(board),
-        x > @out_of_bounds_index and x <= horizontal_edge(board) do
+        x > @out_of_bounds_index and x <= opposite_edge(board) do
       {y, x}
     end
   end
