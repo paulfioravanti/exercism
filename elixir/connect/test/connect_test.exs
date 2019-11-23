@@ -41,7 +41,6 @@ defmodule ConnectTest do
     assert Connect.result_for(board) == :black
   end
 
-  @tag :pending
   test "rectangle, black wins" do
     board =
       remove_spaces([
@@ -55,7 +54,6 @@ defmodule ConnectTest do
     assert Connect.result_for(board) == :black
   end
 
-  @tag :pending
   test "rectangle, white wins" do
     board =
       remove_spaces([
@@ -69,7 +67,6 @@ defmodule ConnectTest do
     assert Connect.result_for(board) == :white
   end
 
-  @tag :pending
   test "spiral, black wins" do
     board = [
       "OXXXXXXXX",
@@ -86,7 +83,6 @@ defmodule ConnectTest do
     assert Connect.result_for(board) == :black
   end
 
-  @tag :pending
   test "spiral, nobody wins" do
     board = [
       "OXXXXXXXX",
