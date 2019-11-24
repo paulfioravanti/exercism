@@ -150,9 +150,9 @@ defmodule Poker do
         |> tally_points(hand)
       end
 
-      def tally_points([], _hand), do: 0
+      defp tally_points([], _hand), do: 0
 
-      def tally_points([card], hand) do
+      defp tally_points([card], hand) do
         remaining_cards_score = remaining_cards_score(hand, card)
 
         card
@@ -274,15 +274,15 @@ defmodule Poker do
         end
       end
 
-      def split_hand(%Hand{cards: cards}, ranks) do
+      defp split_hand(%Hand{cards: cards}, ranks) do
         cards
         |> Enum.sort_by(&Card.value(&1))
         |> Enum.split_with(&Card.multiple?(&1, ranks, @triplet))
       end
 
-      def full_house?([], _pair, _ranks), do: false
+      defp full_house?([], _pair, _ranks), do: false
 
-      def full_house?(_triplet, pair, ranks) do
+      defp full_house?(_triplet, pair, ranks) do
         Enum.all?(pair, &Card.multiple?(&1, ranks, @pair))
       end
     end
