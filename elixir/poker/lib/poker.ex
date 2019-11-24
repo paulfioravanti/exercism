@@ -317,8 +317,6 @@ defmodule Poker do
     end
 
     defmodule StraightFlush do
-      alias Poker.Score.{Straight, Flush}
-
       @points 34
 
       def score(hand) do
@@ -351,8 +349,6 @@ defmodule Poker do
       FourOfAKind,
       StraightFlush
     ]
-
-    alias Poker.Hand
 
     def calculate(hand) do
       Enum.reduce(@hand_types, hand, &sum_points/2)
