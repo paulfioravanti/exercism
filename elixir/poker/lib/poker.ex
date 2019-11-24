@@ -177,7 +177,7 @@ defmodule Poker do
       def score(hand) do
         hand
         |> straight()
-        |> tally_score()
+        |> tally_points()
       end
 
       def straight(hand) do
@@ -185,9 +185,9 @@ defmodule Poker do
         numbered_straight(cards) || ace_low_straight(cards)
       end
 
-      defp tally_score(nil), do: 0
+      defp tally_points(nil), do: 0
 
-      defp tally_score(cards) do
+      defp tally_points(cards) do
         cards
         |> Enum.reverse()
         |> hd()
