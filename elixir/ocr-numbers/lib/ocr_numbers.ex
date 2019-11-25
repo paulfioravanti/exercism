@@ -35,8 +35,8 @@ defmodule OcrNumbers do
     end
   end
 
-  defp valid_height?(pipes) do
-    pipes
+  defp valid_height?(input) do
+    input
     |> length()
     |> rem(@height)
     |> Kernel.==(0)
