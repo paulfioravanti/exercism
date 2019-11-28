@@ -30,27 +30,24 @@ defmodule Dominoes do
   defp connected_graph?(head, tail) do
     # tail represents a set of disjoints
     # https://en.wikipedia.org/wiki/Intersection_(set_theory)#Intersecting_and_disjoint_sets
-    {intersections, tail} = Enum.split_with(tail, &intersects?(&1, head))
+    {intersections, tail} = Enum.split_with(tail, &intersects?(head, &1))
 
-    cond do
-      Enum.empty?(intersections) ->
-        false
-
-      true ->
-        intersections
-        |> List.flatten()
-        |> Enum.concat(head)
-        |> connected_graph?(tail)
+    if Enum.empty?(intersections) do
+      false
+    else
+      intersections
+      |> List.flatten(head)
+      |> connected_graph?(tail)
     end
   end
 
-  defp intersects?(edge, head) do
+  defp intersects?(head, edge) do
+    head = MapSet.new(head)
+
     edge
-    |> to_mapset()
-    |> MapSet.intersection(to_mapset(head))
+    |> MapSet.new()
+    |> MapSet.intersection(head)
     |> MapSet.to_list()
     |> Enum.any?()
   end
-
-  defp to_mapset(domino), do: Enum.into(domino, MapSet.new())
 end
