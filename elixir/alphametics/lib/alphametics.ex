@@ -23,7 +23,24 @@ defmodule Alphametics do
 
     @single_digits
     |> permutations(length(letters))
-    |> Enum.each(&evaluate_permutation(puzzle, letters, &1))
+    |> Enum.reduce_while(nil, &evaluate_permutation(puzzle, letters, &1, &2))
+  end
+
+  defp evaluate_permutation(puzzle, letters, permutation, acc) do
+    translations = Enum.zip(letters, permutation)
+    expression = generate_expression(puzzle, translations)
+
+    cond do
+      any_leading_zeroes?(expression) ->
+        {:cont, acc}
+
+      evaluate(expression) ->
+        solution = Enum.reduce(translations, %{}, &add_char_key_value/2)
+        {:halt, solution}
+
+      true ->
+        {:cont, acc}
+    end
   end
 
   defp to_letters(puzzle) do
@@ -39,53 +56,36 @@ defmodule Alphametics do
   defp permutations(digits, length) do
     for digit <- digits,
         rest = digits -- [digit],
-        rest <- permutations(rest, length - 1),
-        do: [digit | rest]
-  end
-
-  defp evaluate_permutation(puzzle, letters, permutation) do
-    # IO.inspect(permutation)
-    IO.inspect(Enum.join(permutation))
-    # IO.inspect(letters)
-    IO.inspect(Enum.join(letters))
-
-    expression =
-      puzzle
-      |> String.replace(Enum.join(letters), Enum.join(permutation))
-      |> IO.inspect()
-      |> String.graphemes()
-
-    cond do
-      leading_zero?(expression) ->
-        nil
-
-      evaluate(expression) ->
-        solution =
-          letters
-          |> Enum.zip(permutation)
-          |> Enum.into(%{})
-
-        throw({:halt, solution})
-
-      true ->
-        nil
+        rest <- permutations(rest, length - 1) do
+      [digit | rest]
     end
   end
 
-  defp leading_zero?(expression) do
+  defp generate_expression(puzzle, translations) do
+    translations
+    |> Enum.reduce(puzzle, &letter_to_permutation/2)
+    |> String.split()
+  end
+
+  defp letter_to_permutation({letter, permutation}, acc) do
+    String.replace(acc, letter, Integer.to_string(permutation))
+  end
+
+  defp any_leading_zeroes?(expression) do
     Enum.any?(expression, &String.starts_with?(&1, "0"))
   end
 
-  defp evaluate(expression) do
-    expression
+  defp evaluate([head | tail]) do
+    tail
     |> Enum.chunk_every(2)
-    |> Enum.reduce(0, &accumulate_expression/2)
+    |> Enum.reduce(String.to_integer(head), &accumulate_expression/2)
   end
 
   defp accumulate_expression([fun, value], acc) do
-    # IO.inspect(fun)
-    # IO.inspect(value)
-    # IO.inspect(acc)
-    apply(fun, [acc, value])
+    apply(Kernel, String.to_atom(fun), [acc, String.to_integer(value)])
+  end
+
+  defp add_char_key_value({<<translation::utf8>>, value}, acc) do
+    Map.put(acc, translation, value)
   end
 end

@@ -1,7 +1,6 @@
 defmodule AlphameticsTest do
   use ExUnit.Case
 
-  # @tag :pending
   test "puzzle with three letters" do
     puzzle = "I + BB == ILL"
 
@@ -14,19 +13,16 @@ defmodule AlphameticsTest do
     assert Alphametics.solve(puzzle) == solution
   end
 
-  @tag :pending
   test "solution must have unique value for each letter" do
     puzzle = "A == B"
     assert Alphametics.solve(puzzle) == nil
   end
 
-  @tag :pending
   test "leading zero solution is invalid" do
     puzzle = "ACA + DD == BD"
     assert Alphametics.solve(puzzle) == nil
   end
 
-  @tag :pending
   test "puzzle with two digits final carry" do
     puzzle = "A + A + A + A + A + A + A + A + A + A + A + B == BCC"
 
@@ -39,7 +35,6 @@ defmodule AlphameticsTest do
     assert Alphametics.solve(puzzle) == solution
   end
 
-  @tag :pending
   test "puzzle with four letters" do
     puzzle = "AS + A == MOM"
 
@@ -53,7 +48,6 @@ defmodule AlphameticsTest do
     assert Alphametics.solve(puzzle) == solution
   end
 
-  @tag :pending
   test "puzzle with six letters" do
     puzzle = "NO + NO + TOO == LATE"
 
@@ -69,7 +63,6 @@ defmodule AlphameticsTest do
     assert Alphametics.solve(puzzle) == solution
   end
 
-  @tag :pending
   test "puzzle with seven letters" do
     puzzle = "HE + SEES + THE == LIGHT"
 
@@ -86,7 +79,6 @@ defmodule AlphameticsTest do
     assert Alphametics.solve(puzzle) == solution
   end
 
-  @tag :pending
   test "puzzle with eight letters" do
     puzzle = "SEND + MORE == MONEY"
 
@@ -104,7 +96,6 @@ defmodule AlphameticsTest do
     assert Alphametics.solve(puzzle) == solution
   end
 
-  @tag :pending
   test "puzzle with ten letters" do
     puzzle = "AND + A + STRONG + OFFENSE + AS + A + GOOD == DEFENSE"
 
@@ -124,7 +115,6 @@ defmodule AlphameticsTest do
     assert Alphametics.solve(puzzle) == solution
   end
 
-  @tag :pending
   test "puzzle with ten letters and 199 addends" do
     puzzle =
       "THIS + A + FIRE + THEREFORE + FOR + ALL + HISTORIES + I + TELL + A + " <>
