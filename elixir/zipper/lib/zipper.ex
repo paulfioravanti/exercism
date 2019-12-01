@@ -51,8 +51,8 @@ defmodule Zipper do
   @spec up(Zipper.t()) :: Zipper.t() | nil
   def up(%Zipper{trail: []}), do: nil
 
-  def up(%Zipper{focus: focus, trail: [current_tree | trail]}) do
-    %Zipper{focus: get_parent(current_tree, focus), trail: trail}
+  def up(%Zipper{focus: focus, trail: [parent | trail]}) do
+    %Zipper{focus: parent_tree(parent, focus), trail: trail}
   end
 
   @doc """
@@ -79,11 +79,6 @@ defmodule Zipper do
     %Zipper{zipper | focus: %BinTree{focus | right: right}}
   end
 
-  defp get_parent({:left, bin_tree}, focus) do
-    %BinTree{bin_tree | left: focus}
-  end
-
-  defp get_parent({:right, bin_tree}, focus) do
-    %BinTree{bin_tree | right: focus}
-  end
+  defp parent_tree({:left, parent}, focus), do: %BinTree{parent | left: focus}
+  defp parent_tree({:right, parent}, focus), do: %BinTree{parent | right: focus}
 end
