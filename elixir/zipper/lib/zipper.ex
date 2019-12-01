@@ -31,8 +31,8 @@ defmodule Zipper do
   @spec left(Zipper.t()) :: Zipper.t() | nil
   def left(%Zipper{focus: %BinTree{left: nil}}), do: nil
 
-  def left(%Zipper{focus: focus, trail: trail}) do
-    %Zipper{focus: focus.left, trail: [{:left, focus} | trail]}
+  def left(%Zipper{focus: %BinTree{left: left} = focus, trail: trail}) do
+    %Zipper{focus: left, trail: [{:left, focus} | trail]}
   end
 
   @doc """
@@ -41,8 +41,8 @@ defmodule Zipper do
   @spec right(Zipper.t()) :: Zipper.t() | nil
   def right(%Zipper{focus: %BinTree{right: nil}}), do: nil
 
-  def right(%Zipper{focus: focus, trail: trail}) do
-    %Zipper{focus: focus.right, trail: [{:right, focus} | trail]}
+  def right(%Zipper{focus: %BinTree{right: right} = focus, trail: trail}) do
+    %Zipper{focus: right, trail: [{:right, focus} | trail]}
   end
 
   @doc """
