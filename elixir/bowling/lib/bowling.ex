@@ -18,54 +18,169 @@ defmodule Bowling do
       defguardp open?(first_roll, second_roll)
                 when first_roll + second_roll < @max_pins
 
+      defguardp final_frame?(frames) when length(frames) == @final_frame
+      defguardp standard_frame?(frames) when length(frames) < @final_frame
       defguardp exceeds_max_pins?(pins) when pins > @max_pins
 
-      defguardp rolled_pins_exceed_max_pins?(
-                  first_roll,
-                  second_roll,
-                  frame_number
-                )
-                when frame_number < @final_frame and
-                       first_roll + second_roll > @max_pins
+      defguardp exceeds_max_pins?(roll1, roll2)
+                when exceeds_max_pins?(roll1 + roll2)
 
       defguardp invalid_post_strike_bonus_balls?(second_roll, third_roll)
                 when not strike?(second_roll) and
-                       exceeds_max_pins?(second_roll + third_roll)
+                       exceeds_max_pins?(second_roll, third_roll)
 
       defguardp final_frame_finished?(first_roll, second_roll)
-                when not spare?(first_roll, second_roll) and
-                       not strike?(second_roll)
+                when not (strike?(first_roll) or strike?(second_roll) or
+                            spare?(first_roll, second_roll))
 
       def exceeds_pin_count_message, do: @exceeds_pin_count_message
 
       def new, do: %Frame{}
 
-      def roll(%Frame{rolls: [second_roll, @strike]}, third_roll, @final_frame)
-          when invalid_post_strike_bonus_balls?(second_roll, third_roll) do
+      def roll(
+            [%Frame{rolls: [second_roll, @strike]} | _rest] = frames,
+            third_roll
+          )
+          when final_frame?(frames) and
+                 invalid_post_strike_bonus_balls?(second_roll, third_roll) do
         {:error, @exceeds_pin_count_message}
       end
 
-      def roll(%Frame{rolls: [second_roll, first_roll]}, _third_roll, @final_frame)
-          when final_frame_finished?(first_roll, second_roll) do
+      def roll(
+            [%Frame{rolls: [second_roll, first_roll]} | _rest] = frames,
+            _third_roll
+          )
+          when final_frame?(frames) and
+                 final_frame_finished?(first_roll, second_roll) do
         {:error, "Cannot roll after game is over"}
       end
 
-      def roll(%Frame{rolls: [@strike]}, roll, @final_frame)
-          when exceeds_max_pins?(roll) do
+      def roll([%Frame{rolls: [@strike]} | _rest] = frames, roll)
+          when final_frame?(frames) and exceeds_max_pins?(roll) do
         {:error, @exceeds_pin_count_message}
       end
 
-      def roll(%Frame{rolls: [first_roll]}, roll, frame_number)
-          when rolled_pins_exceed_max_pins?(first_roll, roll, frame_number) do
+      def roll([%Frame{rolls: [first_roll]} | _rest] = frames, roll)
+          when standard_frame?(frames) and
+                 exceeds_max_pins?(first_roll, roll) do
         {:error, @exceeds_pin_count_message}
       end
 
-      def roll(%Frame{rolls: rolls, score: score} = frame, roll, frame_number) do
-        frame = %Frame{frame | rolls: [roll | rolls], score: score + roll}
-        {:ok, frame, frame_number}
+      def roll([%Frame{rolls: rolls, score: score}], roll) do
+        frame = %Frame{rolls: [roll | rolls], score: score + roll}
+        {:ok, [frame]}
+      end
+
+      def roll(
+            [
+              %Frame{rolls: []},
+              %Frame{rolls: [@strike], score: previous_score} = previous_frame,
+              %Frame{rolls: [@strike], score: second_previous_score} =
+                second_previous_frame
+              | rest
+            ],
+            @strike
+          ) do
+        second_previous_frame = %Frame{
+          second_previous_frame
+          | score: second_previous_score + @strike
+        }
+
+        previous_frame = %Frame{
+          previous_frame
+          | score: previous_score + @strike
+        }
+
+        current_frame = %Frame{rolls: [@strike], score: @strike}
+        frames = [current_frame, previous_frame, second_previous_frame | rest]
+        {:ok, frames}
+      end
+
+      def roll(
+            [
+              %Frame{rolls: [first_roll], score: score},
+              %Frame{rolls: [@strike], score: previous_score} = previous_frame,
+              %Frame{rolls: [@strike], score: second_previous_score} =
+                second_previous_frame
+              | rest
+            ],
+            roll
+          ) do
+        second_previous_frame = %Frame{
+          second_previous_frame
+          | score: second_previous_score + first_roll
+        }
+
+        previous_frame = %Frame{
+          previous_frame
+          | score: previous_score + first_roll + roll
+        }
+
+        current_frame = %Frame{rolls: [roll, first_roll], score: score + roll}
+        frames = [current_frame, previous_frame, second_previous_frame | rest]
+        {:ok, frames}
+      end
+
+      def roll(
+            [
+              %Frame{rolls: []},
+              %Frame{rolls: [@strike], score: previous_score} = previous_frame
+              | rest
+            ],
+            @strike
+          ) do
+        previous_frame = %Frame{
+          previous_frame
+          | score: previous_score + @strike
+        }
+
+        current_frame = %Frame{rolls: [@strike], score: @strike}
+        frames = [current_frame, previous_frame | rest]
+        {:ok, frames}
+      end
+
+      def roll(
+            [
+              %Frame{rolls: [first_roll], score: score},
+              %Frame{rolls: [@strike], score: previous_score} = previous_frame
+              | rest
+            ],
+            roll
+          ) do
+        previous_frame = %Frame{
+          previous_frame
+          | score: previous_score + first_roll + roll
+        }
+
+        current_frame = %Frame{rolls: [roll, first_roll], score: score + roll}
+        frames = [current_frame, previous_frame | rest]
+        {:ok, frames}
+      end
+
+      def roll(
+            [
+              %Frame{rolls: [], score: score},
+              %Frame{
+                rolls: [previous_second_roll, previous_first_roll],
+                score: previous_score
+              } = previous_frame
+              | rest
+            ],
+            roll
+          )
+          when spare?(previous_first_roll, previous_second_roll) do
+        previous_frame = %Frame{previous_frame | score: previous_score + roll}
+        current_frame = %Frame{rolls: [roll], score: score + roll}
+        {:ok, [current_frame, previous_frame | rest]}
+      end
+
+      def roll([%Frame{rolls: rolls, score: score} | rest], roll) do
+        frame = %Frame{rolls: [roll | rolls], score: score + roll}
+        {:ok, [frame | rest]}
       end
 
       def over?(%Frame{rolls: [@strike]}, @final_frame), do: false
+      def over?(%Frame{rolls: [@strike]}, _frame_number), do: true
       def over?(%Frame{rolls: [@strike, @strike]}, @final_frame), do: false
 
       def over?(%Frame{rolls: [second_roll, first_roll]}, @final_frame)
@@ -107,12 +222,13 @@ defmodule Bowling do
       {:error, Frame.exceeds_pin_count_message()}
     end
 
-    def roll(%Game{frames: [current_frame | rest] = frames} = game, roll) do
-      frame_number = length(frames)
+    def roll(%Game{frames: frames} = game, roll) do
+      case Frame.roll(frames, roll) do
+        {:ok, frames} ->
+          update_game(game, frames)
 
-      with {:ok, frame, frame_number} <-
-             Frame.roll(current_frame, roll, frame_number) do
-        update_game(frame, frame_number, game, rest)
+        {:error, message} ->
+          {:error, message}
       end
     end
 
@@ -124,14 +240,14 @@ defmodule Bowling do
       end
     end
 
-    defp update_game(frame, frame_number, game, frames) do
-      frames = [frame | frames]
+    defp update_game(game, [current_frame | _rest] = frames) do
+      frame_number = length(frames)
 
       cond do
-        Frame.over?(frame, frame_number) and game_over?(frames) ->
+        Frame.over?(current_frame, frame_number) and game_over?(frames) ->
           %Game{game | frames: frames}
 
-        Frame.over?(frame, frame_number) ->
+        Frame.over?(current_frame, frame_number) ->
           %Game{game | frames: [Frame.new() | frames]}
 
         true ->
