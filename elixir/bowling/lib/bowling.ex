@@ -29,10 +29,6 @@ defmodule Bowling do
                 when not strike?(second_roll) and
                        exceeds_max_pins?(second_roll, third_roll)
 
-      defguardp final_frame_finished?(first_roll, second_roll)
-                when not (strike?(first_roll) or strike?(second_roll) or
-                            spare?(first_roll, second_roll))
-
       def exceeds_pin_count_message, do: @exceeds_pin_count_message
 
       def new, do: %Frame{}
@@ -46,29 +42,52 @@ defmodule Bowling do
         {:error, @exceeds_pin_count_message}
       end
 
-      def roll(
-            [%Frame{rolls: [second_roll, first_roll]} | _rest] = frames,
-            _third_roll
-          )
-          when final_frame?(frames) and
-                 final_frame_finished?(first_roll, second_roll) do
-        {:error, "Cannot roll after game is over"}
-      end
-
-      def roll([%Frame{rolls: [@strike]} | _rest] = frames, roll)
-          when final_frame?(frames) and exceeds_max_pins?(roll) do
+      def roll([%Frame{rolls: [@strike]} | _rest] = frames, second_roll)
+          when final_frame?(frames) and exceeds_max_pins?(second_roll) do
         {:error, @exceeds_pin_count_message}
       end
 
-      def roll([%Frame{rolls: [first_roll]} | _rest] = frames, roll)
+      def roll([%Frame{rolls: [first_roll]} | _rest] = frames, second_roll)
           when standard_frame?(frames) and
-                 exceeds_max_pins?(first_roll, roll) do
+                 exceeds_max_pins?(first_roll, second_roll) do
         {:error, @exceeds_pin_count_message}
       end
 
-      def roll([%Frame{rolls: rolls, score: score}], roll) do
-        frame = %Frame{rolls: [roll | rolls], score: score + roll}
-        {:ok, [frame]}
+      def roll(
+            [%Frame{rolls: [@strike, @strike], score: score} | rest] = frames,
+            @strike
+          )
+          when final_frame?(frames) do
+        current_frame = %Frame{
+          rolls: [@strike, @strike, @strike],
+          score: score + @strike
+        }
+
+        frames = [current_frame | rest]
+        {:ok, frames}
+      end
+
+      def roll(
+            [
+              %Frame{rolls: [@strike], score: score},
+              %Frame{rolls: [@strike], score: previous_score} = previous_frame
+              | rest
+            ] = frames,
+            @strike
+          )
+          when final_frame?(frames) do
+        previous_frame = %Frame{
+          previous_frame
+          | score: previous_score + @strike
+        }
+
+        current_frame = %Frame{
+          rolls: [@strike, @strike],
+          score: score + @strike
+        }
+
+        frames = [current_frame, previous_frame | rest]
+        {:ok, frames}
       end
 
       def roll(
@@ -104,7 +123,7 @@ defmodule Bowling do
                 second_previous_frame
               | rest
             ],
-            roll
+            second_roll
           ) do
         second_previous_frame = %Frame{
           second_previous_frame
@@ -113,10 +132,14 @@ defmodule Bowling do
 
         previous_frame = %Frame{
           previous_frame
-          | score: previous_score + first_roll + roll
+          | score: previous_score + first_roll + second_roll
         }
 
-        current_frame = %Frame{rolls: [roll, first_roll], score: score + roll}
+        current_frame = %Frame{
+          rolls: [second_roll, first_roll],
+          score: score + second_roll
+        }
+
         frames = [current_frame, previous_frame, second_previous_frame | rest]
         {:ok, frames}
       end
@@ -145,65 +168,91 @@ defmodule Bowling do
               %Frame{rolls: [@strike], score: previous_score} = previous_frame
               | rest
             ],
-            roll
+            second_roll
           ) do
         previous_frame = %Frame{
           previous_frame
-          | score: previous_score + first_roll + roll
+          | score: previous_score + first_roll + second_roll
         }
 
-        current_frame = %Frame{rolls: [roll, first_roll], score: score + roll}
+        current_frame = %Frame{
+          rolls: [second_roll, first_roll],
+          score: score + second_roll
+        }
+
         frames = [current_frame, previous_frame | rest]
         {:ok, frames}
       end
 
       def roll(
             [
-              %Frame{rolls: [], score: score},
+              %Frame{rolls: []},
               %Frame{
                 rolls: [previous_second_roll, previous_first_roll],
                 score: previous_score
               } = previous_frame
               | rest
             ],
-            roll
+            first_roll
           )
           when spare?(previous_first_roll, previous_second_roll) do
-        previous_frame = %Frame{previous_frame | score: previous_score + roll}
-        current_frame = %Frame{rolls: [roll], score: score + roll}
+        previous_frame = %Frame{
+          previous_frame
+          | score: previous_score + first_roll
+        }
+
+        current_frame = %Frame{rolls: [first_roll], score: first_roll}
         {:ok, [current_frame, previous_frame | rest]}
       end
 
-      def roll([%Frame{rolls: rolls, score: score} | rest], roll) do
-        frame = %Frame{rolls: [roll | rolls], score: score + roll}
-        {:ok, [frame | rest]}
+      def roll([%Frame{rolls: rolls, score: score} | rest] = frames, roll) do
+        if over?(frames) do
+          {:error, "Cannot roll after game is over"}
+        else
+          frame = %Frame{rolls: [roll | rolls], score: score + roll}
+          {:ok, [frame | rest]}
+        end
       end
 
-      def over?(%Frame{rolls: [@strike]}, @final_frame), do: false
-      def over?(%Frame{rolls: [@strike]}, _frame_number), do: true
-      def over?(%Frame{rolls: [@strike, @strike]}, @final_frame), do: false
+      def roll([%Frame{rolls: rolls, score: score}], roll) do
+        frame = %Frame{rolls: [roll | rolls], score: score + roll}
+        {:ok, [frame]}
+      end
 
-      def over?(%Frame{rolls: [second_roll, first_roll]}, @final_frame)
-          when spare?(first_roll, second_roll) do
+      def over?([%Frame{rolls: [@strike, @strike]} | _rest] = frames)
+          when final_frame?(frames) do
         false
       end
 
-      def over?(%Frame{rolls: [second_roll, first_roll]}, @final_frame)
-          when open?(first_roll, second_roll) do
+      def over?([%Frame{rolls: [@strike]} | _rest] = frames)
+          when final_frame?(frames) do
+        false
+      end
+
+      def over?([%Frame{rolls: [second_roll, first_roll]} | _rest] = frames)
+          when final_frame?(frames) and spare?(first_roll, second_roll) do
+        false
+      end
+
+      def over?([%Frame{rolls: [second_roll, first_roll]} | _rest] = frames)
+          when final_frame?(frames) and open?(first_roll, second_roll) do
         true
       end
 
-      def over?(%Frame{rolls: rolls}, frame_number) do
-        length(rolls) == max_rolls(frame_number)
+      def over?([%Frame{rolls: [@strike]} | _rest]), do: true
+
+      def over?([%Frame{rolls: rolls} | _rest] = frames)
+          when final_frame?(frames) do
+        length(rolls) == @final_frame_max_rolls
       end
+
+      def over?([%Frame{rolls: rolls} | _rest]), do: length(rolls) == @max_rolls
 
       def accumulate_score(%Frame{score: score}, acc), do: acc + score
 
-      defp max_rolls(@final_frame), do: @final_frame_max_rolls
-      defp max_rolls(_frame_number), do: @max_rolls
+      def final?(frames), do: final_frame?(frames)
     end
 
-    @max_frames 10
     @min_roll_points 0
     @max_roll_points 10
 
@@ -240,14 +289,12 @@ defmodule Bowling do
       end
     end
 
-    defp update_game(game, [current_frame | _rest] = frames) do
-      frame_number = length(frames)
-
+    defp update_game(game, frames) do
       cond do
-        Frame.over?(current_frame, frame_number) and game_over?(frames) ->
+        game_over?(frames) ->
           %Game{game | frames: frames}
 
-        Frame.over?(current_frame, frame_number) ->
+        Frame.over?(frames) ->
           %Game{game | frames: [Frame.new() | frames]}
 
         true ->
@@ -255,9 +302,7 @@ defmodule Bowling do
       end
     end
 
-    defp game_over?([head | _tail] = frames) do
-      length(frames) == @max_frames and Frame.over?(head, @max_frames)
-    end
+    defp game_over?(frames), do: Frame.final?(frames) and Frame.over?(frames)
   end
 
   @doc """

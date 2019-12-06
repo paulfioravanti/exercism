@@ -98,7 +98,6 @@ defmodule BowlingTest do
     assert Bowling.score(game) == 20
   end
 
-  @tag :pending
   test "all strikes is a perfect game" do
     game = Bowling.start()
     rolls = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
