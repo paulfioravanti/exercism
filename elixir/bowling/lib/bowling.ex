@@ -29,9 +29,23 @@ defmodule Bowling do
                 when not strike?(second_roll) and
                        exceeds_max_pins?(second_roll, third_roll)
 
+      defguardp final_frame_over?(first_roll, second_roll)
+                when not (strike?(first_roll) or
+                            strike?(second_roll) or
+                            spare?(first_roll, second_roll))
+
       def exceeds_pin_count_message, do: @exceeds_pin_count_message
 
       def new, do: %Frame{}
+
+      def roll(
+            [%Frame{rolls: [second_roll, first_roll]} | _rest] = frames,
+            _third_roll
+          )
+          when final_frame?(frames) and
+                 final_frame_over?(first_roll, second_roll) do
+        {:error, "Cannot roll after game is over"}
+      end
 
       def roll(
             [%Frame{rolls: [second_roll, @strike]} | _rest] = frames,
@@ -205,32 +219,13 @@ defmodule Bowling do
         {:ok, [current_frame, previous_frame | rest]}
       end
 
-      def roll([%Frame{rolls: rolls, score: score} | rest] = frames, roll) do
-        if over?(frames) do
-          {:error, "Cannot roll after game is over"}
-        else
-          frame = %Frame{rolls: [roll | rolls], score: score + roll}
-          {:ok, [frame | rest]}
-        end
-      end
-
-      def roll([%Frame{rolls: rolls, score: score}], roll) do
+      def roll([%Frame{rolls: rolls, score: score} | rest], roll) do
         frame = %Frame{rolls: [roll | rolls], score: score + roll}
-        {:ok, [frame]}
-      end
-
-      def over?([%Frame{rolls: [@strike, @strike]} | _rest] = frames)
-          when final_frame?(frames) do
-        false
+        {:ok, [frame | rest]}
       end
 
       def over?([%Frame{rolls: [@strike]} | _rest] = frames)
           when final_frame?(frames) do
-        false
-      end
-
-      def over?([%Frame{rolls: [second_roll, first_roll]} | _rest] = frames)
-          when final_frame?(frames) and spare?(first_roll, second_roll) do
         false
       end
 
