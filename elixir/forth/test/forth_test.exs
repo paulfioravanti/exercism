@@ -135,7 +135,6 @@ defmodule ForthTest do
     end
   end
 
-  @tag :pending
   test "defining a new word" do
     s =
       Forth.new()
@@ -146,7 +145,6 @@ defmodule ForthTest do
     assert s == "1 1 1"
   end
 
-  @tag :pending
   test "redefining an existing word" do
     s =
       Forth.new()
@@ -158,7 +156,6 @@ defmodule ForthTest do
     assert s == "1 1 1"
   end
 
-  @tag :pending
   test "redefining an existing built-in word" do
     s =
       Forth.new()
@@ -179,14 +176,12 @@ defmodule ForthTest do
     assert s == "220371"
   end
 
-  @tag :pending
   test "defining a number" do
     assert_raise Forth.InvalidWord, fn ->
       Forth.new() |> Forth.eval(": 1 2 ;")
     end
   end
 
-  @tag :pending
   test "calling a non-existing word" do
     assert_raise Forth.UnknownWord, fn ->
       Forth.new() |> Forth.eval("1 foo")
