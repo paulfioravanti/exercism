@@ -50,7 +50,7 @@ defmodule Forth do
     end
 
     def add(%Evaluator{stack: [head, next | tail]} = evaluator) do
-      %Evaluator{evaluator | stack: [head + next | tail]}
+      %Evaluator{evaluator | stack: [next + head | tail]}
     end
 
     def sub(%Evaluator{stack: [head, next | tail]} = evaluator) do
@@ -58,7 +58,7 @@ defmodule Forth do
     end
 
     def mult(%Evaluator{stack: [head, next | tail]} = evaluator) do
-      %Evaluator{evaluator | stack: [head * next | tail]}
+      %Evaluator{evaluator | stack: [next * head | tail]}
     end
 
     def div(%Evaluator{stack: [head, next | tail]} = evaluator) do
