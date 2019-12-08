@@ -1,14 +1,16 @@
 defmodule Forth do
   defmodule Evaluator do
+    alias Forth.{DivisionByZero, InvalidWord, StackUnderflow, UnknownWord}
+
     @words %{
-      "+" => [&Evaluator.add/1],
-      "-" => [&Evaluator.sub/1],
-      "*" => [&Evaluator.mult/1],
-      "/" => [&Evaluator.div/1],
-      "DUP" => [&Evaluator.dup/1],
-      "DROP" => [&Evaluator.drop/1],
-      "SWAP" => [&Evaluator.swap/1],
-      "OVER" => [&Evaluator.over/1]
+      "+" => &Evaluator.add/1,
+      "-" => &Evaluator.sub/1,
+      "*" => &Evaluator.mult/1,
+      "/" => &Evaluator.div/1,
+      "DUP" => &Evaluator.dup/1,
+      "DROP" => &Evaluator.drop/1,
+      "SWAP" => &Evaluator.swap/1,
+      "OVER" => &Evaluator.over/1
     }
     @final_element -1
 
@@ -16,70 +18,80 @@ defmodule Forth do
 
     def new, do: %Evaluator{}
 
+    def parse_term(term) do
+      case Integer.parse(term) do
+        {int, ""} ->
+          int
+
+        :error ->
+          String.upcase(term)
+      end
+    end
+
     def eval(%Evaluator{stack: stack} = evaluator, value)
         when is_integer(value) do
       %Evaluator{evaluator | stack: [value | stack]}
     end
 
-    def eval(%Evaluator{words: words} = evaluator, ": " <> word) do
-      [word | definition] = parse_custom_word(word)
-      word = parse(word)
+    def eval(%Evaluator{words: words} = evaluator, ": " <> custom_word) do
+      [custom_word | definition] = parse_custom_word(custom_word)
       implementation = Enum.map(definition, &fetch_implementation(words, &1))
-      words = Map.put(words, word, implementation)
+      words = Map.put(words, custom_word, implementation)
       %Evaluator{evaluator | words: words}
     end
 
-    def eval(%Evaluator{words: words} = evaluator, value) do
-      fun = Map.fetch!(words, value)
-      Enum.reduce(fun, evaluator, &apply(&1, [&2]))
+    def eval(%Evaluator{words: words} = evaluator, word) do
+      words
+      |> Map.fetch!(word)
+      |> eval_definition(evaluator)
     rescue
       KeyError ->
-        reraise Forth.UnknownWord, __STACKTRACE__
+        reraise UnknownWord, __STACKTRACE__
     end
 
-    def add(%Evaluator{stack: [second, first | tail]} = evaluator) do
-      %Evaluator{evaluator | stack: [first + second | tail]}
+    def add(%Evaluator{stack: [head, next | tail]} = evaluator) do
+      %Evaluator{evaluator | stack: [head + next | tail]}
     end
 
-    def sub(%Evaluator{stack: [second, first | tail]} = evaluator) do
-      %Evaluator{evaluator | stack: [first - second | tail]}
+    def sub(%Evaluator{stack: [head, next | tail]} = evaluator) do
+      %Evaluator{evaluator | stack: [next - head | tail]}
     end
 
-    def mult(%Evaluator{stack: [second, first | tail]} = evaluator) do
-      %Evaluator{evaluator | stack: [first * second | tail]}
+    def mult(%Evaluator{stack: [head, next | tail]} = evaluator) do
+      %Evaluator{evaluator | stack: [head * next | tail]}
     end
 
-    def div(%Evaluator{stack: [second, first | tail]} = evaluator) do
-      %Evaluator{evaluator | stack: [div(first, second) | tail]}
+    def div(%Evaluator{stack: [head, next | tail]} = evaluator) do
+      %Evaluator{evaluator | stack: [div(next, head) | tail]}
     rescue
       ArithmeticError ->
-        reraise Forth.DivisionByZero, __STACKTRACE__
+        reraise DivisionByZero, __STACKTRACE__
     end
 
-    def dup(%Evaluator{stack: []}), do: raise(Forth.StackUnderflow)
+    def dup(%Evaluator{stack: []}), do: raise(StackUnderflow)
 
     def dup(%Evaluator{stack: [head | tail]} = evaluator) do
       %Evaluator{evaluator | stack: [head, head | tail]}
     end
 
-    def drop(%Evaluator{stack: []}), do: raise(Forth.StackUnderflow)
+    def drop(%Evaluator{stack: []}), do: raise(StackUnderflow)
 
     def drop(%Evaluator{stack: [_head | tail]} = evaluator) do
       %Evaluator{evaluator | stack: tail}
     end
 
-    def swap(%Evaluator{stack: []}), do: raise(Forth.StackUnderflow)
-    def swap(%Evaluator{stack: [_value]}), do: raise(Forth.StackUnderflow)
+    def swap(%Evaluator{stack: []}), do: raise(StackUnderflow)
+    def swap(%Evaluator{stack: [_head]}), do: raise(StackUnderflow)
 
-    def swap(%Evaluator{stack: [second, first | tail]} = evaluator) do
-      %Evaluator{evaluator | stack: [first, second | tail]}
+    def swap(%Evaluator{stack: [head, next | tail]} = evaluator) do
+      %Evaluator{evaluator | stack: [next, head | tail]}
     end
 
-    def over(%Evaluator{stack: []}), do: raise(Forth.StackUnderflow)
-    def over(%Evaluator{stack: [_value]}), do: raise(Forth.StackUnderflow)
+    def over(%Evaluator{stack: []}), do: raise(StackUnderflow)
+    def over(%Evaluator{stack: [_head]}), do: raise(StackUnderflow)
 
-    def over(%Evaluator{stack: [second, first | tail]} = evaluator) do
-      %Evaluator{evaluator | stack: [first, second, first | tail]}
+    def over(%Evaluator{stack: [head, next | tail]} = evaluator) do
+      %Evaluator{evaluator | stack: [next, head, next | tail]}
     end
 
     def format_stack(%Evaluator{stack: []}), do: ""
@@ -90,25 +102,43 @@ defmodule Forth do
       |> Enum.join(" ")
     end
 
-    defp parse_custom_word(word) do
-      word
+    defp eval_definition(definition, evaluator) when is_function(definition) do
+      apply(definition, [evaluator])
+    end
+
+    defp eval_definition(definition, evaluator) when is_list(definition) do
+      Enum.reduce(definition, evaluator, &apply(&1, [&2]))
+    end
+
+    defp parse_custom_word(custom_word) do
+      custom_word
       |> String.split()
       |> Enum.drop(@final_element)
+      |> parse_custom_word_name()
     end
 
-    defp fetch_implementation(words, fun) do
-      words
-      |> Map.fetch!(fun)
-      |> hd()
-    end
-
-    defp parse(word) do
+    def parse_custom_word_name([word | _definition] = custom_word) do
       case Integer.parse(word) do
+        # Attempt to re-define a number
         {_int, ""} ->
-          raise Forth.InvalidWord
+          raise InvalidWord
+
+        # Happy path
+        :error ->
+          custom_word
+      end
+    end
+
+    defp fetch_implementation(words, definition) do
+      case Map.fetch(words, definition) do
+        {:ok, implementation} ->
+          implementation
 
         :error ->
-          word
+          # create on-the-fly custom implementation
+          fn evaluator ->
+            eval(evaluator, parse_term(definition))
+          end
       end
     end
   end
@@ -131,7 +161,7 @@ defmodule Forth do
     @words
     |> Regex.scan(s)
     |> List.flatten()
-    |> Enum.map(&parse/1)
+    |> Enum.map(&Evaluator.parse_term/1)
     |> Enum.reduce(ev, &Evaluator.eval(&2, &1))
   end
 
@@ -140,19 +170,7 @@ defmodule Forth do
   being the rightmost element in the string.
   """
   @spec format_stack(evaluator) :: String.t()
-  def format_stack(ev) do
-    Evaluator.format_stack(ev)
-  end
-
-  defp parse(term) do
-    case Integer.parse(term) do
-      {int, ""} ->
-        int
-
-      :error ->
-        String.upcase(term)
-    end
-  end
+  def format_stack(ev), do: Evaluator.format_stack(ev)
 
   defmodule StackUnderflow do
     defexception []
