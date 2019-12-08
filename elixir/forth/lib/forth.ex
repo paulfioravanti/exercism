@@ -16,6 +16,8 @@ defmodule Forth do
 
     defstruct stack: [], words: @words
 
+    @type t :: %Evaluator{stack: List.t(), words: Map.t()}
+
     def new, do: %Evaluator{}
 
     def parse_term(term) do
@@ -61,11 +63,10 @@ defmodule Forth do
       %Evaluator{evaluator | stack: [next * head | tail]}
     end
 
+    def div(%Evaluator{stack: [0 | _tail]}), do: raise(DivisionByZero)
+
     def div(%Evaluator{stack: [head, next | tail]} = evaluator) do
       %Evaluator{evaluator | stack: [div(next, head) | tail]}
-    rescue
-      ArithmeticError ->
-        reraise DivisionByZero, __STACKTRACE__
     end
 
     def dup(%Evaluator{stack: []}), do: raise(StackUnderflow)
@@ -143,9 +144,9 @@ defmodule Forth do
     end
   end
 
-  @opaque evaluator :: Evaluator.t()
-
   @words ~r/:.+;|[[:graph:]]+/u
+
+  @opaque evaluator :: Evaluator.t()
 
   @doc """
   Create a new evaluator.
