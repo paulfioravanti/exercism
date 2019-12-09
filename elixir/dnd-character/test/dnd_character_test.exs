@@ -82,12 +82,10 @@ defmodule DndCharacterTest do
       %{character: character()}
     end
 
-    @tag :pending
     test "has valid hitpoints", %{character: character} do
       assert character.hitpoints === 10 + modifier(character.constitution)
     end
 
-    @tag :pending
     test "has each ability only calculated once", %{character: character} do
       assert character.strength === character.strength
     end
