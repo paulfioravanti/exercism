@@ -28,7 +28,5 @@ defmodule Hamming do
     {:error, "Lists must be the same length"}
   end
 
-  defp difference?({nucleotide1, nucleotide2}) do
-    nucleotide1 != nucleotide2
-  end
+  defp difference?({nucleotide1, nucleotide2}), do: nucleotide1 != nucleotide2
 end
