@@ -31,9 +31,7 @@ defmodule Clock do
     new(hour + @hours_in_day, minute)
   end
 
-  def new(hour, minute) do
-    %Clock{hour: hour, minute: minute}
-  end
+  def new(hour, minute), do: %Clock{hour: hour, minute: minute}
 
   @doc """
   Adds two clock times:

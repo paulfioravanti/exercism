@@ -1,7 +1,6 @@
 defmodule ClockTest do
   use ExUnit.Case
 
-  # @tag :pending
   test "to_string" do
     try do
       to_string(%Clock{})
