@@ -31,9 +31,7 @@ defmodule AllYourBase do
     end
   end
 
-  defp invalid_digit?(digit, base_a) do
-    digit < 0 or digit >= base_a
-  end
+  defp invalid_digit?(digit, base_a), do: digit < 0 or digit >= base_a
 
   defp sum_input(digits, base_a) do
     digits
