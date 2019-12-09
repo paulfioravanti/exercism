@@ -25,9 +25,7 @@ defmodule BankAccount do
   Close the bank. Makes the account unavailable.
   """
   @spec close_bank(account) :: none
-  def close_bank(account) do
-    Agent.stop(account)
-  end
+  def close_bank(account), do: Agent.stop(account)
 
   @doc """
   Get the account's balance.
