@@ -1,10 +1,3 @@
-if !System.get_env("EXERCISM_TEST_EXAMPLES") do
-  Code.load_file("gigasecond.exs", __DIR__)
-end
-
-ExUnit.start()
-ExUnit.configure(exclude: :pending, trace: true)
-
 defmodule GigasecondTest do
   use ExUnit.Case
 
@@ -22,7 +15,7 @@ defmodule GigasecondTest do
 
   test "yourself" do
     # customize these values for yourself
-    your_birthday = {{1979, 10, 09}, {0, 0, 0}}
-    assert Gigasecond.from(your_birthday) == {{2011, 06, 17}, {1, 46, 40}}
+    # your_birthday = {{year1, month1, day1}, {0, 0, 0}}
+    # assert Gigasecond.from(your_birthday) == {{year2, month2, day2}, {hours, minutes, seconds}}
   end
 end
