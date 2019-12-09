@@ -6,9 +6,7 @@ defmodule Anagram do
   def match(base, candidates) do
     word = String.downcase(base)
     letters = to_sorted_letters(word)
-
-    candidates
-    |> Enum.filter(&anagram?(String.downcase(&1), word, letters))
+    Enum.filter(candidates, &anagram?(String.downcase(&1), word, letters))
   end
 
   defp to_sorted_letters(word) do
