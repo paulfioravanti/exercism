@@ -1,16 +1,3 @@
-if !System.get_env("EXERCISM_TEST_EXAMPLES") do
-  Code.load_file("grains.exs", __DIR__)
-end
-
-ExUnit.start()
-ExUnit.configure(exclude: :pending, trace: true)
-
-# NOTE: :math.pow/2 doesn't do what you'd expect:
-# `:math.pow(2, 64) == :math.pow(2, 64) - 1` is true.
-#
-# It's best to avoid functions operating on floating point numbers for very
-# large numbers.
-
 defmodule GrainsTest do
   use ExUnit.Case
 
@@ -48,19 +35,16 @@ defmodule GrainsTest do
 
   test "square greater than 64 returns an error" do
     assert Grains.square(65) ===
-             {:error,
-              "The requested square must be between 1 and 64 (inclusive)"}
+             {:error, "The requested square must be between 1 and 64 (inclusive)"}
   end
 
   test "negative square returns an error" do
     assert Grains.square(-1) ===
-             {:error,
-              "The requested square must be between 1 and 64 (inclusive)"}
+             {:error, "The requested square must be between 1 and 64 (inclusive)"}
   end
 
   test "square 0 returns an error" do
     assert Grains.square(0) ===
-             {:error,
-              "The requested square must be between 1 and 64 (inclusive)"}
+             {:error, "The requested square must be between 1 and 64 (inclusive)"}
   end
 end

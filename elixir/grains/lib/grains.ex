@@ -23,13 +23,10 @@ defmodule Grains do
   @spec total :: pos_integer
   def total do
     total_grains = Enum.reduce(@chessboard, 0, &sum_square/2)
-
     {:ok, total_grains}
   end
 
-  defp sum_square(grains, acc) do
-    acc + calculate_square(grains)
-  end
+  defp sum_square(grains, acc), do: acc + calculate_square(grains)
 
   defp calculate_square(number) do
     @base
