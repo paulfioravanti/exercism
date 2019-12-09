@@ -25,10 +25,7 @@ defmodule BinarySearch do
   """
   @spec search(tuple, integer) :: {:ok, integer} | :not_found
   def search({}, _key), do: :not_found
-
-  def search(numbers, key) do
-    search(numbers, key, 0, tuple_size(numbers) - 1)
-  end
+  def search(numbers, key), do: search(numbers, key, 0, tuple_size(numbers) - 1)
 
   defp search(_numbers, _key, left, right) when key_not_found?(left, right) do
     :not_found
