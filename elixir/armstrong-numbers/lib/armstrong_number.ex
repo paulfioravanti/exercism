@@ -18,7 +18,5 @@ defmodule ArmstrongNumber do
     Enum.reduce(digits, 0, &power(length, &1, &2))
   end
 
-  defp power(length, digit, acc) do
-    acc + :math.pow(digit, length)
-  end
+  defp power(length, digit, acc), do: acc + :math.pow(digit, length)
 end
