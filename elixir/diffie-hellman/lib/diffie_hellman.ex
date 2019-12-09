@@ -35,9 +35,7 @@ defmodule DiffieHellman do
   Given a prime integer `prime_p`, return a random integer between 1 and `prime_p` - 1
   """
   @spec generate_private_key(prime_p :: integer) :: integer
-  def generate_private_key(prime_p) do
-    Enum.random(1..(prime_p - 1))
-  end
+  def generate_private_key(prime_p), do: Enum.random(1..(prime_p - 1))
 
   @doc """
   Given two prime integers as generators (`prime_p` and `prime_g`), and a private key,
@@ -45,7 +43,11 @@ defmodule DiffieHellman do
 
   (prime_g **  private_key) % prime_p
   """
-  @spec generate_public_key(prime_p :: integer, prime_g :: integer, private_key :: integer) ::
+  @spec generate_public_key(
+          prime_p :: integer,
+          prime_g :: integer,
+          private_key :: integer
+        ) ::
           integer
   def generate_public_key(prime_p, prime_g, private_key) do
     mod_pow(prime_g, private_key, prime_p)
