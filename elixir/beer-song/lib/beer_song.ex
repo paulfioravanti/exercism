@@ -35,9 +35,7 @@ defmodule BeerSong do
   Get the entire beer song for a given range of numbers of bottles.
   """
   @spec lyrics(Range.t()) :: String.t()
-  def lyrics(range \\ 99..0) do
-    Enum.map_join(range, "\n", &verse/1)
-  end
+  def lyrics(range \\ 99..0), do: Enum.map_join(range, "\n", &verse/1)
 
   defp line_1(amount, container \\ "bottles") do
     formatted_amount =
@@ -65,7 +63,5 @@ defmodule BeerSong do
     "#{amount_of_beer(amount, container)} on the wall"
   end
 
-  defp amount_of_beer(amount, container) do
-    "#{amount} #{container} of beer"
-  end
+  defp amount_of_beer(amount, container), do: "#{amount} #{container} of beer"
 end
