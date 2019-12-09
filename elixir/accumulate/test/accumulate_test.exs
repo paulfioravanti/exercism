@@ -1,10 +1,3 @@
-if !System.get_env("EXERCISM_TEST_EXAMPLES") do
-  Code.load_file("accumulate.exs", __DIR__)
-end
-
-ExUnit.start()
-ExUnit.configure(exclude: :pending, trace: true)
-
 defmodule AccumulateTest do
   use ExUnit.Case
 
