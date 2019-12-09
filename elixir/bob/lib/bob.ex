@@ -25,13 +25,8 @@ defmodule Bob do
     end
   end
 
-  defp silence?(remark) do
-    remark == ""
-  end
-
-  defp question?(remark) do
-    String.ends_with?(remark, "?")
-  end
+  defp silence?(remark), do: remark == ""
+  defp question?(remark), do: String.ends_with?(remark, "?")
 
   defp yelling?(remark) do
     remark == String.upcase(remark) and remark != String.downcase(remark)
