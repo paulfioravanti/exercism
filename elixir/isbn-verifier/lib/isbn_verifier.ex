@@ -19,17 +19,16 @@ defmodule IsbnVerifier do
   @spec isbn?(String.t()) :: boolean
   def isbn?(isbn) do
     isbn = String.replace(isbn, "-", "")
+    String.match?(isbn, @isbn_10) and valid?(isbn)
+  end
 
-    if String.match?(isbn, @isbn_10) do
-      isbn
-      |> generate_isbn_integers()
-      |> Enum.zip(@weights)
-      |> Enum.reduce(0, &add_isbn_formula/2)
-      |> rem(@multiple)
-      |> Kernel.==(0)
-    else
-      false
-    end
+  defp valid?(isbn) do
+    isbn
+    |> generate_isbn_integers()
+    |> Enum.zip(@weights)
+    |> Enum.reduce(0, &add_isbn_formula/2)
+    |> rem(@multiple)
+    |> Kernel.==(0)
   end
 
   defp generate_isbn_integers(isbn) do
@@ -48,7 +47,5 @@ defmodule IsbnVerifier do
   defp convert_check("X"), do: [10]
   defp convert_check(check), do: [String.to_integer(check)]
 
-  defp add_isbn_formula({integer, weight}, acc) do
-    acc + integer * weight
-  end
+  defp add_isbn_formula({integer, weight}, acc), do: acc + integer * weight
 end
