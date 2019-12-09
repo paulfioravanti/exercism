@@ -13,10 +13,7 @@ defmodule CollatzConjecture do
     - if number is even, divide by 2
   """
   @spec calc(input :: pos_integer()) :: non_neg_integer()
-  def calc(input) when positive_integer?(input) do
-    calc(input, @initial_steps)
-  end
-
+  def calc(input) when positive_integer?(input), do: calc(input, @initial_steps)
   defp calc(@terminating_number, steps), do: steps
 
   defp calc(input, steps) when Integer.is_even(input) do
