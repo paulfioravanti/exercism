@@ -4,19 +4,13 @@ defmodule PascalsTriangle do
   with the given height
   """
   @spec rows(integer) :: [[integer]]
-  def rows(num) do
-    # https://en.wikipedia.org/wiki/Pascal%27s_triangle
-    # "The rows of Pascal's triangle are conventionally enumerated
-    # starting with row n = 0 at the top (the 0th row)", so instantly decrement
-    # the number of rows by 1.
-    0..(num - 1)
-    |> Enum.map(&generate_row/1)
-  end
+  # https://en.wikipedia.org/wiki/Pascal%27s_triangle
+  # "The rows of Pascal's triangle are conventionally enumerated
+  # starting with row n = 0 at the top (the 0th row)", so instantly decrement
+  # the number of rows by 1.
+  def rows(num), do: Enum.map(0..(num - 1), &generate_row/1)
 
-  defp generate_row(row_num) do
-    0..row_num
-    |> Enum.map(&binomial(&1, row_num))
-  end
+  defp generate_row(row_num), do: Enum.map(0..row_num, &binomial(&1, row_num))
 
   # https://en.wikipedia.org/wiki/Binomial_theorem
   # "n (row_num) choose k (exponent)" => n!/(n - k)!k!
@@ -25,9 +19,5 @@ defmodule PascalsTriangle do
   end
 
   defp factorial(0), do: 1
-
-  defp factorial(num) do
-    1..num
-    |> Enum.reduce(1, &*/2)
-  end
+  defp factorial(num), do: Enum.reduce(1..num, 1, &*/2)
 end
