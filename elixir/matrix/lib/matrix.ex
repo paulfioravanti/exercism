@@ -20,34 +20,28 @@ defmodule Matrix do
   values separated by single spaces.
   """
   @spec to_string(matrix :: %Matrix{}) :: String.t()
-  def to_string(matrix) do
-    matrix.matrix
-    |> Enum.map_join("\n", &join_row/1)
+  def to_string(%Matrix{matrix: matrix}) do
+    Enum.map_join(matrix, "\n", &join_row/1)
   end
 
   @doc """
   Given a `matrix`, return its rows as a list of lists of integers.
   """
   @spec rows(matrix :: %Matrix{}) :: list(list(integer))
-  def rows(matrix) do
-    matrix.matrix
-  end
+  def rows(%Matrix{matrix: matrix}), do: matrix
 
   @doc """
   Given a `matrix` and `index`, return the row at `index`.
   """
   @spec row(matrix :: %Matrix{}, index :: integer) :: list(integer)
-  def row(matrix, index) do
-    matrix.matrix
-    |> Enum.at(index)
-  end
+  def row(%Matrix{matrix: matrix}, index), do: Enum.at(matrix, index)
 
   @doc """
   Given a `matrix`, return its columns as a list of lists of integers.
   """
   @spec columns(matrix :: %Matrix{}) :: list(list(integer))
-  def columns(matrix) do
-    matrix.matrix
+  def columns(%Matrix{matrix: matrix}) do
+    matrix
     |> List.zip()
     |> Enum.map(&Tuple.to_list/1)
   end
@@ -68,8 +62,5 @@ defmodule Matrix do
     |> Enum.map(&String.to_integer/1)
   end
 
-  defp join_row(row) do
-    row
-    |> Enum.map_join(" ", &Integer.to_string/1)
-  end
+  defp join_row(row), do: Enum.map_join(row, " ", &Integer.to_string/1)
 end
