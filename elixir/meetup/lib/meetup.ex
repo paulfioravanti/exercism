@@ -42,7 +42,6 @@ defmodule Meetup do
   defp generate_date_range(year, month) do
     {:ok, start_date} = Date.new(year, month, 1)
     {:ok, end_date} = Date.new(year, month, Date.days_in_month(start_date))
-
     Date.range(start_date, end_date)
   end
 
