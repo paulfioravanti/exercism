@@ -19,11 +19,13 @@ defmodule PrimeFactors do
   def factors_for(1), do: []
   def factors_for(number), do: factors_for(number, @minimum_prime, [])
 
-  defp factors_for(number, quotient, acc) when final_factor?(number, quotient) do
+  defp factors_for(number, quotient, acc)
+       when final_factor?(number, quotient) do
     Enum.reverse(acc)
   end
 
-  defp factors_for(number, quotient, acc) when no_remainder?(number, quotient) do
+  defp factors_for(number, quotient, acc)
+       when no_remainder?(number, quotient) do
     number
     |> div(quotient)
     |> factors_for(quotient, [quotient | acc])
