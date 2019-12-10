@@ -1,21 +1,23 @@
 defmodule Phone do
-  @valid_number ~r/\A
-                 \+?1?                 # optional country code
-                 \s*                   # optional divider
-                 \(?                   # optional left parenthesis
-                 (?<area_code>
-                   [2-9]\d{2}          # area code
-                 )
-                 \)?                   # optional right parenthesis
-                 [-\.\s]*              # optional divider
-                 (?<exchange_code>
-                   [2-9]\d{2}          # exchange code
-                 )
-                 [-\.\s]*              # optional divider
-                 (?<subscriber_number>
-                   \d{4}               # subscriber number
-                 )
-                \z/x
+  @valid_number ~r/
+    \A
+    \+?1?                 # optional country code
+    \s*                   # optional divider
+    \(?                   # optional left parenthesis
+    (?<area_code>
+      [2-9]\d{2}          # area code
+    )
+    \)?                   # optional right parenthesis
+    [-\.\s]*              # optional divider
+    (?<exchange_code>
+      [2-9]\d{2}          # exchange code
+    )
+    [-\.\s]*              # optional divider
+    (?<subscriber_number>
+      \d{4}               # subscriber number
+    )
+    \z
+  /x
 
   @doc """
   Remove formatting from a phone number.
@@ -121,7 +123,5 @@ defmodule Phone do
     end
   end
 
-  defp phone_number_parts(raw) do
-    Regex.named_captures(@valid_number, raw)
-  end
+  defp phone_number_parts(raw), do: Regex.named_captures(@valid_number, raw)
 end
