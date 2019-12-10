@@ -7,7 +7,6 @@ defmodule Luhn do
   @spec valid?(String.t()) :: boolean
   def valid?(number) do
     number = String.replace(number, " ", "")
-
     valid_format?(number) and valid_value?(number)
   end
 
