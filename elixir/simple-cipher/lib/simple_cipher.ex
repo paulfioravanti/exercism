@@ -36,9 +36,7 @@ defmodule SimpleCipher do
   "abcabca". If the key is longer than the text, only use as many letters of it
   as are necessary.
   """
-  def encode(plaintext, key) do
-    shift(plaintext, key, &+/2)
-  end
+  def encode(plaintext, key), do: shift(plaintext, key, &+/2)
 
   @doc """
   Given a `ciphertext` and `key`, decode each character of the `ciphertext` by
@@ -50,9 +48,7 @@ defmodule SimpleCipher do
   but you will go the opposite way, so "d" becomes "a", "w" becomes "t",
   etc..., depending on how much you shift the alphabet.
   """
-  def decode(ciphertext, key) do
-    shift(ciphertext, key, &-/2)
-  end
+  def decode(ciphertext, key), do: shift(ciphertext, key, &-/2)
 
   defp shift(text, key, fun) do
     text
