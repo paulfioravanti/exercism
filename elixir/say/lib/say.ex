@@ -71,9 +71,7 @@ defmodule Say do
     {:ok, hypenated_word(number)}
   end
 
-  def in_english(number) do
-    {:ok, full_word(number)}
-  end
+  def in_english(number), do: {:ok, full_word(number)}
 
   defp hypenated_word(number) do
     [_tens, ones] = Integer.digits(number)
@@ -82,27 +80,22 @@ defmodule Say do
 
   defp full_word(0), do: ""
 
-  defp full_word(number) when up_to_twenty?(number) do
-    @number_words[number]
-  end
+  defp full_word(number) when up_to_twenty?(number), do: @number_words[number]
 
   defp full_word(number) when up_to_ninety_nine?(number) do
     hypenated_word(number)
   end
 
   defp full_word(number) when ten_thousand_up_to_one_million?(number) do
-    number
-    |> split_list_by_scale(@thousand)
+    split_list_by_scale(number, @thousand)
   end
 
   defp full_word(number) when ten_million_up_to_one_billion?(number) do
-    number
-    |> split_list_by_scale(@million)
+    split_list_by_scale(number, @million)
   end
 
   defp full_word(number) when ten_billion_up_to_one_trillion?(number) do
-    number
-    |> split_list_by_scale(@billion)
+    split_list_by_scale(number, @billion)
   end
 
   defp full_word(number) do
