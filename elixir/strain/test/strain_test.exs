@@ -1,10 +1,3 @@
-if !System.get_env("EXERCISM_TEST_EXAMPLES") do
-  Code.load_file("strain.exs", __DIR__)
-end
-
-ExUnit.start()
-ExUnit.configure(trace: true, exclude: :pending)
-
 defmodule StrainTest do
   use ExUnit.Case
 
@@ -30,9 +23,7 @@ defmodule StrainTest do
 
   test "keep strings" do
     words = ~w(apple zebra banana zombies cherimoya zelot)
-
-    assert Strain.keep(words, &String.starts_with?(&1, "z")) ==
-             ~w(zebra zombies zelot)
+    assert Strain.keep(words, &String.starts_with?(&1, "z")) == ~w(zebra zombies zelot)
   end
 
   test "keep arrays" do
@@ -72,9 +63,7 @@ defmodule StrainTest do
 
   test "discard strings" do
     words = ~w(apple zebra banana zombies cherimoya zelot)
-
-    assert Strain.discard(words, &String.starts_with?(&1, "z")) ==
-             ~w(apple banana cherimoya)
+    assert Strain.discard(words, &String.starts_with?(&1, "z")) == ~w(apple banana cherimoya)
   end
 
   test "discard arrays" do
@@ -88,10 +77,6 @@ defmodule StrainTest do
       [1, 2, 5]
     ]
 
-    assert Strain.discard(rows, fn row -> 5 in row end) == [
-             [1, 2, 3],
-             [2, 1, 2],
-             [2, 2, 1]
-           ]
+    assert Strain.discard(rows, fn row -> 5 in row end) == [[1, 2, 3], [2, 1, 2], [2, 2, 1]]
   end
 end
