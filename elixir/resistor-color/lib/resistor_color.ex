@@ -18,7 +18,5 @@ defmodule ResistorColor do
   def colors, do: @colors
 
   @spec code(String.t()) :: integer()
-  def code(color) do
-    Enum.find_index(colors(), &(&1 == color))
-  end
+  def code(color), do: Enum.find_index(colors(), &(&1 == color))
 end
