@@ -4,22 +4,14 @@ defmodule SumOfMultiples do
   """
   @spec to(non_neg_integer, [non_neg_integer]) :: non_neg_integer
   def to(limit, factors) do
-    limit
-    |> multiple_range()
+    1..(limit - 1)
     |> Stream.filter(&multiples?(factors, &1))
     |> Enum.sum()
   end
 
-  defp multiple_range(limit) do
-    1..(limit - 1)
-  end
-
   defp multiples?(factors, range_number) do
-    factors
-    |> Enum.any?(&multiple?(range_number, &1))
+    Enum.any?(factors, &multiple?(range_number, &1))
   end
 
-  defp multiple?(range_number, factor) do
-    rem(range_number, factor) == 0
-  end
+  defp multiple?(range_number, factor), do: rem(range_number, factor) == 0
 end
