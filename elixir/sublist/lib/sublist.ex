@@ -10,10 +10,10 @@ defmodule Sublist do
       a === b ->
         :equal
 
-      b |> contains?(a) ->
+      contains?(b, a) ->
         :sublist
 
-      a |> contains?(b) ->
+      contains?(a, b) ->
         :superlist
 
       true ->
@@ -21,9 +21,9 @@ defmodule Sublist do
     end
   end
 
-  defp contains?(x, y) when x |> shorter?(y), do: false
+  defp contains?(x, y) when shorter?(x, y), do: false
 
-  defp contains?(x, y) do
-    x |> List.starts_with?(y) or tl(x) |> contains?(y)
+  defp contains?([_x_head | x_tail] = x, y) do
+    List.starts_with?(x, y) or contains?(x_tail, y)
   end
 end
