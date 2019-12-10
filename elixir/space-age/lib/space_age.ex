@@ -25,9 +25,7 @@ defmodule SpaceAge do
   aged on 'planet'.
   """
   @spec age_on(planet, pos_integer) :: float
-  def age_on(:earth, seconds) do
-    seconds / @earth_orbital_period
-  end
+  def age_on(:earth, seconds), do: seconds / @earth_orbital_period
 
   def age_on(planet, seconds) do
     age_on(:earth, seconds) / Keyword.get(@orbital_factors, planet)
