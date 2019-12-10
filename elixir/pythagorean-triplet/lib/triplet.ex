@@ -40,7 +40,9 @@ defmodule Triplet do
   @doc """
   Generates a list of pythagorean triplets from a given min to a given max, whose values add up to a given sum.
   """
-  @spec generate(non_neg_integer, non_neg_integer, non_neg_integer) :: [list(non_neg_integer)]
+  @spec generate(non_neg_integer, non_neg_integer, non_neg_integer) :: [
+          list(non_neg_integer)
+        ]
   def generate(min, max, sum) do
     generate(min, max)
     |> Enum.filter(&same_sum?(sum, &1))
