@@ -83,18 +83,14 @@ defmodule TwelveDays do
   Sing all 12 verses, in order, one verse per line.
   """
   @spec sing() :: String.t()
-  def sing do
-    verses(1, 12)
-  end
+  def sing, do: verses(1, 12)
 
   defp cardinal_from_ordinal(ordinal) do
-    @cardinals
-    |> Map.get(ordinal, remove_ordinal_ending(ordinal))
+    Map.get(@cardinals, ordinal, remove_ordinal_ending(ordinal))
   end
 
   defp remove_ordinal_ending(ordinal) do
-    ordinal
-    |> String.replace(@ordinal_ending, "")
+    String.replace(ordinal, @ordinal_ending, "")
   end
 
   defp calculate_extra_gifts(index) do
