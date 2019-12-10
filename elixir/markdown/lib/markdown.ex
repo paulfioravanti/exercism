@@ -99,7 +99,11 @@ defmodule Markdown do
   end
 
   defp replace_prefix(@strong_attribute <> rest), do: @open_strong_tag <> rest
-  defp replace_prefix(@emphasis_attribute <> rest), do: @open_emphasis_tag <> rest
+
+  defp replace_prefix(@emphasis_attribute <> rest) do
+    @open_emphasis_tag <> rest
+  end
+
   defp replace_prefix(word), do: word
 
   defp replace_suffix(word) do
