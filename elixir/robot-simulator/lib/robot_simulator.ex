@@ -91,11 +91,9 @@ defmodule RobotSimulator do
     |> turn(robot)
   end
 
-  def advance(robot) do
-    {x, y} = robot.position
-
+  def advance(%RobotSimulator{position: {x, y}, direction: direction} = robot) do
     new_position =
-      case robot.direction do
+      case direction do
         :north ->
           {x, y + 1}
 
@@ -112,15 +110,9 @@ defmodule RobotSimulator do
     %RobotSimulator{robot | position: new_position}
   end
 
-  defp turn(new_bearings, robot) do
-    index =
-      @bearings
-      |> Enum.find_index(&(&1 == robot.direction))
-
-    new_direction =
-      new_bearings
-      |> Enum.fetch!(index)
-
+  defp turn(new_bearings, %RobotSimulator{direction: direction} = robot) do
+    index = Enum.find_index(@bearings, &(&1 == direction))
+    new_direction = Enum.fetch!(new_bearings, index)
     %RobotSimulator{robot | direction: new_direction}
   end
 
