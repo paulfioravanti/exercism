@@ -1,10 +1,3 @@
-if !System.get_env("EXERCISM_TEST_EXAMPLES") do
-  Code.load_file("rle.exs", __DIR__)
-end
-
-ExUnit.start()
-ExUnit.configure(exclude: :pending, trace: true)
-
 defmodule RunLengthEncoderTest do
   use ExUnit.Case
 
@@ -21,9 +14,7 @@ defmodule RunLengthEncoderTest do
   end
 
   test "encode single characters mixed with repeated characters" do
-    assert RunLengthEncoder.encode(
-             "WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB"
-           ) ===
+    assert RunLengthEncoder.encode("WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB") ===
              "12WB12W3B24WB"
   end
 

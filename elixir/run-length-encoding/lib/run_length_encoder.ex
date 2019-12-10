@@ -15,16 +15,14 @@ defmodule RunLengthEncoder do
   def encode(""), do: ""
 
   def encode(string) do
-    @consecutive_data_elements
-    |> Regex.replace(string, &compress/2)
+    Regex.replace(@consecutive_data_elements, string, &compress/2)
   end
 
   @spec decode(String.t()) :: String.t()
   def decode(""), do: ""
 
   def decode(string) do
-    @run_length_encoding
-    |> Regex.replace(string, &reconstruct/1)
+    Regex.replace(@run_length_encoding, string, &reconstruct/1)
   end
 
   defp compress(whole_match, letter) do
