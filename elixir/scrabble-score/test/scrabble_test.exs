@@ -1,11 +1,4 @@
-if !System.get_env("EXERCISM_TEST_EXAMPLES") do
-  Code.load_file("scrabble.exs", __DIR__)
-end
-
-ExUnit.start()
-ExUnit.configure(exclude: :pending, trace: true)
-
-defmodule ScrabbleScoreTest do
+defmodule ScrabbleTest do
   use ExUnit.Case
 
   test "empty word scores zero" do
