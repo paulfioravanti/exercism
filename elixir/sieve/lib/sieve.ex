@@ -13,14 +13,8 @@ defmodule Sieve do
 
   defp mark_composites(limit) do
     primes_range = primes_range(limit)
-
-    primes_limit =
-      limit
-      |> :math.sqrt()
-      |> floor()
-
-    primes_limit..2
-    |> Enum.reduce(primes_range, &check_composite(limit, &1, &2))
+    primes_limit = primes_limit(limit)
+    Enum.reduce(primes_limit..2, primes_range, &check_composite(limit, &1, &2))
   end
 
   defp primes_range(limit) do
@@ -29,11 +23,19 @@ defmodule Sieve do
     |> Enum.into(%{})
   end
 
+  defp primes_limit(limit) do
+    limit
+    |> :math.sqrt()
+    |> floor()
+  end
+
   defp check_composite(limit, number, acc) do
-    if acc[number] == :composite do
-      acc
-    else
-      mark_multiples_as_composites(limit, number, acc)
+    case acc[number] do
+      :composite ->
+        acc
+
+      :prime ->
+        mark_multiples_as_composites(limit, number, acc)
     end
   end
 
