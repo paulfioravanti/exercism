@@ -14,12 +14,7 @@ defmodule NucleotideCount do
   """
   @spec count([char], char) :: non_neg_integer
   def count(strand, nucleotide) do
-    Enum.reduce(strand, 0, fn char, count ->
-      case char do
-        ^nucleotide -> count + 1
-        _ -> count
-      end
-    end)
+    Enum.reduce(strand, 0, &increment_nucleotide(nucleotide, &1, &2))
   end
 
   @doc """
@@ -32,16 +27,14 @@ defmodule NucleotideCount do
   """
   @spec histogram([char]) :: map
   def histogram(strand) do
-    Enum.reduce(strand, initial_nucleotides(), fn char, histogram ->
-      Map.update(histogram, char, 1, fn value ->
-        value + 1
-      end)
-    end)
+    Enum.reduce(strand, initial_nucleotides(), &increment_histogram/2)
   end
 
+  defp increment_nucleotide(nucleotide, nucleotide, acc), do: acc + 1
+  defp increment_nucleotide(_nucleotide, _char, acc), do: acc
+  defp increment_histogram(char, acc), do: Map.update(acc, char, 1, &(&1 + 1))
+
   defp initial_nucleotides do
-    Enum.reduce(@nucleotides, %{}, fn elem, map ->
-      Map.put(map, elem, 0)
-    end)
+    Enum.reduce(@nucleotides, %{}, &Map.put(&2, &1, 0))
   end
 end
