@@ -20,17 +20,15 @@ defmodule PerfectNumbers do
   def classify(1), do: {:ok, :deficient}
 
   def classify(number) do
-    aliquot_sum = aliquot_sum(number)
-
     classification =
-      cond do
-        aliquot_sum > number ->
+      case aliquot_sum(number) do
+        sum when sum > number ->
           :abundant
 
-        aliquot_sum == number ->
+        sum when sum == number ->
           :perfect
 
-        true ->
+        _less_than ->
           :deficient
       end
 
@@ -38,19 +36,16 @@ defmodule PerfectNumbers do
   end
 
   defp aliquot_sum(number) do
-    1..(number - 1)
-    |> Enum.reduce(0, &add_factor(number, &1, &2))
+    Enum.reduce(1..(number - 1), 0, &add_factor(number, &1, &2))
   end
 
   defp add_factor(number, candidate_factor, acc) do
-    if factor?(number, candidate_factor) do
-      acc + candidate_factor
-    else
-      acc
-    end
-  end
+    case rem(number, candidate_factor) do
+      0 ->
+        acc + candidate_factor
 
-  defp factor?(number, candidate_factor) do
-    rem(number, candidate_factor) == 0
+      _num ->
+        acc
+    end
   end
 end
