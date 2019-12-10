@@ -23,15 +23,13 @@ defmodule Minesweeper do
     |> Enum.join()
   end
 
+  defp annotate_character({_y_index, _board}, {@mine, _x_index}), do: @mine
+
   defp annotate_character({y_index, board}, {char, x_index}) do
-    if char == @mine do
-      char
-    else
-      board
-      |> adjacent_coordinates(y_index, x_index)
-      |> Enum.reduce(0, &sum_mine(board, &1, &2))
-      |> substitute_character(char)
-    end
+    board
+    |> adjacent_coordinates(y_index, x_index)
+    |> Enum.reduce(0, &sum_mine(board, &1, &2))
+    |> substitute_character(char)
   end
 
   defp adjacent_coordinates(board, y_index, x_index) do
@@ -89,7 +87,13 @@ defmodule Minesweeper do
       |> String.codepoints()
       |> Enum.at(x)
 
-    if char == @mine, do: acc + 1, else: acc
+    case char do
+      @mine ->
+        acc + 1
+
+      _other ->
+        acc
+    end
   end
 
   defp substitute_character(sum, char), do: if(sum > 0, do: sum, else: char)
