@@ -14,9 +14,6 @@ defmodule Triangle do
       |> Enum.uniq()
       |> Enum.count()
       |> determine_triangle_type()
-    else
-      err ->
-        err
     end
   end
 
