@@ -1,4 +1,4 @@
-defmodule RNATranscription do
+defmodule RnaTranscription do
   @rna_transcriptions %{
     ?A => ?U,
     ?C => ?G,
@@ -15,13 +15,5 @@ defmodule RNATranscription do
   'UGAC'
   """
   @spec to_rna([char]) :: [char]
-  def to_rna(dna) do
-    dna
-    |> Enum.map(&rna_transcription/1)
-  end
-
-  defp rna_transcription(dna) do
-    @rna_transcriptions
-    |> Map.fetch!(dna)
-  end
+  def to_rna(dna), do: Enum.map(dna, &Map.fetch!(@rna_transcriptions, &1))
 end
