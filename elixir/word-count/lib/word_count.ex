@@ -1,4 +1,4 @@
-defmodule Words do
+defmodule WordCount do
   @non_alphanumeric_or_dashes ~r([^[:alnum:]\-])u
 
   @doc """
@@ -20,8 +20,6 @@ defmodule Words do
   end
 
   defp increment_tally_for_word(word, acc) do
-    Map.update(acc, word, 1, fn tally ->
-      tally + 1
-    end)
+    Map.update(acc, word, 1, &(&1 + 1))
   end
 end
