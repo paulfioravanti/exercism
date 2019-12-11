@@ -9,8 +9,7 @@ class Transcriptor {
   toRna(dna: string): string {
     const codons = [...dna]
     this.validateSequence(codons)
-    const rna =
-      codons.map(codon => RNA_TRANSCRIPTIONS[codon]).join("")
+    const rna = codons.map(codon => RNA_TRANSCRIPTIONS[codon]).join("")
     return rna
   }
 
