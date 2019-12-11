@@ -27,4 +27,5 @@ rust/
 scala/
 scheme/
 swift/
+typescript/**/node_modules
 **/.exercism/
