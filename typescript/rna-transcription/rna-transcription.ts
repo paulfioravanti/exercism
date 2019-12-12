@@ -1,28 +1,25 @@
-enum RNA_TRANSCRIPTIONS {
-  A = "U",
-  C = "G",
-  G = "C",
-  T = "A"
-}
+type DNA = "C" | "G" | "A" | "T"
+type RNA = "G" | "C" | "U" | "A"
+type MaybeRNA = RNA | never
 
 class Transcriptor {
+  RNA_TRANSCRIPTIONS: {[nucleotide in DNA]: RNA} = {
+    C: "G",
+    G: "C",
+    A: "U",
+    T: "A"
+  }
+
   toRna(dna: string): string {
-    const codons = [...dna]
-    this.validateSequence(codons)
-    const rna = codons.map(codon => RNA_TRANSCRIPTIONS[codon]).join("")
-    return rna
+    return [...dna].map(this.translateNucleotide).join("")
   }
 
-  private validateSequence(
-    codons: string[]
-  ): asserts codons is Array<keyof typeof RNA_TRANSCRIPTIONS> {
-    if (!codons.every(this.isValidCodon)) {
-      throw Error("Invalid input DNA.")
-    }
+  private translateNucleotide = (nucleotide: string): MaybeRNA => {
+    return this.RNA_TRANSCRIPTIONS[nucleotide as DNA] || this.throwInvalidDna()
   }
 
-  private isValidCodon(codon: string): codon is keyof typeof RNA_TRANSCRIPTIONS {
-    return codon in RNA_TRANSCRIPTIONS
+  private throwInvalidDna(): never {
+    throw new Error("Invalid input DNA.")
   }
 }
 
