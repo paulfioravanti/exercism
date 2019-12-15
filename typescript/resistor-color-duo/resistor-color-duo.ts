@@ -12,8 +12,8 @@ type Color =
 type ColorValue = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 
 export class ResistorColor {
-  private MAX_COLORS = 2
-  private RESISTOR_VALUES: Record<Color, ColorValue> = {
+  private readonly MAX_COLORS = 2
+  private readonly RESISTOR_VALUES: Record<Color, ColorValue> = {
     black: "0",
     brown: "1",
     red: "2",
@@ -25,7 +25,7 @@ export class ResistorColor {
     grey: "8",
     white: "9"
   }
-  private colors: Color[]
+  private readonly colors: Color[]
 
   constructor(colors: Color[]) {
     if (colors.length < this.MAX_COLORS) {
@@ -39,7 +39,7 @@ export class ResistorColor {
     return parseInt(this.colors.reduce(this.addResistorValue, ""))
   }
 
-  private addResistorValue = (acc: string, color: string): string => {
-    return acc + this.RESISTOR_VALUES[color as Color]
+  private addResistorValue = (acc: string, color: Color): string => {
+    return acc + this.RESISTOR_VALUES[color]
   }
 }
