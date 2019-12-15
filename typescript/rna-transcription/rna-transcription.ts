@@ -3,7 +3,7 @@ type RNA = "G" | "C" | "U" | "A"
 type MaybeRNA = RNA | never
 
 class Transcriptor {
-  RNA_TRANSCRIPTIONS: {[nucleotide in DNA]: RNA} = {
+  RNA_TRANSCRIPTIONS: Record<DNA, RNA> = {
     C: "G",
     G: "C",
     A: "U",
@@ -11,7 +11,10 @@ class Transcriptor {
   }
 
   toRna(dna: string): string {
-    return [...dna].map(this.translateNucleotide).join("")
+    return dna
+      .split("")
+      .map(this.translateNucleotide)
+      .join("")
   }
 
   private translateNucleotide = (nucleotide: string): MaybeRNA => {
