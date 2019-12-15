@@ -1,5 +1,5 @@
 class TwoFer {
-  public static twoFer(name: string = "you"): string {
+  static twoFer(name: string = "you"): string {
     return `One for ${name}, one for me.`
   }
 }
