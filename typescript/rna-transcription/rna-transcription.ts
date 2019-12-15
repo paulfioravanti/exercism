@@ -3,7 +3,7 @@ type RNA = "G" | "C" | "U" | "A"
 type MaybeRNA = RNA | never
 
 class Transcriptor {
-  RNA_TRANSCRIPTIONS: Record<DNA, RNA> = {
+  private RNA_TRANSCRIPTIONS: Record<DNA, RNA> = {
     C: "G",
     G: "C",
     A: "U",
