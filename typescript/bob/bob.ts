@@ -16,20 +16,17 @@ class Bob {
   }
 
   private respondToVerbalRemark(remark: string): string {
-    const shoutingQuestion: string = [
-      this.isQuestion(remark),
-      this.isShouting(remark)
-    ].join()
+    const isQuestion: boolean = this.isQuestion(remark)
+    const isShouting: boolean = this.isShouting(remark)
 
-    switch (shoutingQuestion) {
-      case "true,true":
-        return "Calm down, I know what I'm doing!"
-      case "true,false":
-        return "Sure."
-      case "false,true":
-        return "Whoa, chill out!"
-      default:
-        return "Whatever."
+    if (isQuestion && isShouting) {
+      return "Calm down, I know what I'm doing!"
+    } else if (isQuestion) {
+      return "Sure."
+    } else if (isShouting) {
+      return "Whoa, chill out!"
+    } else {
+      return "Whatever."
     }
   }
 
