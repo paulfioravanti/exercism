@@ -13,7 +13,7 @@ fsharp/
 go/
 haskell/
 java/
-javascript/
+javascript/**/node_modules
 lfe/
 lisp/
 lua/
