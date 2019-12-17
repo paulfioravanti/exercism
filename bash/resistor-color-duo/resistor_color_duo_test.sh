@@ -29,6 +29,7 @@
 
 @test "invalid color" {
     run bash resistor_color_duo.sh foo
+    echo $output
     [[ $status -eq 1 ]]
     [[ $output == *"invalid color"* ]]
 }
