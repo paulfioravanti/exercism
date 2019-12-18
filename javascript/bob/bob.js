@@ -1,5 +1,3 @@
-const LETTERS = /[A-Za-z]/i
-
 export const hey = message => {
   const remark = message.trim()
 
@@ -40,3 +38,5 @@ function isShouting(remark) {
 function hasLetters(remark) {
   return LETTERS.test(remark)
 }
+
+const LETTERS = /[A-Za-z]/i
