@@ -1,5 +1,11 @@
+export const age = (planet, seconds) => {
+  return parseFloat(
+    (seconds / EARTH_ORBITAL_PERIOD / ORBITAL_FACTORS[planet]).toFixed(2)
+  )
+}
+
 const EARTH_ORBITAL_PERIOD = 31557600.0
-const ORBITAL_FACTORS = {
+const ORBITAL_FACTORS = Object.freeze({
   earth: 1,
   mercury: 0.2408467,
   venus: 0.61519726,
@@ -8,10 +14,4 @@ const ORBITAL_FACTORS = {
   saturn: 29.447498,
   uranus: 84.016846,
   neptune: 164.79132
-}
-
-export const age = (planet, seconds) => {
-  return Number(
-    (seconds / EARTH_ORBITAL_PERIOD / ORBITAL_FACTORS[planet]).toFixed(2)
-  )
-}
+})
