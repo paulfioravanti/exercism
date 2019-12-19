@@ -8,7 +8,7 @@ main () {
     echo "Invalid nucleotide detected."
     exit 1
   fi
-  echo "$1" | tr "$DNA" "$RNA"
+  echo "$1" | tr $DNA $RNA
 }
 
 main "$@"
