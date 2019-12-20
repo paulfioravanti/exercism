@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-declare -A RESISTOR_VALUES=(
+declare -rA RESISTOR_VALUES=(
   ["black"]=0
   ["brown"]=1
   ["red"]=2
@@ -14,10 +14,10 @@ declare -A RESISTOR_VALUES=(
 )
 
 main () {
-  resistance=""
+  local resistance=""
 
   for color in $1 $2; do
-    local value=${RESISTOR_VALUES[${color}]}
+    local value=${RESISTOR_VALUES[$color]}
 
     if [[ -z $value ]]; then
       echo "invalid color"
@@ -27,7 +27,7 @@ main () {
     resistance+=$value
   done
 
-  echo "${resistance}"
+  echo "$resistance"
 }
 
 main "$@"
