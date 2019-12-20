@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-declare -r EARTH_ORBITAL_PERIOD=31557600.0
+declare -ri EARTH_ORBITAL_PERIOD=31557600
 declare -rA ORBITAL_FACTORS=(
-  ["Earth"]=1.0
+  ["Earth"]=1
   ["Mercury"]=0.2408467
   ["Venus"]=0.61519726
   ["Mars"]=1.8808158
