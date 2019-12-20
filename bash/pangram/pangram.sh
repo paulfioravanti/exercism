@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
-NUMBER_OF_LETTERS_IN_ALPHABET=26
+declare -ri NUMBER_OF_LETTERS_IN_ALPHABET=26
 
 main () {
-  count=$(letter_count "$1")
-  if [[ $count -eq $NUMBER_OF_LETTERS_IN_ALPHABET ]]; then
+  if [[ $(letter_count "$1") -eq $NUMBER_OF_LETTERS_IN_ALPHABET ]]; then
     echo "true"
   else
     echo "false"
