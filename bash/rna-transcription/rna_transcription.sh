@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-DNA="CGAT"
-RNA="GCUA"
+declare -r DNA="CGAT"
+declare -r RNA="GCUA"
 
 main () {
   if [[ $1 =~ [^$DNA] ]]; then
