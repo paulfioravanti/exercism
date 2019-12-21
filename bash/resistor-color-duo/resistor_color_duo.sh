@@ -17,17 +17,23 @@ main () {
   local resistance=""
 
   for color in $1 $2; do
-    local value=${RESISTOR_VALUES[$color]}
-
-    if [[ -z $value ]]; then
-      echo "invalid color"
-      exit 1
-    fi
-
-    resistance+=$value
+    add_color_value
   done
 
   echo "$resistance"
+}
+
+add_color_value () {
+  local value=${RESISTOR_VALUES[$color]}
+  check_value
+  resistance+=$value
+}
+
+check_value () {
+  if [[ -z $value ]]; then
+    echo "invalid color"
+    exit 1
+  fi
 }
 
 main "$@"
