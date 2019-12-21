@@ -5,9 +5,8 @@ declare -ri CENTURIAL_YEAR=100
 declare -r YEAR="^[0-9]{4}$"
 
 main () {
-  if [[ ! "$*" =~ $YEAR ]]; then
-    usage
-  fi
+  check_arguments "$@"
+
   local -r year=$1
 
   if leap && (centurial || leap_cycle); then
@@ -17,9 +16,11 @@ main () {
   fi
 }
 
-usage () {
-  echo "Usage: leap.sh <year>"
-  exit 1
+check_arguments () {
+  if [[ ! "$*" =~ $YEAR ]]; then
+    echo "Usage: leap.sh <year>"
+    exit 1
+  fi
 }
 
 leap () {
