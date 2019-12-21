@@ -3,19 +3,17 @@
 declare -ri NUMBER_OF_LETTERS_IN_ALPHABET=26
 
 main () {
-  if pangram "$@"; then
+  local -r sentence=$1
+
+  if [[ $(letter_count) -eq $NUMBER_OF_LETTERS_IN_ALPHABET ]]; then
     echo true
   else
     echo false
   fi
 }
 
-pangram () {
-  [[ $(letter_count "$@") -eq $NUMBER_OF_LETTERS_IN_ALPHABET ]]
-}
-
 letter_count () {
-  echo "$1" |
+  echo "$sentence" |
   tr "[:upper:]" "[:lower:]" | # lowercase the string
   tr -cd "[:alpha:]" |         # remove non-alpha characters
   grep --only-matching . |     # put each character on a new line
