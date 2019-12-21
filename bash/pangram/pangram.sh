@@ -3,11 +3,15 @@
 declare -ri NUMBER_OF_LETTERS_IN_ALPHABET=26
 
 main () {
-  if [[ $(letter_count "$1") -eq $NUMBER_OF_LETTERS_IN_ALPHABET ]]; then
-    echo "true"
+  if pangram "$@"; then
+    echo true
   else
-    echo "false"
+    echo false
   fi
+}
+
+pangram () {
+  [[ $(letter_count "$@") -eq $NUMBER_OF_LETTERS_IN_ALPHABET ]]
 }
 
 letter_count () {
