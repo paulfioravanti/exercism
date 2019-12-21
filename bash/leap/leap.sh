@@ -8,15 +8,9 @@ main () {
   if [[ ! "$*" =~ $YEAR ]]; then
     usage
   fi
+  local -r year=$1
 
-  if [[
-    $(leap "$1") -eq 0 &&
-    (
-      $(centurial "$1") -ne 0 ||
-      $(leap_cycle "$1") -eq 0
-    )
-  ]]
-  then
+  if leap && (centurial || leap_cycle); then
     echo true
   else
     echo false
@@ -29,16 +23,16 @@ usage () {
 }
 
 leap () {
-  echo "$1" % $LEAP_YEAR
+  [[ "$year % $LEAP_YEAR" -eq 0 ]]
 }
 
 centurial () {
-  echo "$1" % $CENTURIAL_YEAR
+  [[ "$year % $CENTURIAL_YEAR" -ne 0 ]]
 }
 
 leap_cycle () {
   local -ri leap_cycle_length="$LEAP_YEAR * $CENTURIAL_YEAR"
-  echo "$1" % "$leap_cycle_length"
+  [[ "$year % $leap_cycle_length" -eq 0 ]]
 }
 
 main "$@"
