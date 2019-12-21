@@ -14,15 +14,20 @@ declare -rA ORBITAL_FACTORS=(
 
 main () {
   local -r factor="${ORBITAL_FACTORS[$1]}"
+  check_factor
+  local -ri seconds=$2
+  printf "%.2f" "$(space_age)"
+}
+
+check_factor () {
   if [[ -z $factor ]]; then
     echo "not a planet"
     exit 1
   fi
-  printf "%.2f" "$(space_age "$factor" "$2")"
 }
 
 space_age () {
-  bc <<< "scale=3; $2 / $EARTH_ORBITAL_PERIOD / $1"
+  bc <<< "scale=3; $seconds / $EARTH_ORBITAL_PERIOD / $factor"
 }
 
 main "$@"
