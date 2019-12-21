@@ -4,11 +4,16 @@ declare -r DNA="CGAT"
 declare -r RNA="GCUA"
 
 main () {
-  if [[ $1 =~ [^$DNA] ]]; then
+  local -r dna=$1
+  check_dna
+  echo "$dna" | tr $DNA $RNA
+}
+
+check_dna () {
+  if [[ $dna =~ [^$DNA] ]]; then
     echo "Invalid nucleotide detected."
     exit 1
   fi
-  echo "$1" | tr $DNA $RNA
 }
 
 main "$@"
