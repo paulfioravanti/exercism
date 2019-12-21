@@ -41,5 +41,4 @@ leap_cycle () {
   echo "$1" % "$leap_cycle_length"
 }
 
-
 main "$@"
