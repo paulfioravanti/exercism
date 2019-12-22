@@ -8,7 +8,8 @@ elisp/
 elixir/erl_crash.dump
 elm/**/elm-stuff
 elm/**/node_modules
-erlang/
+erlang/**/_build
+erlang/erl_crash.dump
 fsharp/
 go/
 haskell/
