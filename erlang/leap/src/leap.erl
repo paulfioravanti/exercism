@@ -8,7 +8,7 @@
 
 
 leap_year(Year) ->
-  is_leap(Year) and (is_non_centurial(Year) or is_leap_cycle(Year)).
+  is_leap(Year) andalso (is_non_centurial(Year) orelse is_leap_cycle(Year)).
 
 % Private
 
