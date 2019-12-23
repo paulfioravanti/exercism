@@ -1,3 +1,10 @@
+const RNA_TRANSCRIPTIONS = Object.freeze({
+  C: "G",
+  G: "C",
+  A: "U",
+  T: "A"
+})
+
 export const toRna = dna => {
   return dna
     .split("")
@@ -8,10 +15,3 @@ export const toRna = dna => {
 const translateNucleotide = nucleotide => {
   return RNA_TRANSCRIPTIONS[nucleotide]
 }
-
-const RNA_TRANSCRIPTIONS = Object.freeze({
-  C: "G",
-  G: "C",
-  A: "U",
-  T: "A"
-})
