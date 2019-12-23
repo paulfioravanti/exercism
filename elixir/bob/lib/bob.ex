@@ -1,11 +1,11 @@
 defmodule Bob do
   def hey(input) do
-    remark = String.trim(input)
+    case String.trim(input) do
+      "" ->
+        "Fine. Be that way!"
 
-    if silence?(remark) do
-      "Fine. Be that way!"
-    else
-      respond_to_verbal_remark(remark)
+      remark ->
+        respond_to_verbal_remark(remark)
     end
   end
 
@@ -25,7 +25,6 @@ defmodule Bob do
     end
   end
 
-  defp silence?(remark), do: remark == ""
   defp question?(remark), do: String.ends_with?(remark, "?")
 
   defp yelling?(remark) do
