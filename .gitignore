@@ -24,7 +24,7 @@ perl5/
 php/
 plsql/
 python/
-rust/
+rust/**/target
 scala/
 scheme/
 swift/
