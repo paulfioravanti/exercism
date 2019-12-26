@@ -2,6 +2,7 @@
 
 declare -ri LEAP_YEAR=4
 declare -ri CENTURIAL_YEAR=100
+declare -ri LEAP_CYCLE_LENGTH="$LEAP_YEAR * $CENTURIAL_YEAR"
 declare -r YEAR="^[0-9]{4}$"
 
 main () {
@@ -32,8 +33,7 @@ centurial () {
 }
 
 leap_cycle () {
-  local -ri leap_cycle_length="$LEAP_YEAR * $CENTURIAL_YEAR"
-  [[ "$year % $leap_cycle_length" -eq 0 ]]
+  [[ "$year % $LEAP_CYCLE_LENGTH" -eq 0 ]]
 }
 
 main "$@"
