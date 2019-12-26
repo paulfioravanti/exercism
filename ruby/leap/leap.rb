@@ -3,7 +3,7 @@ module Year
   private_constant :LEAP_YEAR
   CENTURIAL_YEAR = 100
   private_constant :CENTURIAL_YEAR
-  LEAP_CYCLE_LENGTH = 400
+  LEAP_CYCLE_LENGTH = LEAP_YEAR * CENTURIAL_YEAR
   private_constant :LEAP_CYCLE_LENGTH
 
   module_function
