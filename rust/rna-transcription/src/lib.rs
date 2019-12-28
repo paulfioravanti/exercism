@@ -25,7 +25,7 @@ pub struct RNA {
 }
 
 impl Dna {
-    fn parse((index, dna): (usize, char)) -> Result<Dna, usize> {
+    fn from_char((index, dna): (usize, char)) -> Result<Dna, usize> {
         match dna {
             'A' => Ok(Dna::A),
             'C' => Ok(Dna::C),
@@ -46,7 +46,7 @@ impl Dna {
 }
 
 impl Rna {
-    fn parse((index, rna): (usize, char)) -> Result<Rna, usize> {
+    fn from_char((index, rna): (usize, char)) -> Result<Rna, usize> {
         match rna {
             'C' => Ok(Rna::C),
             'G' => Ok(Rna::G),
@@ -59,7 +59,7 @@ impl Rna {
 
 impl DNA {
     pub fn new(dna: &str) -> Result<DNA, usize> {
-        let strand: Vec<Dna> = generate_strand(dna, Dna::parse)?;
+        let strand: Vec<Dna> = generate_strand(dna, Dna::from_char)?;
         Ok(DNA { strand })
     }
 
@@ -72,7 +72,7 @@ impl DNA {
 
 impl RNA {
     pub fn new(rna: &str) -> Result<RNA, usize> {
-        let strand: Vec<Rna> = generate_strand(rna, Rna::parse)?;
+        let strand: Vec<Rna> = generate_strand(rna, Rna::from_char)?;
         Ok(RNA { strand })
     }
 }
