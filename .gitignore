@@ -1,4 +1,7 @@
 # Remove language from .gitignore as exercises are done for it
+c/**/*.o
+c/**/*.out
+c/**/*.out.dSYM
 clojure/
 coffeescript/
 cpp/
