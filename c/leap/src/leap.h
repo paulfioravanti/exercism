@@ -15,5 +15,4 @@ bool is_non_centurial_year(int year);
 
 bool is_leap_year_cycle(int year);
 
-
 #endif
