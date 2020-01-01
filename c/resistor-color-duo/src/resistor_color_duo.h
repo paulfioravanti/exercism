@@ -1,7 +1,7 @@
 #ifndef RESISTOR_COLOR_DUO_H
 #define RESISTOR_COLOR_DUO_H
 
-typedef enum {
+typedef enum color {
   BLACK,
   BROWN,
   RED,
