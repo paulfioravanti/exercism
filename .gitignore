@@ -4,7 +4,7 @@ c/**/*.out
 c/**/*.out.dSYM
 clojure/
 coffeescript/
-cpp/
+cpp/**/build
 csharp/
 ecmascript/
 elisp/
