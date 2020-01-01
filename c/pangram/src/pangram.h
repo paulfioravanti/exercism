@@ -3,7 +3,7 @@
 
 #include <ctype.h> // tolower, isalpha
 #include <stdbool.h> // bool
-#include <string.h> // NULL, strdup, strlen
+#include <string.h> // NULL, strdup, strlen, size_t
 
 const int NUMBER_OF_LETTERS_IN_ALPHABET;
 
