@@ -3,7 +3,6 @@
 
 #include <ctype.h> // tolower, isalpha
 #include <stdbool.h> // bool
-#include <stdio.h> // sscanf
 #include <string.h> // NULL, strcpy
 
 const int NUMBER_OF_LETTERS_IN_ALPHABET;
