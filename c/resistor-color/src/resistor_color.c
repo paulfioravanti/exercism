@@ -1,6 +1,6 @@
 #include "resistor_color.h"
 
-const resistor_band_t COLORS[] = {
+static const resistor_band_t COLORS[NUM_COLORS] = {
   BLACK,
   BROWN,
   RED,
