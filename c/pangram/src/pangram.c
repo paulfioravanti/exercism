@@ -2,10 +2,6 @@
 
 const int NUMBER_OF_LETTERS_IN_ALPHABET = 26;
 
-bool is_empty(const char *sentence) {
-  return sentence[0] == '\0';
-}
-
 void parse_lower(char *sentence) {
   int count = 0;
 
@@ -40,12 +36,11 @@ int count_unique_characters(char* sentence) {
 }
 
 bool is_pangram(const char *sentence) {
-  if (sentence == NULL || is_empty(sentence)) {
+  if (sentence == NULL || !strlen(sentence)) {
     return false;
   }
 
-  char pangram[strlen(sentence)];
-  strcpy(pangram, sentence);
+  char *pangram = strdup(sentence);
   parse_lower(pangram);
   return count_unique_characters(pangram) == NUMBER_OF_LETTERS_IN_ALPHABET;
 }

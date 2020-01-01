@@ -3,11 +3,9 @@
 
 #include <ctype.h> // tolower, isalpha
 #include <stdbool.h> // bool
-#include <string.h> // NULL, strcpy, strlen
+#include <string.h> // NULL, strdup, strlen
 
 const int NUMBER_OF_LETTERS_IN_ALPHABET;
-
-bool is_empty(const char *sentence);
 
 void parse_lower(char *str);
 
