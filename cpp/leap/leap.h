@@ -2,9 +2,9 @@
 #define LEAP_H
 
 namespace leap {
-  const int LEAP_YEAR = 4;
-  const int CENTURIAL_YEAR = 100;
-  const int LEAP_CYCLE_LENGTH = LEAP_YEAR * CENTURIAL_YEAR;
+  static const int LEAP_YEAR = 4;
+  static const int CENTURIAL_YEAR = 100;
+  static const int LEAP_CYCLE_LENGTH = LEAP_YEAR * CENTURIAL_YEAR;
 
   bool is_leap_year(int year);
 
