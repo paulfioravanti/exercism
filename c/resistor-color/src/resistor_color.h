@@ -3,7 +3,7 @@
 
 #define NUM_COLORS 10
 
-typedef enum {
+typedef enum color {
   BLACK,
   BROWN,
   RED,
