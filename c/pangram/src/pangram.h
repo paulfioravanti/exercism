@@ -5,7 +5,7 @@
 #include <stdbool.h> // bool
 #include <string.h> // NULL, strdup, strlen, size_t
 
-const int NUMBER_OF_LETTERS_IN_ALPHABET;
+static const int NUMBER_OF_LETTERS_IN_ALPHABET = 26;
 
 bool is_pangram(const char *sentence);
 

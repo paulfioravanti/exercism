@@ -1,7 +1,5 @@
 #include "pangram.h"
 
-const int NUMBER_OF_LETTERS_IN_ALPHABET = 26;
-
 bool is_pangram(const char *sentence) {
   if (sentence == NULL || !strlen(sentence)) {
     return false;
