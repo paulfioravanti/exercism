@@ -4,7 +4,7 @@
 #include <string>
 
 namespace two_fer {
-  std::string two_fer(std::string name = "you");
+  std::string two_fer(const std::string &name = "you");
 }
 
 #endif
