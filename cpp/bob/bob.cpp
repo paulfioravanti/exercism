@@ -22,7 +22,7 @@ namespace bob {
   }
 
   bool is_silence(const string greeting) {
-    return all_of(greeting.begin(), greeting.end(), isspace);
+    return greeting.empty();
   }
 
   const string respond_to_verbal_greeting(const string greeting) {
