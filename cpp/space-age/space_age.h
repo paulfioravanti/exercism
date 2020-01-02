@@ -34,7 +34,6 @@ namespace space_age {
       double on_uranus() const;
       double on_neptune() const;
   };
-
 }
 
 #endif
