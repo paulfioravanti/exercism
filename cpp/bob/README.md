@@ -2,39 +2,25 @@
 
 Bob is a lackadaisical teenager. In conversation, his responses are very limited.
 
-Bob answers 'Sure.' if you ask him a question.
+Bob answers 'Sure.' if you ask him a question, such as "How are you?".
 
-He answers 'Whoa, chill out!' if you yell at him.
+He answers 'Whoa, chill out!' if you YELL AT HIM (in all capitals).
+
+He answers 'Calm down, I know what I'm doing!' if you yell a question at him.
 
 He says 'Fine. Be that way!' if you address him without actually saying
 anything.
 
 He answers 'Whatever.' to anything else.
 
-## Instructions
-
-Run the test file, and fix each of the errors in turn. When you get the
-first test to pass, go to the first pending or skipped test, and make
-that pass as well. When all of the tests are passing, feel free to
-submit.
-
-Remember that passing code is just the first step. The goal is to work
-towards a solution that is as readable and expressive as you can make
-it.
-
-Please make your solution as general as possible. Good code doesn't just
-pass the test suite, it works with any input that fits the
-specification.
-
-Have fun!
-
+Bob's conversational partner is a purist when it comes to written communication and always follows normal rules regarding sentence punctuation in English.
 
 ## Getting Started
 
-Make sure you have read the [getting started with C++](http://help.exercism.io/getting-started-with-cpp.html)
-page on the [exercism help site](http://help.exercism.io/).  This covers
-the basic information on setting up the development environment expected
-by the exercises.
+Make sure you have read the [Installing](https://exercism.io/tracks/cpp/installation) and
+[Running the Tests](https://exercism.io/tracks/cpp/tests) pages for C++ on exercism.io.
+This covers the basic information on setting up the development
+environment expected by the exercises.
 
 ## Passing the Tests
 
@@ -55,7 +41,7 @@ to get a failing test, then change the code minimally to pass the test,
 refactor your implementation for readability and expressiveness and then
 go on to the next test.
 
-Try to use standard C++11 facilities in preference to writing your own
+Try to use standard C++14 facilities in preference to writing your own
 low-level algorithms or facilities by hand.  [CppReference](http://en.cppreference.com/)
 is a wiki reference to the C++ language and standard library.  If you
 are new to C++, but have programmed in C, beware of
@@ -63,4 +49,7 @@ are new to C++, but have programmed in C, beware of
 
 ## Source
 
-Inspired by the 'Deaf Grandma' exercise in Chris Pine's Learn to Program tutorial. [view source](http://pine.fm/LearnToProgram/?Chapter=06)
+Inspired by the 'Deaf Grandma' exercise in Chris Pine's Learn to Program tutorial. [http://pine.fm/LearnToProgram/?Chapter=06](http://pine.fm/LearnToProgram/?Chapter=06)
+
+## Submitting Incomplete Solutions
+It's possible to submit an incomplete solution so you can see how others have completed the exercise.
