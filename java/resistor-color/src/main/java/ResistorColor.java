@@ -15,7 +15,7 @@ class ResistorColor {
     };
 
     int colorCode(String color) {
-        return List.<String>of(COLORS).indexOf(color);
+        return List.of(COLORS).indexOf(color);
     }
 
     String[] colors() {
