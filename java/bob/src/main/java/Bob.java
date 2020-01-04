@@ -1,8 +1,6 @@
 class Bob {
-    private static final String LETTER_INPUT = ".*[A-Za-z].*";
-
     String hey(String input) {
-        String remark = input.trim();
+        final String remark = input.trim();
 
         if (isSilence(remark)) {
             return "Fine. Be that way!";
@@ -16,8 +14,8 @@ class Bob {
     }
 
     private String respondToVerbalRemark(String remark) {
-        boolean question = isQuestion(remark);
-        boolean yelling = isYelling(remark);
+        final boolean question = isQuestion(remark);
+        final boolean yelling = isYelling(remark);
 
         if (question && yelling) {
             return "Calm down, I know what I'm doing!";
@@ -35,11 +33,10 @@ class Bob {
     }
 
     private boolean isYelling(String remark) {
-        String yelling = remark.toUpperCase();
-        return hasLetters(remark) && yelling.equals(remark);
+        return hasLetters(remark) && remark.toUpperCase().equals(remark);
     }
 
     private boolean hasLetters(String remark) {
-        return remark.matches(LETTER_INPUT);
+        return remark.chars().anyMatch(Character::isLetter);
     }
 }
