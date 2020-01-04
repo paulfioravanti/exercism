@@ -1,4 +1,4 @@
-import java.util.Arrays;
+import java.util.List;
 
 class ResistorColor {
     private static final String[] COLORS = {
@@ -15,7 +15,7 @@ class ResistorColor {
     };
 
     int colorCode(String color) {
-        return Arrays.asList(COLORS).indexOf(color);
+        return List.<String>of(COLORS).indexOf(color);
     }
 
     String[] colors() {
