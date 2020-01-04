@@ -60,6 +60,6 @@ class SpaceAge {
     }
 
     private double on(Planet planet) {
-      return this.seconds / EARTH_ORBITAL_PERIOD / planet.orbitalFactor;
+      return getSeconds() / EARTH_ORBITAL_PERIOD / planet.orbitalFactor;
     }
 }
