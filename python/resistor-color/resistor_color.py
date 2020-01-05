@@ -15,7 +15,7 @@ __COLORS = [
 ]
 
 
-def color_code(color: str):
+def color_code(color: str) -> int:
     return __COLORS.index(color)
 
 
