@@ -1,11 +1,10 @@
-from typing import Pattern
-import re
+from typing import Set
+import string
 
 
-__NON_ASCII_LETTERS: Pattern[str] = re.compile("[^a-z]")
-__NUMBER_OF_LETTERS_IN_ALPHABET: int = 26
+__ALPHABET: Set[str] = set(string.ascii_lowercase)
 
 
 def is_pangram(sentence: str) -> bool:
-    stripped: str = re.sub(__NON_ASCII_LETTERS, "", sentence.lower())
-    return len(set(stripped)) == __NUMBER_OF_LETTERS_IN_ALPHABET
+    unique_letters = set(sentence.lower())
+    return __ALPHABET.issubset(unique_letters)
