@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict
 from enum import Enum
 
 
@@ -25,8 +25,7 @@ __RNA_TRANSCRIPTIONS: Dict[Dna, Rna] = {
 
 
 def to_rna(dna_strand: str) -> str:
-    rna_nucleotides: List[str] = list(map(__translate_nucleotide, dna_strand))
-    return "".join(rna_nucleotides)
+    return "".join(map(__translate_nucleotide, dna_strand))
 
 
 def __translate_nucleotide(nucleotide: str) -> str:
