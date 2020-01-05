@@ -27,7 +27,8 @@ ocaml/
 perl5/
 php/
 plsql/
-python/
+python/**/__pycache__
+python/**/.pytest_cache
 rust/**/target
 scala/
 scheme/
