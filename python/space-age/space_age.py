@@ -25,7 +25,7 @@ class SpaceAge:
         Planet.NEPTUNE: 164.79132
     }
 
-    def __init__(self, seconds: int):
+    def __init__(self, seconds: int) -> None:
         self.seconds = seconds
 
     def on_earth(self) -> float:
