@@ -25,9 +25,7 @@ __RNA_TRANSCRIPTIONS: Dict[Dna, Rna] = {
 
 
 def to_rna(dna_strand: str) -> str:
-    rna_nucleotides: List[str] = list(
-        map(__translate_nucleotide, list(dna_strand))
-    )
+    rna_nucleotides: List[str] = list(map(__translate_nucleotide, dna_strand))
     return "".join(rna_nucleotides)
 
 
