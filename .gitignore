@@ -29,6 +29,7 @@ php/
 plsql/
 python/**/__pycache__
 python/**/.pytest_cache
+python/**/.mypy_cache
 rust/**/target
 scala/
 scheme/
