@@ -5,6 +5,7 @@ c/**/*.out.dSYM
 clojure/
 coffeescript/
 cpp/**/build
+crystal/**/~
 csharp/
 ecmascript/
 elisp/
