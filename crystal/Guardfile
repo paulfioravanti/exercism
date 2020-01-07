@@ -1,0 +1,4 @@
+guard "process", name: "Crystal", command: "crystal spec" do
+   watch %r{spec/.*}
+   watch %r{src/.*}
+end
