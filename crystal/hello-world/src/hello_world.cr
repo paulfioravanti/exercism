@@ -1,7 +1,7 @@
 module HelloWorld
   extend self
 
-  def hello
+  def hello : String
     "Hello, World!"
   end
 end
