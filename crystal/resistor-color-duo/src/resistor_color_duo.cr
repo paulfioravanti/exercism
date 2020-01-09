@@ -1,26 +1,24 @@
 module ResistorColorDuo
   extend self
 
-  private RESISTOR_VALUES = {
-    "black":  "0",
-    "brown":  "1",
-    "red":    "2",
-    "orange": "3",
-    "yellow": "4",
-    "green":  "5",
-    "blue":   "6",
-    "violet": "7",
-    "grey":   "8",
-    "white":  "9",
-  }
+  private RESISTOR_VALUES = StaticArray[
+    "black",
+    "brown",
+    "red",
+    "orange",
+    "yellow",
+    "green",
+    "blue",
+    "violet",
+    "grey",
+    "white",
+  ]
 
   def value(bands : Array(String)) : Int
-    bands
-      .reduce("", &->add_resistor_value(String, String))
-      .to_i
+    bands.reduce(0, &->add_resistor_value(Int32, String))
   end
 
-  private def add_resistor_value(acc : String, band : String) : String
-    acc + RESISTOR_VALUES[band]
+  private def add_resistor_value(acc : Int, band : String) : Int
+    (acc * 10) + (RESISTOR_VALUES.index(band) || 0)
   end
 end
