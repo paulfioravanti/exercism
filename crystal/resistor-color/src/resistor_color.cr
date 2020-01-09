@@ -1,24 +1,24 @@
 module ResistorColor
   extend self
 
-  private COLORS = StaticArray[
-    "black",
-    "brown",
-    "red",
-    "orange",
-    "yellow",
-    "green",
-    "blue",
-    "violet",
-    "grey",
-    "white",
-  ]
+  enum Color
+    Black
+    Brown
+    Red
+    Orange
+    Yellow
+    Green
+    Blue
+    Violet
+    Grey
+    White
+  end
 
-  def color_code(color : String) : Int32?
-    COLORS.index(color)
+  def color_code(color : String) : Int32
+    Color.parse(color).value
   end
 
   def colors : Array(String)
-    COLORS.to_a
+    Color.names.map(&.downcase)
   end
 end
