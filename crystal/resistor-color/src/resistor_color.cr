@@ -1,8 +1,6 @@
 module ResistorColor
   extend self
 
-  private alias MaybeInt = Int32 | Nil
-
   private COLORS = StaticArray[
     "black",
     "brown",
@@ -16,7 +14,7 @@ module ResistorColor
     "white",
   ]
 
-  def color_code(color : String) : MaybeInt
+  def color_code(color : String) : Int32?
     COLORS.index(color)
   end
 
