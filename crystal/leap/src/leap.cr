@@ -10,14 +10,14 @@ module Year
   end
 
   private def leap_year?(year : Int) : Bool
-    (year % LEAP_YEAR).zero?
+    year.divisible_by?(LEAP_YEAR)
   end
 
   private def non_centurial_year?(year : Int) : Bool
-    !(year % CENTURIAL_YEAR).zero?
+    !year.divisible_by?(CENTURIAL_YEAR)
   end
 
   private def leap_cycle_year?(year : Int) : Bool
-    (year % LEAP_CYCLE_LENGTH).zero?
+    year.divisible_by?(LEAP_CYCLE_LENGTH)
   end
 end
