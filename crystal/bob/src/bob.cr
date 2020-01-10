@@ -1,36 +1,41 @@
 module Bob
   extend self
 
-  def hey(remark : String) : String
-    if silence?(remark)
-      "Fine. Be that way!"
-    else
-      respond_to_verbal_remark(remark)
+  struct Remark
+    def initialize(@remark : String) : String
     end
+
+    def silence? : Bool
+      remark.blank?
+    end
+
+    def shouting_question? : Bool
+      shouting? && question?
+    end
+
+    def shouting? : Bool
+      remark == remark.upcase && remark != remark.downcase
+    end
+
+    def question? : Bool
+      remark.ends_with?("?")
+    end
+
+    private getter remark : String
   end
 
-  private def silence?(remark : String) : Bool
-    remark.blank?
-  end
-
-  private def respond_to_verbal_remark(remark : String) : String
-    case [question?(remark), shouting?(remark)]
-    when [true, true]
+  def hey(input : String) : String
+    case Remark.new(input)
+    when .silence?
+      "Fine. Be that way!"
+    when .shouting_question?
       "Calm down, I know what I'm doing!"
-    when [true, false]
+    when .question?
       "Sure."
-    when [false, true]
+    when .shouting?
       "Whoa, chill out!"
     else
       "Whatever."
     end
-  end
-
-  private def shouting?(remark : String) : Bool
-    remark == remark.upcase && remark != remark.downcase
-  end
-
-  private def question?(remark : String) : Bool
-    remark.ends_with?("?")
   end
 end
