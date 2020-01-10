@@ -1,8 +1,22 @@
+const DNA = Object.freeze({
+  C: 'C',
+  G: 'G',
+  A: 'A',
+  T: 'T'
+})
+
+const RNA = Object.freeze({
+  G: 'G',
+  C: 'C',
+  U: 'U',
+  A: 'A'
+})
+
 const RNA_TRANSCRIPTIONS = Object.freeze({
-  C: "G",
-  G: "C",
-  A: "U",
-  T: "A"
+  [DNA.C]: RNA.G,
+  [DNA.G]: RNA.C,
+  [DNA.A]: RNA.U,
+  [DNA.T]: RNA.A
 })
 
 export const toRna = dna => {
