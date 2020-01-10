@@ -2,17 +2,17 @@
 
 static char dna_to_rna(const char dna) {
   switch(dna) {
-    case 'G':
-      return 'C';
-    case 'C':
-      return 'G';
-    case 'T':
-      return 'A';
-    case 'A':
-      return 'U';
+    case DNA_G:
+      return RNA_C;
+    case DNA_C:
+      return RNA_G;
+    case DNA_T:
+      return RNA_A;
+    case DNA_A:
+      return RNA_U;
     default:
       return '\0';
-    }
+  }
 }
 
 char *to_rna(const char *dna) {
