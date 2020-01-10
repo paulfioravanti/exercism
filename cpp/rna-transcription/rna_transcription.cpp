@@ -4,7 +4,7 @@ using namespace std;
 
 namespace rna_transcription {
   char to_rna(const char dna) {
-    return RNA_TRANSCRIPTIONS[dna];
+    return RNA_TRANSCRIPTIONS[static_cast<Dna::Nucleotide>(dna)];
   }
 
   const string to_rna(const string dna_strand) {
