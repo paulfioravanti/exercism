@@ -1,9 +1,7 @@
 module Bob
   extend self
 
-  def hey(input : String) : String
-    remark : String = input.strip
-
+  def hey(remark : String) : String
     if silence?(remark)
       "Fine. Be that way!"
     else
@@ -12,7 +10,7 @@ module Bob
   end
 
   private def silence?(remark : String) : Bool
-    remark.empty?
+    remark.blank?
   end
 
   private def respond_to_verbal_remark(remark : String) : String
