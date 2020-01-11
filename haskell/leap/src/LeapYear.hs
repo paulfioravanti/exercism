@@ -1,7 +1,4 @@
-module LeapYear
-  ( isLeapYear
-  )
-where
+module LeapYear (isLeapYear) where
 
 isLeapYear :: Integer -> Bool
 isLeapYear year =
@@ -18,7 +15,7 @@ isNonCenturialYear year = mod year centurialYear /= 0
 isLeapCycleYear :: Integer -> Bool
 isLeapCycleYear year =
   let leapCycleLength = leapYear * centurialYear
-  in  mod year leapCycleLength == 0
+  in mod year leapCycleLength == 0
 
 leapYear :: Integer
 leapYear = 4
