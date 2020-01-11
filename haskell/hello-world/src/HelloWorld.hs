@@ -1,5 +1,7 @@
-module HelloWorld (hello) where
+module HelloWorld
+  ( hello
+  )
+where
 
 hello :: String
-hello =
-    "Hello, World!"
+hello = "Hello, World!"
