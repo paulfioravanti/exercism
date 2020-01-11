@@ -16,7 +16,7 @@ erlang/**/_build
 erlang/erl_crash.dump
 fsharp/
 go/
-haskell/
+haskell/**/.stack-work
 java/**/build
 java/**/.gradle
 javascript/**/node_modules
