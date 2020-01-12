@@ -3,7 +3,8 @@
 module Bob (responseFor) where
 
 import Data.Function ((&))
-import Data.Text as Text
+import Data.Text (Text)
+import qualified Data.Text as Text
 
 responseFor :: String -> String
 responseFor input =
