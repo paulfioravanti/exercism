@@ -8,9 +8,9 @@ import qualified Data.Text as Text
 
 responseFor :: String -> String
 responseFor input =
-  let parsed = input & Text.pack & Text.strip
+  let parsedInput = input & Text.pack & Text.strip
   in
-    case parsed of
+    case parsedInput of
       "" -> "Fine. Be that way!"
 
       remark -> respondToVerbalRemark remark
