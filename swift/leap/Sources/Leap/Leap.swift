@@ -14,14 +14,14 @@ struct Year {
   }
 
   private func isLeap() -> Bool {
-    calendarYear % Year.LEAP_YEAR == 0
+    calendarYear.isMultiple(of: Year.LEAP_YEAR)
   }
 
   private func isNonCenturialYear() -> Bool {
-    calendarYear % Year.CENTURIAL_YEAR != 0
+    !calendarYear.isMultiple(of: Year.CENTURIAL_YEAR)
   }
 
   private func isLeapCycleYear() -> Bool {
-    calendarYear % Year.LEAP_CYCLE_LENGTH == 0
+    calendarYear.isMultiple(of: Year.LEAP_CYCLE_LENGTH)
   }
 }
