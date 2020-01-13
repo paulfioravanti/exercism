@@ -4,6 +4,8 @@ using namespace std;
 
 namespace pangram {
   bool is_pangram(const string sentence) {
+    using namespace detail;
+
     unordered_set<char> letters;
 
     for (const char character : sentence) {
