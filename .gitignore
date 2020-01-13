@@ -34,6 +34,6 @@ python/**/.mypy_cache
 rust/**/target
 scala/
 scheme/
-swift/
+swift/**/.build
 typescript/**/node_modules
 **/.exercism/
