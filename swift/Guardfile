@@ -1,0 +1,4 @@
+guard "process", name: "Swift", command: "swift test" do
+   watch %r{Sources/.*}
+   watch %r{Tests/.*}
+end
