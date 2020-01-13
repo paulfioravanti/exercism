@@ -26,7 +26,7 @@ struct Nucleotide {
     Dna.T: Rna.A
   ]
 
-  private let dnaStrand : String
+  private let dnaStrand: String
 
   init(_ dnaStrand: String) {
     self.dnaStrand = dnaStrand
@@ -36,7 +36,7 @@ struct Nucleotide {
     return try String(dnaStrand.map(transcribe))
   }
 
-  private func transcribe (_ nucleotide: Character) throws -> Character {
+  private func transcribe(_ nucleotide: Character) throws -> Character {
     guard
       let dna = Dna(rawValue: nucleotide),
       let rna = Nucleotide.RNA_TRANSCRIPTIONS[dna]
