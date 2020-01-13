@@ -1,9 +1,9 @@
 struct Year {
-  private static var LEAP_YEAR: Int = 4
-  private static var CENTURIAL_YEAR: Int = 100
-  private static var LEAP_CYCLE_LENGTH: Int = LEAP_YEAR * CENTURIAL_YEAR
+  private static let LEAP_YEAR: Int = 4
+  private static let CENTURIAL_YEAR: Int = 100
+  private static let LEAP_CYCLE_LENGTH: Int = LEAP_YEAR * CENTURIAL_YEAR
 
-  private var calendarYear: Int
+  private let calendarYear: Int
 
   init(calendarYear: Int) {
     self.calendarYear = calendarYear
