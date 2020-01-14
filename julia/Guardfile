@@ -1,0 +1,3 @@
+guard "process", name: "Julia", command: "julia runtests.jl" do
+  watch %r{./*.jl}
+end
