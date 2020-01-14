@@ -9,7 +9,7 @@ struct Year {
     self.calendarYear = calendarYear
   }
 
-  func isLeapYear() -> Bool {
+  var isLeapYear: Bool {
     isLeap() && (isNonCenturialYear() || isLeapCycleYear())
   }
 
