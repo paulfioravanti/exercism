@@ -1,12 +1,12 @@
 export default class Gigasecond {
   private readonly MILLISECONDS: number = 10**12
-  private readonly fromDate: Date
+  private readonly startDate: Date
 
-  constructor(fromDate: Date) {
-    this.fromDate = fromDate
+  constructor(startDate: Date) {
+    this.startDate = startDate
   }
 
   date = (): Date => {
-    return new Date(this.fromDate.getTime() + this.MILLISECONDS)
+    return new Date(this.startDate.getTime() + this.MILLISECONDS)
   }
 }
