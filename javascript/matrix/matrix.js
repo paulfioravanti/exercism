@@ -13,19 +13,11 @@ export class Matrix {
   }
 
   generateRows(matrixString) {
-    return (
-      matrixString
-        .split("\n")
-        .map(this.parseRowColumns)
-    )
+    return matrixString.split("\n").map(this.parseRowColumns)
   }
 
   parseRowColumns(rowString) {
-    return (
-      rowString
-        .split(" ")
-        .map(column => parseInt(column))
-    )
+    return rowString.split(" ").map(Number)
   }
 
   transpose(rows) {
