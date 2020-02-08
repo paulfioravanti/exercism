@@ -6,7 +6,7 @@ export default class Gigasecond {
     this.startDate = startDate
   }
 
-  date = (): Date => {
+  date(): Date {
     return new Date(this.startDate.getTime() + this.MILLISECONDS)
   }
 }
