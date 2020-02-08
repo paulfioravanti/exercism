@@ -16,11 +16,7 @@ export default class Matrix {
   }
 
   private parseRowColumns(row: string): number[] {
-    return (
-      row
-        .split(" ")
-        .map((column: string) => parseInt(column))
-    )
+    return row.split(" ").map(Number)
   }
 
   private transpose(): number[][] {
