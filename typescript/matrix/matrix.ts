@@ -8,10 +8,10 @@ export default class Matrix {
   }
 
   private generateRows(matrix: string): number[][] {
-    return matrix.split("\n").map(this.parseRowColumns)
+    return matrix.split("\n").map(this.generateColumns)
   }
 
-  private parseRowColumns(row: string): number[] {
+  private generateColumns(row: string): number[] {
     return row.split(" ").map(Number)
   }
 
