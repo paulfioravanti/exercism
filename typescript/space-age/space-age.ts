@@ -8,7 +8,7 @@ type Planet =
   | "uranus"
   | "neptune"
 
-class SpaceAge {
+export default class SpaceAge {
   private readonly EARTH_ORBITAL_PERIOD: number = 31557600.0
   private readonly ORBITAL_FACTORS: Record<Planet, number> = {
     earth: 1,
@@ -69,5 +69,3 @@ class SpaceAge {
     )
   }
 }
-
-export default SpaceAge
