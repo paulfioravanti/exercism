@@ -1,4 +1,4 @@
-class Bob {
+export default class Bob {
   private readonly LETTERS: RegExp = /[A-Za-z]/i
 
   hey(input: string): string {
@@ -42,5 +42,3 @@ class Bob {
     return this.LETTERS.test(remark)
   }
 }
-
-export default Bob
