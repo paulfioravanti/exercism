@@ -1,6 +1,7 @@
 export class Matrix {
   constructor(matrixString) {
     this._rows = this.generateRows(matrixString)
+    this._columns = this.transpose(this.rows)
   }
 
   get rows() {
@@ -8,19 +9,30 @@ export class Matrix {
   }
 
   get columns() {
-    return this.transpose(this.rows)
+    return this._columns
   }
 
   generateRows(matrixString) {
     return (
       matrixString
-      .split("\n")
-      .map(rowString => rowString.split(" "))
-      .map(row => row.map(column => parseInt(column)))
+        .split("\n")
+        .map(this.parseRowColumns)
+    )
+  }
+
+  parseRowColumns(rowString) {
+    return (
+      rowString
+        .split(" ")
+        .map(column => parseInt(column))
     )
   }
 
   transpose(rows) {
-    return rows[0].map((_column, index) => rows.map(row => row[index]))
+    return (
+      rows[0].map((_column, index) =>
+        rows.map(row => row[index])
+      )
+    )
   }
 }
