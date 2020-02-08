@@ -1,6 +1,7 @@
-class Pangram {
+export default class Pangram {
   private readonly NON_ASCII_LETTERS: RegExp = /[^a-z]/g
   private readonly NUMBER_OF_LETTERS_IN_ALPHABET: number = 26
+  private phrase: string
 
   constructor(phrase: string) {
     this.phrase = phrase
@@ -10,8 +11,6 @@ class Pangram {
     return this.letterCount() === this.NUMBER_OF_LETTERS_IN_ALPHABET
   }
 
-  private phrase: string
-
   private letterCount(): number {
     const letters = this.phrase
       .toLowerCase()
@@ -20,5 +19,3 @@ class Pangram {
     return [...new Set(letters)].length
   }
 }
-
-export default Pangram
