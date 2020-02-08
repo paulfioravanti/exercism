@@ -12,7 +12,7 @@ type Color =
 type ColorValue = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 
 export class ResistorColor {
-  private readonly MAX_COLORS = 2
+  private readonly MAX_COLORS: number = 2
   private readonly RESISTOR_VALUES: Record<Color, ColorValue> = {
     black: "0",
     brown: "1",
@@ -35,7 +35,7 @@ export class ResistorColor {
     }
   }
 
-  value = (): number => {
+  value(): number {
     return parseInt(this.colors.reduce(this.addResistorValue, ""))
   }
 
