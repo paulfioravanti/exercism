@@ -13,21 +13,21 @@ export default class CollatzConjecture {
     }
 
     return (
-      CollatzConjecture.calculateSteps(input, CollatzConjecture.INITIAL_STEPS)
+      this.calculateSteps(input, this.INITIAL_STEPS)
     )
   }
 
   private static calculateSteps(input: number, steps: number): number {
-    if (input === CollatzConjecture.TERMINATING_NUMBER) {
+    if (input === this.TERMINATING_NUMBER) {
       return steps
     }
 
-    if (CollatzConjecture.IS_EVEN(input)) {
-      input = CollatzConjecture.N_DIV_TWO(input)
+    if (this.IS_EVEN(input)) {
+      input = this.N_DIV_TWO(input)
     } else {
-      input = CollatzConjecture.THREE_N_PLUS_ONE(input)
+      input = this.THREE_N_PLUS_ONE(input)
     }
 
-    return CollatzConjecture.calculateSteps(input, steps + 1)
+    return this.calculateSteps(input, steps + 1)
   }
 }
