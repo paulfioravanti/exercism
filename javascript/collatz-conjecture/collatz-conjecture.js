@@ -17,11 +17,6 @@ function calculateSteps(input, steps) {
     return steps
   }
 
-  if (IS_EVEN(input)) {
-    input = N_DIV_TWO(input)
-  } else {
-    input = THREE_N_PLUS_ONE(input)
-  }
-
+  input = IS_EVEN(input) ? N_DIV_TWO(input) : THREE_N_PLUS_ONE(input)
   return calculateSteps(input, steps + 1)
 }
