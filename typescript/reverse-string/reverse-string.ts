@@ -1,5 +1,5 @@
 export default class ReverseString {
-  static reverse(str: string): string {
-    return str.split("").reverse().join("")
+  static reverse(text: string): string {
+    return text.split("").reverse().join("")
   }
 }
