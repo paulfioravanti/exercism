@@ -1,4 +1,5 @@
 type MaybeString = string | never
+type TriangleSides = [number, number, number]
 
 export default class Triangle {
   private readonly IS_EQUILATERAL = (uniqueSides: number[]): boolean => {
@@ -10,9 +11,9 @@ export default class Triangle {
   private readonly IS_SCALENE = (uniqueSides: number[]): boolean => {
     return uniqueSides.length === 3
   }
-  private readonly sides: number[]
+  private readonly sides: TriangleSides
 
-  constructor(...sides: number[]) {
+  constructor(...sides: TriangleSides) {
     this.sides = sides.sort(this.ascending)
   }
 
