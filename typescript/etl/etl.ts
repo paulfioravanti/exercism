@@ -1,8 +1,9 @@
 type LegacyData = Record<string, string[]>
 type LegacyEntry = [string, string[]]
 type NewData = Record<string, number>
+type LegacyEntryReducer = (acc: NewData, letter: string) => NewData
 
-const assignPointValue = (pointValue: string) => {
+const assignPointValue = (pointValue: string): LegacyEntryReducer => {
   return (acc: NewData, letter: string): NewData => {
     acc[letter.toLowerCase()] = parseInt(pointValue)
     return acc
