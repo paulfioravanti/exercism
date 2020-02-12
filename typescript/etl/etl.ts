@@ -17,6 +17,6 @@ function assignPointValue(pointValue: string): LegacyEntryReducer {
 function transformLetters(
   acc: NewData,
   [pointValue, letters]: LegacyEntry
-  ): NewData {
+): NewData {
   return letters.reduce(assignPointValue(pointValue), acc)
 }
