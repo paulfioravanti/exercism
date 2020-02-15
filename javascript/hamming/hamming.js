@@ -1,31 +1,31 @@
-export const compute = (left, right) => {
-  if (left === right) {
+export const compute = (leftStrand, rightStrand) => {
+  if (leftStrand === rightStrand) {
     return 0
   }
-  validiateStrandLengths(left, right)
+  validiateStrandLengths(leftStrand, rightStrand)
 
   return (
-    left
+    leftStrand
     .split("")
-    .filter(isDifferent(right))
+    .filter(isDifferent(rightStrand))
     .length
   )
 }
 
-function validiateStrandLengths(left, right) {
-  if (left === "") {
+function validiateStrandLengths(leftStrand, rightStrand) {
+  if (leftStrand === "") {
     throw new Error("left strand must not be empty")
   }
 
-  if (right === "") {
+  if (rightStrand === "") {
     throw new Error("right strand must not be empty")
   }
 
-  if (left.length !== right.length) {
+  if (leftStrand.length !== rightStrand.length) {
     throw new Error("left and right strands must be of equal length")
   }
 }
 
-function isDifferent(right) {
-  return (nucleotide, index) => nucleotide !== right.charAt(index)
+function isDifferent(rightStrand) {
+  return (leftNucleotide, index) => leftNucleotide !== rightStrand.charAt(index)
 }
