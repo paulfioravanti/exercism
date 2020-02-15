@@ -13,8 +13,9 @@ export default class Raindrops {
   ])
 
   convert(number: number): string {
-    const raindrops = this.CONVERSIONS.reduce(this.addRaindrop(number), "")
-    return raindrops === "" ? number.toString() : raindrops
+    const raindrops: string =
+      this.CONVERSIONS.reduce(this.addRaindrop(number), "")
+    return raindrops || number.toString()
   }
 
   private addRaindrop(number: number): RaindropReducer {
