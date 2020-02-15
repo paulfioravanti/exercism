@@ -27,5 +27,5 @@ function validiateStrandLengths(left, right) {
 }
 
 function isDifferent(right) {
-  return (nucleotide, index) => nucleotide !== right[index]
+  return (nucleotide, index) => nucleotide !== right.charAt(index)
 }
