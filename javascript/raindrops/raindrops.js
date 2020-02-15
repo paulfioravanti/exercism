@@ -6,7 +6,7 @@ const CONVERSIONS = Object.freeze([
 
 export const convert = number => {
   const raindrops = CONVERSIONS.reduce(addRaindrop(number), "")
-  return raindrops === "" ? number.toString() : raindrops
+  return raindrops || number.toString()
 }
 
 function addRaindrop(number) {
