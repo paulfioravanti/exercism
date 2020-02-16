@@ -4,38 +4,28 @@ export class Squares {
   }
 
   constructor(number) {
-    this._number = number
+    this._numbers = [...Array(number + 1).keys()]
   }
 
-  get number() {
-    return this._number
+  get numbers() {
+    return this._numbers
   }
 
   get sumOfSquares() {
-    return this.numberRange().reduce(this.addSquare(), 0)
+    return this.numbers.reduce(this.sumSquare(), 0)
   }
 
   get squareOfSum() {
-    return this.numberRange().reduce(this.sum, 0)**Squares.SQUARE
+    return this.numbers.reduce(this.sum, 0)**Squares.SQUARE
   }
 
   get difference() {
     return this.squareOfSum - this.sumOfSquares
   }
 
-  numberRange() {
-    return [...Array(this.number).keys()].map(this.increment())
-  }
-
-  addSquare() {
+  sumSquare() {
     return (acc, number) => {
       return this.sum(acc, number**Squares.SQUARE)
-    }
-  }
-
-  increment() {
-    return (number) => {
-      return this.sum(1, number)
     }
   }
 
