@@ -20,11 +20,7 @@ export const classify = number => {
 }
 
 function aliquotSum(number) {
-  return (
-    range(number)
-      .reduce(addFactor(number), [])
-      .reduce(add, 0)
-  )
+  return range(number).reduce(addFactor(number), 0)
 }
 
 function range(number) {
@@ -34,12 +30,8 @@ function range(number) {
 function addFactor(number) {
   return (acc, candidateFactor) => {
     if (IS_FACTOR(candidateFactor, number)) {
-      acc.push(candidateFactor)
+      acc += candidateFactor
     }
     return acc
   }
-}
-
-function add(acc, factor) {
-  return acc + factor
 }
