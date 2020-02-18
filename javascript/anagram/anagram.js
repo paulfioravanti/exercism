@@ -5,13 +5,10 @@ export const findAnagrams = (word, candidates) => {
 function isAnagram(word) {
   return (anagramCandidate) => {
     const candidate = anagramCandidate.toLowerCase()
-    return (
-      word !== candidate &&
-      toSortedString(word) === toSortedString(candidate)
-    )
+    return word !== candidate && normalize(word) === normalize(candidate)
   }
 }
 
-function toSortedString(word) {
+function normalize(word) {
   return word.split("").sort().join()
 }
