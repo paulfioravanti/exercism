@@ -1,38 +1,17 @@
-export const findAnagrams = (base, candidates) => {
-  const word = base.toLowerCase()
-  const letters = toSortedLetters(word)
-  return candidates.filter(isAnagram(word, letters))
+export const findAnagrams = (word, candidates) => {
+  return candidates.filter(isAnagram(word.toLowerCase()))
 }
 
-function toSortedLetters(word) {
-  return word.split("").sort()
-}
-
-function isAnagram(word, letters) {
-  return (wordCandidate) => {
-    const candidate = wordCandidate.toLowerCase()
+function isAnagram(word) {
+  return (anagramCandidate) => {
+    const candidate = anagramCandidate.toLowerCase()
     return (
-      isDifferentWord(word, candidate) && hasSameLetters(letters, candidate)
+      word !== candidate &&
+      toSortedString(word) === toSortedString(candidate)
     )
   }
 }
 
-function isDifferentWord(word, candidate) {
-  return word !== candidate
-}
-
-function hasSameLetters(letters, candidate) {
-  const candidateLetters = toSortedLetters(candidate)
-  return (
-    hasSameLength(letters, candidateLetters) &&
-    includesEveryLetterOnce(letters, candidateLetters)
-  )
-}
-
-function hasSameLength(letters, candidateLetters) {
-  return letters.length === candidateLetters.length
-}
-
-function includesEveryLetterOnce(letters, candidateLetters) {
-  return letters.every((letter, index) => candidateLetters[index] === letter)
+function toSortedString(word) {
+  return word.split("").sort().join()
 }
