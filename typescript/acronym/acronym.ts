@@ -1,4 +1,4 @@
-export default class Acronym {
+export default abstract class Acronym {
   private static readonly NON_ACRONYM_TARGET: RegExp = /(\w)[A-Z]*[a-z]*\W*/g
 
   public static parse(phrase: string): string {
