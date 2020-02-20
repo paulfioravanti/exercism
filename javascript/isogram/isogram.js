@@ -6,22 +6,9 @@ export const isIsogram = input => {
   }
 
   const isogramLetters = input.toLowerCase().match(WORD_CHARACTERS)
-  return isEqual(uniq(isogramLetters), isogramLetters)
-};
+  return uniq(isogramLetters).length === isogramLetters.length
+}
 
 function uniq(array) {
   return [...new Set(array)]
-}
-
-function isEqual(array1, array2) {
-  return (
-    array1.length === array2.length &&
-    array1.every(isContainedIn(array2))
-  )
-}
-
-function isContainedIn(array) {
-  return (char, index) => {
-    return array[index] === char
-  }
 }
