@@ -10,10 +10,11 @@ type Color =
   | "grey"
   | "white"
 type ColorValue = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+type ResistorValues = Record<Color, ColorValue>
 
 export class ResistorColor {
-  private readonly MAX_COLORS: number = 2
-  private readonly RESISTOR_VALUES: Record<Color, ColorValue> = {
+  private readonly MAX_COLORS: Readonly<number> = 2
+  private readonly RESISTOR_VALUES: Readonly<ResistorValues> = {
     black: "0",
     brown: "1",
     red: "2",
@@ -25,7 +26,7 @@ export class ResistorColor {
     grey: "8",
     white: "9"
   }
-  private readonly colors: Color[]
+  private readonly colors: Readonly<Color[]>
 
   constructor(colors: Color[]) {
     if (colors.length < this.MAX_COLORS) {
