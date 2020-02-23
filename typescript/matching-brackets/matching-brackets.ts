@@ -1,10 +1,17 @@
+type OpeningBracket = "(" | "[" | "{"
+type ClosingBracket = ")" | "]" | "}"
+type Brackets = Readonly<Record<OpeningBracket, ClosingBracket>>
+type OpeningBracketStack = Array<OpeningBracket>;
 type Maybe<T> = T | undefined
 type MaybeError<T> = T | never
 
 export default class MatchingBrackets {
-  private readonly OPENING_BRACKETS: string = "([{"
-  private readonly CLOSING_BRACKETS: string = ")]}"
-  private readonly input: string
+  private readonly BRACKETS: Brackets = Object.freeze({
+    "(": ")",
+    "[": "]",
+    "{": "}"
+  })
+  private readonly input: Readonly<string>
 
   constructor(input: string) {
     this.input = input
@@ -12,7 +19,7 @@ export default class MatchingBrackets {
 
   isPaired(): boolean {
     try {
-      const unpaired: string[] =
+      const unpaired: OpeningBracketStack =
         this.input
           .split("")
           .reduce(this.checkPair.bind(this), [])
@@ -23,30 +30,38 @@ export default class MatchingBrackets {
     }
   }
 
-  private checkPair(acc: string[], character: string): string[] {
-    if (this.OPENING_BRACKETS.includes(character)) {
-      acc.push(character)
+  private checkPair(
+    acc: OpeningBracketStack,
+    character: string
+  ): OpeningBracketStack {
+    if (this.isValidOpeningBracket(character)) {
+      acc.push(character as OpeningBracket)
       return acc
     }
 
     return this.handlePotentialClosingBracket(acc, character)
   }
 
+  private isValidOpeningBracket(character: string): boolean {
+    return Object.keys(this.BRACKETS).includes(character as OpeningBracket)
+  }
+
   private handlePotentialClosingBracket(
-    acc: string[],
+    acc: OpeningBracketStack,
     character: string
-  ): MaybeError<string[]> {
-    if (this.CLOSING_BRACKETS.includes(character)) {
-      const openingBracketCandidate: Maybe<string> = acc.pop()
+  ): MaybeError<OpeningBracketStack> {
+    if (this.isValidClosingBracket(character)) {
+      const openingBracketCandidate: Maybe<OpeningBracket> = acc.pop()
+      const closingBracket: ClosingBracket = character as ClosingBracket
 
       if (openingBracketCandidate === undefined) {
         return acc
       }
 
       if (
-        !this.hasMatchingOpeningBracket(
+        !this.arePaired(
           openingBracketCandidate,
-          character
+          closingBracket
         )
       ) {
         throw "halt"
@@ -56,15 +71,25 @@ export default class MatchingBrackets {
     return acc
   }
 
-  private hasMatchingOpeningBracket(
-    openingBracketCandidate: string,
-    character: string
+  private isValidClosingBracket(character: string): boolean {
+    return Object.values(this.BRACKETS).includes(character as ClosingBracket)
+  }
+
+  private arePaired(
+    openingBracketCandidate: OpeningBracket,
+    closingBracket: ClosingBracket
   ): boolean {
-    const closingBracketIndex: number =
-      this.CLOSING_BRACKETS.indexOf(character)
-    const matchingOpeningBracket: string =
-      this.OPENING_BRACKETS[closingBracketIndex]
+    const matchingOpeningBracket: OpeningBracket =
+      Object
+        .keys(this.BRACKETS)
+        .find(this.keyForValue(closingBracket)) as OpeningBracket
 
     return openingBracketCandidate === matchingOpeningBracket
+  }
+
+  private keyForValue(character: string) {
+    return (key: string): boolean => {
+      return this.BRACKETS[key as OpeningBracket] === character
+    }
   }
 }
