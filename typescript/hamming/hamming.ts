@@ -1,8 +1,8 @@
-type MaybeNumber = number | never
+type MaybeError<T> = T | never
 type NucleotideFilter = (leftNucleotide: string, index: number) => boolean
 
 export default class Hamming {
-  compute(leftStrand: string, rightStrand: string): MaybeNumber {
+  compute(leftStrand: string, rightStrand: string): MaybeError<number> {
     if (leftStrand === rightStrand) {
       return 0
     }
