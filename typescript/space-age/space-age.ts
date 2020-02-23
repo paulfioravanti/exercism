@@ -7,10 +7,11 @@ type Planet =
   | "saturn"
   | "uranus"
   | "neptune"
+type OrbitalFactors = Readonly<Record<Planet, number>>
 
 export default class SpaceAge {
-  private readonly EARTH_ORBITAL_PERIOD: number = 31557600.0
-  private readonly ORBITAL_FACTORS: Record<Planet, number> = {
+  private readonly EARTH_ORBITAL_PERIOD: Readonly<number> = 31557600.0
+  private readonly ORBITAL_FACTORS: OrbitalFactors = Object.freeze({
     earth: 1,
     mercury: 0.2408467,
     venus: 0.61519726,
@@ -19,9 +20,9 @@ export default class SpaceAge {
     saturn: 29.447498,
     uranus: 84.016846,
     neptune: 164.79132
-  }
+  })
 
-  seconds: number
+  readonly seconds: Readonly<number>
 
   constructor(seconds: number) {
     this.seconds = seconds
