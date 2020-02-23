@@ -1,6 +1,6 @@
 export default class Matrix {
-  readonly rows: number[][]
-  readonly columns: number[][]
+  readonly rows: Readonly<number[][]>
+  readonly columns: Readonly<number[][]>
 
   constructor(matrix: string) {
     this.rows = this.generateRows(matrix)
@@ -16,7 +16,7 @@ export default class Matrix {
   }
 
   private transpose(): number[][] {
-    const rows: number[][] = this.rows
+    const rows: Readonly<number[][]> = this.rows
 
     return (
       rows[0].map((_column: number, index: number): number[] =>
