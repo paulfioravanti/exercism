@@ -12,10 +12,11 @@ const enum Rna {
   A = "A"
 }
 
-type MaybeRna = Rna | never
+type MaybeError<T> = T | never
+type RnaTranscriptions = Readonly<Record<Dna, Rna>>
 
-class Transcriptor {
-  private readonly RNA_TRANSCRIPTIONS: Record<Dna, Rna> = {
+export default class Transcriptor {
+  private readonly RNA_TRANSCRIPTIONS: RnaTranscriptions = {
     [Dna.C]: Rna.G,
     [Dna.G]: Rna.C,
     [Dna.A]: Rna.U,
@@ -23,13 +24,15 @@ class Transcriptor {
   }
 
   toRna(dna: string): string {
-    return dna
-      .split("")
-      .map(this.translateNucleotide)
-      .join("")
+    return (
+      dna
+        .split("")
+        .map(this.translateNucleotide.bind(this))
+        .join("")
+    )
   }
 
-  private translateNucleotide = (nucleotide: string): MaybeRna => {
+  private translateNucleotide(nucleotide: string): MaybeError<Rna> {
     return this.RNA_TRANSCRIPTIONS[nucleotide as Dna] || this.throwInvalidDna()
   }
 
@@ -37,5 +40,3 @@ class Transcriptor {
     throw new Error("Invalid input DNA.")
   }
 }
-
-export default Transcriptor
