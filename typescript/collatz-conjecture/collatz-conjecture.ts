@@ -1,8 +1,8 @@
 type MaybeError<T> = T | never
 
 export default class CollatzConjecture {
-  private static INITIAL_STEPS: number = 0
-  private static TERMINATING_NUMBER: number = 1
+  private static readonly INITIAL_STEPS: number = 0
+  private static readonly TERMINATING_NUMBER: number = 1
   private static IS_EVEN = (n: number): boolean => n % 2 === 0
   private static N_DIV_TWO = (n: number): number => n / 2
   private static THREE_N_PLUS_ONE = (n: number): number => 3 * n + 1
