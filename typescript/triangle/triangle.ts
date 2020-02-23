@@ -1,5 +1,6 @@
-type MaybeString = string | never
-type TriangleSides = [number, number, number]
+type MaybeError<T> = T | never
+type Sides = [number, number, number]
+type TriangleSides = Readonly<Sides>
 
 export default class Triangle {
   private readonly IS_EQUILATERAL = (uniqueSides: number[]): boolean => {
@@ -13,16 +14,16 @@ export default class Triangle {
   }
   private readonly sides: TriangleSides
 
-  constructor(...sides: TriangleSides) {
+  constructor(...sides: Sides) {
     this.sides = sides.sort(this.ascending)
   }
 
-  kind(): MaybeString {
+  kind(): MaybeError<string> {
     if (!this.allSidesLegal()) {
       throw new Error("Invalid triangle sides")
     }
 
-    const uniqueSides = this.uniqueSides()
+    const uniqueSides: number[] = this.uniqueSides()
 
     if (this.IS_EQUILATERAL(uniqueSides)) {
       return "equilateral"
@@ -35,7 +36,9 @@ export default class Triangle {
     }
   }
 
-  private ascending = (a: number, b: number): number => a - b
+  private ascending(a: number, b: number): number {
+    return a - b
+  }
 
   private uniqueSides(): number[] {
     return [...new Set(this.sides)]
@@ -50,7 +53,7 @@ export default class Triangle {
   }
 
   private allSidesLegalLength(): boolean {
-    const [firstSide, secondSide, thirdSide] = this.sides
+    const [firstSide, secondSide, thirdSide]: TriangleSides = this.sides
     return firstSide + secondSide >= thirdSide
   }
 }
