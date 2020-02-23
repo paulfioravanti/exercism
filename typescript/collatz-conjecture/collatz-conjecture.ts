@@ -1,20 +1,18 @@
-type MaybeNumber = number | never
+type MaybeError<T> = T | never
 
 export default class CollatzConjecture {
-  private static INITIAL_STEPS = 0
-  private static TERMINATING_NUMBER = 1
+  private static INITIAL_STEPS: number = 0
+  private static TERMINATING_NUMBER: number = 1
   private static IS_EVEN = (n: number): boolean => n % 2 === 0
   private static N_DIV_TWO = (n: number): number => n / 2
   private static THREE_N_PLUS_ONE = (n: number): number => 3 * n + 1
 
-  static steps(input: number): MaybeNumber {
+  static steps(input: number): MaybeError<number> {
     if (input < 1) {
       throw new Error("Only positive numbers are allowed")
     }
 
-    return (
-      this.calculateSteps(input, this.INITIAL_STEPS)
-    )
+    return this.calculateSteps(input, this.INITIAL_STEPS)
   }
 
   private static calculateSteps(input: number, steps: number): number {
