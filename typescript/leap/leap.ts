@@ -1,5 +1,5 @@
-const LEAP_YEAR = 4
-const CENTURIAL_YEAR = 100
+const LEAP_YEAR: number = 4
+const CENTURIAL_YEAR: number = 100
 const LEAP_CYCLE_LENGTH: number = LEAP_YEAR * CENTURIAL_YEAR
 
 export default function isLeapYear(year: number): boolean {
