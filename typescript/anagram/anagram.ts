@@ -1,25 +1,22 @@
-type AnagramFilter = (anagramCandidate: string) => boolean
-
 export default class Anagram {
-  private readonly word: string
+  private readonly word: Readonly<string>
 
   constructor(word: string) {
     this.word = word.toLowerCase()
   }
 
   matches(...candidates: string[]): string[] {
-    return candidates.filter(this.isAnagram())
+    return candidates.filter(this.isAnagram.bind(this))
   }
 
-  private isAnagram(): AnagramFilter {
-    const word = this.word
-    return (anagramCandidate: string): boolean => {
-      const candidate = anagramCandidate.toLowerCase()
-      return (
-        word !== candidate &&
-        this.normalize(word) === this.normalize(candidate)
-      )
-    }
+  private isAnagram(anagramCandidate: string): boolean {
+    const word: Readonly<string> = this.word
+    const candidate = anagramCandidate.toLowerCase()
+
+    return (
+      word !== candidate &&
+      this.normalize(word) === this.normalize(candidate)
+    )
   }
 
   private normalize(word: string): string {
