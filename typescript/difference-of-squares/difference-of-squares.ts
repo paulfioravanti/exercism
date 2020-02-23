@@ -1,15 +1,13 @@
-type SumReducer = (acc: number, num: number) => number
-
 export default class Squares {
-  static readonly SQUARE: number = 2
-  private readonly numbers: number[]
+  static readonly SQUARE: Readonly<number> = 2
+  private readonly numbers: Readonly<number[]>
 
   constructor(num: number) {
     this.numbers = [...Array(num + 1).keys()]
   }
 
   get sumOfSquares(): number {
-    return this.numbers.reduce(this.sumSquare(), 0)
+    return this.numbers.reduce(this.sumSquare.bind(this), 0)
   }
 
   get squareOfSum(): number {
@@ -20,10 +18,8 @@ export default class Squares {
     return this.squareOfSum - this.sumOfSquares
   }
 
-  sumSquare(): SumReducer {
-    return (acc: number, num: number): number => {
-      return this.sum(acc, num**Squares.SQUARE)
-    }
+  sumSquare(acc: number, num: number): number {
+    return this.sum(acc, num**Squares.SQUARE)
   }
 
   sum(acc: number, num: number): number {
