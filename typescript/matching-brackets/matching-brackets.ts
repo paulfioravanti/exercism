@@ -87,9 +87,9 @@ export default class MatchingBrackets {
     return openingBracketCandidate === matchingOpeningBracket
   }
 
-  private keyForValue(character: ClosingBracket) {
+  private keyForValue(closingBracket: ClosingBracket) {
     return (key: string): boolean => {
-      return this.BRACKETS[key as OpeningBracket] === character
+      return this.BRACKETS[key as OpeningBracket] === closingBracket
     }
   }
 }
