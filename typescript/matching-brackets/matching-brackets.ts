@@ -52,18 +52,14 @@ export default class MatchingBrackets {
   ): MaybeError<OpeningBracketStack> {
     if (this.isValidClosingBracket(character)) {
       const openingBracketCandidate: Maybe<OpeningBracket> = acc.pop()
-      const closingBracket: ClosingBracket = character as ClosingBracket
 
       if (openingBracketCandidate === undefined) {
         return acc
       }
 
-      if (
-        !this.arePaired(
-          openingBracketCandidate,
-          closingBracket
-        )
-      ) {
+      const closingBracket: ClosingBracket = character as ClosingBracket
+
+      if (!this.arePaired(openingBracketCandidate, closingBracket)) {
         throw "halt"
       }
     }
