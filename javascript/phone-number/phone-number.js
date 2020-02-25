@@ -1,8 +1,10 @@
 const PHONE_NUMBER_LENGTH = 11
 const VALID_COUNTRY_CODE = "1"
 const NON_NUMBERS = /\D/g
-const LETTERS = /[a-z]/ig
-const INVALID_PUNCTUATION = /[@:!]/g
+const PATTERNS = Object.freeze([
+  ["Letters", /[a-z]/ig],
+  ["Punctuations", /[@:!]/g]
+])
 const VALID_NUMBER = new RegExp([
   "^",
   "\\+?1?",                      // optional country code
@@ -17,8 +19,7 @@ const VALID_NUMBER = new RegExp([
   "\\s*",
   "$"
 ].join(""))
-const INVALID_AREA_CODE_START_NUMBERS = Object.freeze(["0", "1"])
-const NUMBER_TO_WORDS = Object.freeze({
+const INVALID_FIRST_DIGITS = Object.freeze({
   "0": "zero",
   "1": "one"
 })
@@ -32,8 +33,7 @@ export const clean = input => {
 }
 
 function validateInput(input) {
-  checkPattern("Letters", LETTERS, input)
-  checkPattern("Punctuations", INVALID_PUNCTUATION, input)
+  PATTERNS.forEach(checkPattern(input))
 
   const numbers = input.replace(NON_NUMBERS, "")
 
@@ -46,9 +46,11 @@ function validateInput(input) {
   }
 }
 
-function checkPattern(patternType, regexp, input) {
-  if (regexp.test(input)) {
-    throw new Error(`${patternType} not permitted`)
+function checkPattern(input) {
+  return ([patternType, regexp]) => {
+    if (regexp.test(input)) {
+      throw new Error(`${patternType} not permitted`)
+    }
   }
 }
 
@@ -80,8 +82,8 @@ function validateNumber(phoneNumber) {
 
 function validateFirstDigit(numberType, number) {
   const firstNumber = number[0]
-  if (INVALID_AREA_CODE_START_NUMBERS.includes(firstNumber)) {
-    const numberWord = NUMBER_TO_WORDS[firstNumber]
+  if (Object.keys(INVALID_FIRST_DIGITS).includes(firstNumber)) {
+    const numberWord = INVALID_FIRST_DIGITS[firstNumber]
     throw new Error(`${numberType} code cannot start with ${numberWord}`)
   }
 }
