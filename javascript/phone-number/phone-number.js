@@ -1,5 +1,5 @@
 const PHONE_NUMBER_LENGTH = 11
-const VALID_COUNTRY_CODE = 1
+const VALID_COUNTRY_CODE = "1"
 const NON_NUMBERS = /\D/g
 const LETTERS = /[a-z]/ig
 const INVALID_PUNCTUATION = /[@:!]/g
@@ -62,7 +62,7 @@ function hasTooManyDigits(numbers) {
 function hasIncorrectCountryCode(numbers) {
   return (
     numbers.length === PHONE_NUMBER_LENGTH &&
-    numbers[0] != VALID_COUNTRY_CODE
+    numbers[0] !== VALID_COUNTRY_CODE
   )
 }
 
