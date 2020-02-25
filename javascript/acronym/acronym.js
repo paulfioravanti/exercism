@@ -1,8 +1,10 @@
-// Target the following for removal from the phrase:
-// 1. One or more letters or apostrophes *after* an existing letter
-//    (found using positive lookbehind) OR
-// 2. (If there is no existing letter) Zero or more non-letters
-const NON_ACRONYM_TARGET = /(?<=[a-zA-Z])[a-zA-Z']+|[^a-zA-Z]*/g
+const NON_ACRONYM_TARGET = new RegExp([
+  "(?<=",       // Using a positive lookbehind,
+  "[a-zA-Z])",  // *after* an existing letter,
+  "[a-zA-Z']+", // find one or more letters or apostrophes
+  "|",          // OR
+  "[^a-zA-Z]*"  // (if there is no existing letter) zero or more non-letters
+].join(""), "g")
 
 export const parse = phrase => {
   return phrase.replace(NON_ACRONYM_TARGET, "").toUpperCase()
