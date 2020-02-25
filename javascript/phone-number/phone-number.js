@@ -32,13 +32,8 @@ export const clean = input => {
 }
 
 function validateInput(input) {
-  if (containsPattern(LETTERS, input)) {
-    throw new Error("Letters not permitted")
-  }
-
-  if (containsPattern(INVALID_PUNCTUATION, input)) {
-    throw new Error("Punctuations not permitted")
-  }
+  checkPattern("Letters", LETTERS, input)
+  checkPattern("Punctuations", INVALID_PUNCTUATION, input)
 
   const numbers = input.replace(NON_NUMBERS, "")
 
@@ -51,8 +46,10 @@ function validateInput(input) {
   }
 }
 
-function containsPattern(regexp, input) {
-  return regexp.test(input)
+function checkPattern(patternType, regexp, input) {
+  if (regexp.test(input)) {
+    throw new Error(`${patternType} not permitted`)
+  }
 }
 
 function hasTooManyDigits(numbers) {
