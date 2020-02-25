@@ -1,4 +1,4 @@
-export const COLORS = [
+export const COLORS = Object.freeze([
   "black",
   "brown",
   "red",
@@ -9,7 +9,7 @@ export const COLORS = [
   "violet",
   "grey",
   "white"
-]
+])
 
 export const colorCode = color => {
   return COLORS.indexOf(color)
