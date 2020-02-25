@@ -70,9 +70,8 @@ function validateNumber(phoneNumber) {
     throw new Error("Incorrect number of digits")
   }
 
-  /* eslint-disable no-unused-vars */
+  /* eslint-disable-next-line no-unused-vars */
   const [_match, areaCode, exchangeCode, subscriberNumber] = phoneNumber
-  /* eslint-enable no-unused-vars */
 
   validateFirstDigit("Area", areaCode)
   validateFirstDigit("Exchange", exchangeCode)
@@ -80,10 +79,10 @@ function validateNumber(phoneNumber) {
   return areaCode + exchangeCode + subscriberNumber
 }
 
-function validateFirstDigit(numberType, number) {
-  const firstNumber = number[0]
-  if (Object.keys(INVALID_FIRST_DIGITS).includes(firstNumber)) {
-    const numberWord = INVALID_FIRST_DIGITS[firstNumber]
+/* eslint-disable-next-line no-unused-vars */
+function validateFirstDigit(numberType, [firstNumber, ..._rest]) {
+  const numberWord = INVALID_FIRST_DIGITS[firstNumber]
+  if (numberWord) {
     throw new Error(`${numberType} code cannot start with ${numberWord}`)
   }
 }
