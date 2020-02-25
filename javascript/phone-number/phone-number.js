@@ -61,7 +61,7 @@ function hasTooManyDigits(numbers) {
 
 function hasIncorrectCountryCode(numbers) {
   return (
-    numbers.length == PHONE_NUMBER_LENGTH &&
+    numbers.length === PHONE_NUMBER_LENGTH &&
     numbers[0] != VALID_COUNTRY_CODE
   )
 }
