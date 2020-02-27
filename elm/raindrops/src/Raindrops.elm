@@ -11,8 +11,7 @@ raindrops number =
             ]
 
         conversion =
-            conversions
-                |> List.foldl (addRaindrop number) ""
+            List.foldl (addRaindrop number) "" conversions
     in
     case conversion of
         "" ->
