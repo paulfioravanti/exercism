@@ -18,7 +18,7 @@ export default class Series {
     return this.chunkEvery(size, digits)
   }
 
-  chunkEvery(size: number, digits: number[]): Slices {
+  private chunkEvery(size: number, digits: number[]): Slices {
     if (size === digits.length) {
       return [digits]
     }
