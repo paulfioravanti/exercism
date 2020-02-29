@@ -54,9 +54,9 @@ export class Scale {
   }
 
   addChromaticScale(chromaticScale) {
-    return ([lastIndex, acc], interval) => {
+    return ([lastIndex, acc], step) => {
       acc.push(chromaticScale[lastIndex])
-      lastIndex += Scale.SEMITONE_STEPS[interval]
+      lastIndex += Scale.SEMITONE_STEPS[step]
       return [lastIndex, acc]
     }
   }
