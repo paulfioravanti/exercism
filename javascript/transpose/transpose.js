@@ -19,14 +19,14 @@ function generateRightPaddedRow(maxRowWidth) {
 }
 
 function transposeRows(paddedRows) {
-  const rows = paddedRows[0].map(transposeRow(paddedRows))
-  const last = rows.pop().trimEnd()
-  rows.push(last)
-  return rows
+  const paddedRow = paddedRows[0]
+  const finalIndex = paddedRow.length - 1
+  return paddedRow.map(transposeRow(paddedRows, finalIndex))
 }
 
-function transposeRow(paddedRows) {
+function transposeRow(paddedRows, finalIndex) {
   return (_column, index) => {
-    return paddedRows.map(row => row[index]).join("")
+    const row = paddedRows.map(row => row[index]).join("")
+    return index === finalIndex ? row.trimEnd() : row
   }
 }
