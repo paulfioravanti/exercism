@@ -3,8 +3,16 @@ export class RotationalCipher {
     return 26
   }
 
+  static get LOWERCASE() {
+    return /[a-z]/
+  }
+
+  static get UPPERCASE() {
+    return /[A-Z]/
+  }
+
   static rotate(text, shift) {
-    if (shift === 0) {
+    if (shift === 0 || shift === RotationalCipher.ALPHABET_LENGTH) {
       return text
     }
 
@@ -18,14 +26,11 @@ export class RotationalCipher {
 
   static rotateChar(shift) {
     return (char) => {
-      const lower = char.toLowerCase()
-      const upper = char.toUpperCase()
-
-      if (char === lower && char !== upper) {
+      if (RotationalCipher.LOWERCASE.test(char)) {
         return RotationalCipher.rotateWithBase("a", char, shift)
       }
 
-      if (char === upper && char !== lower) {
+      if (RotationalCipher.UPPERCASE.test(char)) {
         return RotationalCipher.rotateWithBase("A", char, shift)
       }
 
