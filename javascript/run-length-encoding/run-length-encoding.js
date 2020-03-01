@@ -1,6 +1,6 @@
 // NOTE: \1 backreferences the single character match in parentheses.
 // The parentheses only serve to provide a match for the backreference.
-const CONSECUTIVE_DATA_ELEMENTS = /([A-Za-z\s])\1+/g
+const CONSECUTIVE_DATA_ELEMENTS = /([\w\s])\1+/g
 const RUN_LENGTH_ENCODING = /(\d+)(\D)/g
 
 export const encode = input => {
@@ -19,10 +19,10 @@ export const decode = input => {
   return input.replace(RUN_LENGTH_ENCODING, reconstruct)
 }
 
-function compress(match, letter) {
-  return `${match.length}${letter}`
+function compress(match, character) {
+  return `${match.length}${character}`
 }
 
-function reconstruct(_match, digit, letter) {
-  return letter.repeat(digit)
+function reconstruct(_match, digit, character) {
+  return character.repeat(digit)
 }
