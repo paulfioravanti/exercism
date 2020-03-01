@@ -25,7 +25,7 @@ type Translation =
   | "Cysteine"
   | "Tryptophan"
   | Stop
-type MaybeError<T> = T | never
+type MaybeThrow<T> = T | never
 
 export default class ProteinTranslation {
   private static readonly METHIONINE: Methionine = "AUG"
@@ -45,7 +45,7 @@ export default class ProteinTranslation {
   private static readonly STOP: Stop = "STOP"
   private static readonly CODON: RegExp = /(.{3})/
 
-  static proteins(rna: string): MaybeError<Translation[]> {
+  static proteins(rna: string): Translation[] {
     try {
       return (
         rna
@@ -54,9 +54,6 @@ export default class ProteinTranslation {
           .reduce(ProteinTranslation.translateCodon, [])
       )
     } catch (retval) {
-      if (retval instanceof Error) {
-        throw retval
-      }
       return retval
     }
   }
@@ -64,7 +61,7 @@ export default class ProteinTranslation {
   private static translateCodon(
     acc: Translation[],
     codon: string
-  ): Translation[] {
+  ): MaybeThrow<Translation[]> {
     const protein: Translation =
       ProteinTranslation.proteinForCodon(codon as Codon)
 
