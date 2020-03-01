@@ -48,16 +48,14 @@ export class Character {
   }
 
   constructor() {
-    const constitution = Character.rollAbility()
-
     this._strength = Character.rollAbility()
     this._dexterity = Character.rollAbility()
-    this._constitution = constitution
+    this._constitution = Character.rollAbility()
     this._intelligence = Character.rollAbility()
     this._wisdom = Character.rollAbility()
     this._charisma = Character.rollAbility()
     this._hitpoints =
-      Character.INITIAL_HITPOINTS + abilityModifier(constitution)
+      Character.INITIAL_HITPOINTS + abilityModifier(this.constitution)
   }
 
   get strength() {
