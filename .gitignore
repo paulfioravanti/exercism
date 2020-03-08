@@ -34,6 +34,7 @@ python/**/.mypy_cache
 reasonml/**/node_modules
 reasonml/**/lib/bs
 reasonml/**/.merlin
+reasonml/**/.bsb.lock
 rust/**/target
 scala/
 scheme/
