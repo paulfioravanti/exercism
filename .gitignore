@@ -31,6 +31,9 @@ plsql/
 python/**/__pycache__
 python/**/.pytest_cache
 python/**/.mypy_cache
+reasonml/**/node_modules
+reasonml/**/lib/bs
+reasonml/**/.merlin
 rust/**/target
 scala/
 scheme/
