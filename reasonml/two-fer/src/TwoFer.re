@@ -1,10 +1,7 @@
 let twoFer = name => {
-  let determineName = (name: option(string)): string => {
-    switch (name) {
-    | None => "you"
-    | Some(name) => name
-    }
-  };
+  let companion: string =
+    name
+      ->Belt.Option.getWithDefault("you");
 
-  "One for " ++ determineName(name) ++ ", one for me."
+  "One for " ++ companion ++ ", one for me.";
 };
