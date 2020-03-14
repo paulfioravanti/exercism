@@ -15,7 +15,7 @@ export default class Triangle {
   }
 
   private range(start: number, end: number): number[] {
-    return Array(end - start + 1).fill(0).map(this.sum(start))
+    return Array.from({ length: end - start + 1 }, this.sum(start))
   }
 
   private sum(start: number): NumberMapper {
