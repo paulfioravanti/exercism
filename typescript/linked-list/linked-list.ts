@@ -1,6 +1,6 @@
 type MaybeNull<T> = T | null
 type MaybeVoid<T> = T | void
-type Links<T> = { prev?: Node<T>, next?: Node<T> }
+type Links<T> = { prev: Node<T>, next: Node<T> } | {}
 type HeadNode<T> = MaybeNull<Node<T>>
 
 class Node<T> {
@@ -8,10 +8,10 @@ class Node<T> {
   prev: Node<T>
   next: Node<T>
 
-  constructor(value: T, { prev, next }: Links<T> = {}) {
+  constructor(value: T, links: Links<T> = {}) {
     this.value = value
-    this.prev = prev || this
-    this.next = next || this
+    this.prev = ("prev" in links) ? links.prev : this
+    this.next = ("next" in links) ? links.next : this
   }
 }
 
