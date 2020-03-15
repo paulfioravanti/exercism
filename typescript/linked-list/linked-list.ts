@@ -16,7 +16,7 @@ class Node<T> {
 }
 
 export default class LinkedList<T> {
-  head: HeadNode<T>
+  private head: HeadNode<T>
 
   constructor() {
     this.head = null
@@ -94,7 +94,7 @@ export default class LinkedList<T> {
       return 0
     }
 
-    let count: number = 1
+    let count = 1
     let current: Node<T> = head
 
     while (current.next !== head) {
