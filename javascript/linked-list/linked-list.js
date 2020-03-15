@@ -1,6 +1,6 @@
 export class LinkedList {
   constructor() {
-    this._head = undefined
+    this._head = null
   }
 
   get head() {
@@ -30,7 +30,7 @@ export class LinkedList {
     const tail = head.prev
 
     if (tail === head) {
-      this.head = undefined
+      this.head = null
     } else {
       head.prev = tail.prev
       tail.prev.next = head
@@ -43,7 +43,7 @@ export class LinkedList {
     let newHead = head.next
 
     if (newHead === head) {
-      this.head = undefined
+      this.head = null
     } else {
       newHead.prev = head.prev
       head.prev.next = newHead
