@@ -4,20 +4,20 @@ export class GradeSchool {
   }
 
   roster() {
-    return this.clone(this.sortByGrades(this._roster))
+    return this.clone(this._roster)
   }
 
   add(name, grade) {
     const roster = this._roster
-    const names = roster[grade]
+    let names = roster[grade]
 
     if (!names) {
-      roster[grade] = [name]
-    } else {
-      names.push(name)
-      names.sort()
-      roster[grade] = names
+      names = []
     }
+
+    names.push(name)
+    names.sort()
+    roster[grade] = names
   }
 
   grade(grade) {
@@ -28,17 +28,6 @@ export class GradeSchool {
     }
 
     return roster[grade]
-  }
-
-  sortByGrades(roster) {
-    return Object.keys(roster).sort().reduce(this.assignGrades(roster), {})
-  }
-
-  assignGrades(roster) {
-    return (acc, grade) => {
-      acc[grade] = roster[grade]
-      return acc
-    }
   }
 
   clone(object) {
