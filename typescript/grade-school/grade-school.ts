@@ -27,8 +27,7 @@ export default class GradeSchool {
     }
 
     students.push(name)
-    students.sort()
-    roster.set(grade, students)
+    roster.set(grade, students.sort())
   }
 
   studentsInGrade(gradeNum: number): StudentList {
