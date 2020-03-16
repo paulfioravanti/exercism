@@ -38,13 +38,13 @@ export default class GradeSchool {
     return students ? students : []
   }
 
-  clone(roster: Roster): Roster {
+  private clone(roster: Roster): Roster {
     return new Map(
       [...roster.entries()].map(this.cloneRosterEntry.bind(this))
     )
   }
 
-  cloneRosterEntry(entry: RosterEntry): RosterEntry {
+  private cloneRosterEntry(entry: RosterEntry): RosterEntry {
     return [
       entry[this.GRADE] as Grade,
       entry[this.STUDENT_LIST].slice() as StudentList
