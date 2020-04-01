@@ -1,4 +1,6 @@
 defmodule RomanNumerals do
+  @moduledoc false
+
   @roman_numerals [
     {"M", 1000},
     {"CM", 900},
