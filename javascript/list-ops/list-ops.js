@@ -7,28 +7,24 @@ export class List {
     return this._values
   }
 
-  set values(values) {
-    this._values = values
-  }
-
   append(other) {
-    this.values = this._append(this.values.slice(), other.values)
-    return this
+    const values = this._append(this.values, other.values)
+    return new List(values)
   }
 
   concat(listOfLists) {
-    this.values = this._concat(this.values.slice(), listOfLists.values)
-    return this
+    const values = this._concat(this.values, listOfLists.values)
+    return new List(values)
   }
 
   filter(fun) {
-    this.values = this._filter(fun, [], this.values.slice())
-    return this
+    const values = this._filter(fun, [], this.values)
+    return new List(values)
   }
 
   map(fun) {
-    this.values = this._map(fun, [], this.values.slice())
-    return this
+    const values = this._map(fun, [], this.values)
+    return new List(values)
   }
 
   length() {
@@ -36,16 +32,16 @@ export class List {
   }
 
   foldl(fun, acc) {
-    return this._foldl(fun, acc, this.values.slice())
+    return this._foldl(fun, acc, this.values)
   }
 
   foldr(fun, acc) {
-    return this._foldr(fun, acc, this.values.slice())
+    return this._foldr(fun, acc, this.values)
   }
 
   reverse() {
-    this.values = this._reverse([], this.values.slice())
-    return this
+    const values = this._reverse([], this.values)
+    return new List(values)
   }
 
   _append(list1, list2) {
