@@ -4,7 +4,7 @@ type Maybe<T> = T | undefined
 abstract class RobotNameGenerator {
   private static readonly ALPHABET: string[] = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ']
   private static readonly DIGITS: string[] = [...'0123456789']
-  private static readonly POSSIBLE_NAMES = Object.freeze(
+  private static readonly POSSIBLE_NAMES: readonly string[] = Object.freeze(
     RobotNameGenerator.cartesianProduct(
       RobotNameGenerator.ALPHABET,
       RobotNameGenerator.ALPHABET,
