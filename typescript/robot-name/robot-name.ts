@@ -2,17 +2,20 @@ type MaybeError<T> = T | never
 type Maybe<T> = T | undefined
 
 abstract class RobotNameGenerator {
-  private static readonly ALPHABET: string[] = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ']
-  private static readonly DIGITS: string[] = [...'0123456789']
-  private static readonly POSSIBLE_NAMES: readonly string[] = Object.freeze(
-    RobotNameGenerator.cartesianProduct(
-      RobotNameGenerator.ALPHABET,
-      RobotNameGenerator.ALPHABET,
-      RobotNameGenerator.DIGITS,
-      RobotNameGenerator.DIGITS,
-      RobotNameGenerator.DIGITS
-    ).map((nameCombination: string[]) => nameCombination.join(""))
-  )
+  private static readonly ALPHABET: ReadonlyArray<string> =
+    [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ']
+  private static readonly DIGITS: ReadonlyArray<string> =
+    [...'0123456789']
+  private static readonly POSSIBLE_NAMES: ReadonlyArray<string> =
+    Object.freeze(
+      RobotNameGenerator.cartesianProduct(
+        RobotNameGenerator.ALPHABET.slice(),
+        RobotNameGenerator.ALPHABET.slice(),
+        RobotNameGenerator.DIGITS.slice(),
+        RobotNameGenerator.DIGITS.slice(),
+        RobotNameGenerator.DIGITS.slice()
+      ).map((nameCombination: string[]) => nameCombination.join(""))
+    )
   private static readonly NAMES: string[] =
       RobotNameGenerator.shuffle(RobotNameGenerator.POSSIBLE_NAMES.slice())
 
@@ -48,10 +51,10 @@ abstract class RobotNameGenerator {
 }
 
 export default class Robot {
-  name: string
+  name = ""
 
   constructor() {
-    this.name = RobotNameGenerator.getName()
+    this.resetName()
   }
 
   resetName(): void {
