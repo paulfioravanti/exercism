@@ -46,37 +46,37 @@ export default class List<T = number> {
     return new List(values)
   }
 
-  private _append(list1: T[], list2: T[]): T[] {
-    const list1Empty: boolean = list1.length === 0
-    const list2Empty: boolean = list2.length === 0
+  private _append(values1: T[], values2: T[]): T[] {
+    const values1Empty: boolean = values1.length === 0
+    const values2Empty: boolean = values2.length === 0
 
-    if (list1Empty) {
-      if (list2Empty) {
+    if (values1Empty) {
+      if (values2Empty) {
         return []
       }
-      return list2
-    } else if (list2Empty) {
-      return list1
+      return values2
+    } else if (values2Empty) {
+      return values1
     } else {
-      return [...list1, ...list2]
+      return [...values1, ...values2]
     }
   }
 
-  private _concat(acc: T[], listOfLists: List<T>[]): T[] {
-    if (listOfLists.length === 0) {
+  private _concat(acc: T[], lists: List<T>[]): T[] {
+    if (lists.length === 0) {
       return acc
     }
 
-    const [head, ...tail]: List<T>[] = listOfLists
+    const [head, ...tail]: List<T>[] = lists
     return this._concat([...acc, ...head.values], tail)
   }
 
-  private _filter(fun: FilterFunction<T>, acc: T[], list: T[]): T[] {
-    if (list.length === 0) {
+  private _filter(fun: FilterFunction<T>, acc: T[], values: T[]): T[] {
+    if (values.length === 0) {
       return acc
     }
 
-    const [head, ...tail]: T[] = list
+    const [head, ...tail]: T[] = values
     if (fun(head)) {
       acc = [...acc, head]
     }
@@ -84,51 +84,51 @@ export default class List<T = number> {
     return this._filter(fun, acc, tail)
   }
 
-  private _map(fun: MapFunction<T>, acc: T[], list: T[]): T[] {
-    if (list.length === 0) {
+  private _map(fun: MapFunction<T>, acc: T[], values: T[]): T[] {
+    if (values.length === 0) {
       return acc
     }
 
-    const [head, ...tail]: T[] = list
+    const [head, ...tail]: T[] = values
     acc = [...acc, fun(head)]
     return this._map(fun, acc, tail)
   }
 
-  private _length(list: T[]): number {
-    if (list.length === 0) {
+  private _length(values: T[]): number {
+    if (values.length === 0) {
       return 0
     }
 
-    const [_head, ...tail]: T[] = list
+    const [_head, ...tail]: T[] = values
     return 1 + this._length(tail)
   }
 
-  private _foldl(fun: FoldFunction<T>, acc: T, list: T[]): T {
-    if (list.length === 0) {
+  private _foldl(fun: FoldFunction<T>, acc: T, values: T[]): T {
+    if (values.length === 0) {
       return acc
     }
 
-    const [head, ...tail]: T[] = list
+    const [head, ...tail]: T[] = values
     acc = fun(acc, head)
     return this._foldl(fun, acc, tail)
   }
 
-  private _foldr(fun: FoldFunction<T>, acc: T, list: T[]): T {
-    if (list.length === 0) {
+  private _foldr(fun: FoldFunction<T>, acc: T, values: T[]): T {
+    if (values.length === 0) {
       return acc
     }
 
-    const [head, ...tail]: T[] = list
+    const [head, ...tail]: T[] = values
     acc = this._foldr(fun, acc, tail)
     return fun(acc, head)
   }
 
-  private _reverse(acc: T[], list: T[]): T[] {
-    if (list.length === 0) {
+  private _reverse(acc: T[], values: T[]): T[] {
+    if (values.length === 0) {
       return acc
     }
 
-    const [head, ...tail]: T[] = list
+    const [head, ...tail]: T[] = values
     return [...this._reverse(acc, tail), head]
   }
 }
