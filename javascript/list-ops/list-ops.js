@@ -75,7 +75,7 @@ export class List {
     }
 
     const [head, ...tail] = list
-    if (fun.apply(null, [head])) {
+    if (fun(head)) {
       acc = [...acc, head]
     }
 
@@ -88,7 +88,7 @@ export class List {
     }
 
     const [head, ...tail] = list
-    acc = [...acc, fun.apply(null, [head])]
+    acc = [...acc, fun(head)]
     return this._map(fun, acc, tail)
   }
 
@@ -98,7 +98,7 @@ export class List {
     }
 
     const [head, ...tail] = list
-    acc = fun.apply(null, [acc, head])
+    acc = fun(acc, head)
     return this._foldl(fun, acc, tail)
   }
 
@@ -109,7 +109,7 @@ export class List {
 
     const [head, ...tail] = list
     acc = this._foldr(fun, acc, tail)
-    return fun.apply(null, [acc, head])
+    return fun(acc, head)
   }
 
   _length(list) {
