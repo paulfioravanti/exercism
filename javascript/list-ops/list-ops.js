@@ -44,37 +44,37 @@ export class List {
     return new List(values)
   }
 
-  _append(list1, list2) {
-    const list1Empty = list1.length === 0
-    const list2Empty = list2.length === 0
+  _append(values1, values2) {
+    const values1Empty = values1.length === 0
+    const values2Empty = values2.length === 0
 
-    if (list1Empty) {
-      if (list2Empty) {
+    if (values1Empty) {
+      if (values2Empty) {
         return []
       }
-      return list2
-    } else if (list2Empty) {
-      return list1
+      return values2
+    } else if (values2Empty) {
+      return values1
     } else {
-      return [...list1, ...list2]
+      return [...values1, ...values2]
     }
   }
 
-  _concat(acc, listOfLists) {
-    if (listOfLists.length === 0) {
+  _concat(acc, lists) {
+    if (lists.length === 0) {
       return acc
     }
 
-    const [head, ...tail] = listOfLists
+    const [head, ...tail] = lists
     return this._concat([...acc, ...head.values], tail)
   }
 
-  _filter(fun, acc, list) {
-    if (list.length === 0) {
+  _filter(fun, acc, values) {
+    if (values.length === 0) {
       return acc
     }
 
-    const [head, ...tail] = list
+    const [head, ...tail] = values
     if (fun(head)) {
       acc = [...acc, head]
     }
@@ -82,52 +82,52 @@ export class List {
     return this._filter(fun, acc, tail)
   }
 
-  _map(fun, acc, list) {
-    if (list.length === 0) {
+  _map(fun, acc, values) {
+    if (values.length === 0) {
       return acc
     }
 
-    const [head, ...tail] = list
+    const [head, ...tail] = values
     acc = [...acc, fun(head)]
     return this._map(fun, acc, tail)
   }
 
-  _foldl(fun, acc, list) {
-    if (list.length === 0) {
+  _foldl(fun, acc, values) {
+    if (values.length === 0) {
       return acc
     }
 
-    const [head, ...tail] = list
+    const [head, ...tail] = values
     acc = fun(acc, head)
     return this._foldl(fun, acc, tail)
   }
 
-  _foldr(fun, acc, list) {
-    if (list.length === 0) {
+  _foldr(fun, acc, values) {
+    if (values.length === 0) {
       return acc
     }
 
-    const [head, ...tail] = list
+    const [head, ...tail] = values
     acc = this._foldr(fun, acc, tail)
     return fun(acc, head)
   }
 
-  _length(list) {
-    if (list.length === 0) {
+  _length(values) {
+    if (values.length === 0) {
       return 0
     }
 
     // eslint-disable-next-line no-unused-vars
-    const [_head, ...tail] = list
+    const [_head, ...tail] = values
     return 1 + this._length(tail)
   }
 
-  _reverse(acc, list) {
-    if (list.length === 0) {
+  _reverse(acc, values) {
+    if (values.length === 0) {
       return acc
     }
 
-    const [head, ...tail] = list
+    const [head, ...tail] = values
     return [...this._reverse(acc, tail), head]
   }
 }
