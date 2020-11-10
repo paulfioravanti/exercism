@@ -13,13 +13,9 @@ class Darts
   private_constant :INNER_CIRCLE_BOUNDARY
   INNER_CIRCLE_POINTS = 10
   private_constant :INNER_CIRCLE_POINTS
-  CALCULATE_POINT = ->(x_coord, y_coord) { Math.sqrt(x_coord**2 + y_coord**2) }
-  private_constant :CALCULATE_POINT
-
-  attr_reader :point
 
   def initialize(x_coord, y_coord)
-    @point = CALCULATE_POINT.call(x_coord, y_coord)
+    @point = Math.hypot(x_coord, y_coord)
   end
 
   def score
@@ -33,4 +29,8 @@ class Darts
       INNER_CIRCLE_POINTS
     end
   end
+
+  private
+
+  attr_reader :point
 end
