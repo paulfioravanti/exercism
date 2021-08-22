@@ -41,3 +41,4 @@ scheme/
 swift/**/.build
 typescript/**/node_modules
 **/.exercism/
+.DS_Store
