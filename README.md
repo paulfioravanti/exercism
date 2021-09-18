@@ -14,7 +14,7 @@ blog posts:
 - _[Setting up a Ruby development environment for Exercism][]_
 - _[Tmuxinator for Exercism][]_
 
-[Exercism]: http://exercism.io/
-[my Exercism Profile]: https://exercism.io/profiles/paulfioravanti
+[Exercism]: https://exercism.org/
+[my Exercism Profile]: https://exercism.org/profiles/paulfioravanti
 [Setting up a Ruby development environment for Exercism]: https://www.paulfioravanti.com/blog/ruby-development-environment-exercism/
 [Tmuxinator for Exercism]: https://www.paulfioravanti.com/blog/tmuxinator-exercism/
