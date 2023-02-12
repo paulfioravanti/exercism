@@ -4,15 +4,14 @@ module Bob
   module_function
 
   def hey(input)
-    case input.strip
-    in ""
-      "Fine. Be that way!"
-    in remark
-      respond_to_verbal_remark(remark)
+    if (remark = input.strip).blank?
+      return "Fine. Be that way!"
     end
+
+    respond_to_verbal_remark(remark)
   end
 
-  def respond_to_verbal_remark(remark)
+  private_class_method def respond_to_verbal_remark(remark)
     case [question?(remark), shouting?(remark)]
     when [true, true]
       "Calm down, I know what I'm doing!"
@@ -24,15 +23,12 @@ module Bob
       "Whatever."
     end
   end
-  private_class_method :respond_to_verbal_remark
 
-  def question?(remark)
+  private_class_method def question?(remark)
     remark.end_with?("?")
   end
-  private_class_method :question?
 
-  def shouting?(remark)
+  private_class_method def shouting?(remark)
     remark == remark.upcase && remark != remark.downcase
   end
-  private_class_method :shouting?
 end
