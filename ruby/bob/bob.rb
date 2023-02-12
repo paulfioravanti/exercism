@@ -4,7 +4,7 @@ module Bob
   module_function
 
   def hey(input)
-    if (remark = input.strip).blank?
+    if (remark = input.strip).empty?
       return "Fine. Be that way!"
     end
 
