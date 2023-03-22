@@ -26,12 +26,11 @@ module Luhn
       .then(&CHECK_IF_EVENLY_DIVISIBLE_BY_10)
   end
 
-  def convert_string_to_reversed_numbers(string)
+  private_class_method def convert_string_to_reversed_numbers(string)
     string.reverse.chars.map(&:to_i)
   end
-  private_class_method :convert_string_to_reversed_numbers
 
-  def calculate_pair((left_value, right_value))
+  private_class_method def calculate_pair((left_value, right_value))
     right_luhn_value =
       right_value
       .then(&DOUBLE)
@@ -39,5 +38,4 @@ module Luhn
 
     left_value + right_luhn_value
   end
-  private_class_method :calculate_pair
 end
