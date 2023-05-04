@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Luhn
   TWO_OR_MORE_DIGITS = /\A\d{2,}\z/.freeze
   private_constant :TWO_OR_MORE_DIGITS
