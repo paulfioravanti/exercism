@@ -5,8 +5,7 @@ class Luhn:
     _TWO_OR_MORE_DIGITS = re.compile(r"^\d{2,}$")
 
     def __init__(self, card_number):
-        card_number = re.sub(r"\s", "", card_number)
-        self.card_number = card_number
+        self.card_number = re.sub(r"\s", "", card_number)
 
     def valid(self):
         if not self._TWO_OR_MORE_DIGITS.match(self.card_number):
