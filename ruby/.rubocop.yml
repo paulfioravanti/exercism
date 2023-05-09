@@ -1,7 +1,7 @@
 AllCops:
   Exclude:
     - !ruby/regexp /_test\.rb\z/
-  TargetRubyVersion: 2.7
+  TargetRubyVersion: 3.2
 
 Style/Documentation:
   Enabled: false
