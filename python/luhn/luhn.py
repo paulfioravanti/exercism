@@ -17,7 +17,7 @@ class Luhn:
         return sum_of_pairs % 10 == 0
 
     def _reversed_numbers(self):
-        return list(map(int, reversed(self.card_number)))
+        return [int(char) for char in reversed(self.card_number)]
 
     @staticmethod
     def _chunks(numbers, chunk_size):
